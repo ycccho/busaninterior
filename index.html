@@ -27,6 +27,9 @@
   <!-- Pretendard Web Font CDN -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -131,6 +134,16 @@
       0% { opacity: 0; transform: translateY(-5px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
+    /* Tab UI Customization */
+    .pi-tab-btn {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .pi-tab-btn.active {
+      color: #dd5828;
+      background-color: #ffffff;
+      border-bottom: 3px solid #dd5828;
+    }
   </style>
 
   <!-- Complete SEO JSON-LD Schemas -->
@@ -177,26 +190,6 @@
           }
         }
       ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획",
-      "description": "내과, 치과, 이비인후과 등 각 진료과목의 특성과 보건소 규정을 철저하게 분석한 동선 설계 가이드를 알아봅니다.",
-      "image": "https://busaninterior.kr/hospital_flow.png",
-      "author": {
-        "@type": "Organization",
-        "name": "부산 병원 인테리어 전문 업체"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "부산 병원 인테리어 전문 업체",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://busaninterior.kr/hospital_flow.png"
-        }
-      },
-      "datePublished": "2026-07-19"
     }
   ]
   </script>
@@ -204,7 +197,7 @@
 <body class="antialiased text-[#333333] bg-white">
 
   <!-- Header Section (Clean minimalist Navigation) -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+  <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <span class="w-2.5 h-2.5 bg-primary rounded-full"></span>
@@ -258,8 +251,8 @@
             </a>
           </div>
           
-          <a href="#columns" class="px-6 py-3 rounded text-xs bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all backdrop-blur-md font-medium">
-            전문 칼럼 읽어보기
+          <a href="#tools" class="px-6 py-3 rounded text-xs bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all backdrop-blur-md font-medium">
+            창업자 계산기 모음
           </a>
         </div>
       </div>
@@ -359,7 +352,7 @@
       </div>
     </section>
 
-    <!-- Section 3: Portfolio Showcase (안과/내과 통합 메디컬 센터 이미지 매핑 완료) -->
+    <!-- Section 3: Portfolio Showcase -->
     <section class="mb-32">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
         <div>
@@ -431,7 +424,339 @@
       </div>
     </section>
 
-    <!-- Section 4: Unique Columns Section (6 Articles with matched custom lobby images) -->
+    <!-- [신규 전면 추가] 창업자 필수 유틸리티 탭 허브 (Emulating premium flat typography & layout) -->
+    <section class="mb-32 scroll-mt-24" id="tools">
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">Utility Tools</span>
+        <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2 mb-4">
+          창업자를 위한 필수 도구 모음
+        </h2>
+        <p class="text-[#666666] text-sm">
+          상가, 사무실, 병원 창업 전에 평수, 자재, 필수 체크리스트와 계약서 특약을 마우스 몇 번으로 손쉽게 진단해보세요.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+        <!-- 탭 네비게이션 (PC 버전에서 가시적이며 스크롤 가능) -->
+        <div class="flex overflow-x-auto bg-[#fafafa] border-b border-gray-200 divide-x divide-gray-200 scrollbar-none">
+          <button onclick="openTab('tab-area')" id="btn-tab-area" class="pi-tab-btn active flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-ruler-combined mr-1.5"></i>매장 평수 계산
+          </button>
+          <button onclick="openTab('tab-budget')" id="btn-tab-budget" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-won-sign mr-1.5"></i>상가 평당 견적
+          </button>
+          <button onclick="openTab('tab-ac')" id="btn-tab-ac" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-snowflake mr-1.5"></i>냉난방기 용량
+          </button>
+          <button onclick="openTab('tab-power')" id="btn-tab-power" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-bolt mr-1.5"></i>전기 승압(kW)
+          </button>
+          <button onclick="openTab('tab-material')" id="btn-tab-material" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-cubes mr-1.5"></i>자재 수량 계산
+          </button>
+          <button onclick="openTab('tab-light')" id="btn-tab-light" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-lightbulb mr-1.5"></i>매장 조명 가이드
+          </button>
+          <button onclick="openTab('tab-timeline')" id="btn-tab-timeline" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-tasks mr-1.5"></i>상가 공정표
+          </button>
+          <button onclick="openTab('tab-check')" id="btn-tab-check" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-check-square mr-1.5"></i>상가 체크리스트
+          </button>
+          <button onclick="openTab('tab-contract')" id="btn-tab-contract" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-file-signature mr-1.5"></i>실수방지 특약
+          </button>
+          <button onclick="openTab('tab-license')" id="btn-tab-license" class="pi-tab-btn flex-1 min-w-[120px] px-4 py-4 text-center text-xs font-bold text-gray-500 hover:text-primary outline-none">
+            <i class="fas fa-certificate mr-1.5"></i>업체 면허 조회
+          </button>
+        </div>
+
+        <!-- 탭 콘텐츠 바디 영역 -->
+        <div class="p-6 sm:p-10">
+
+          <!-- 탭 1: 매장 평수 계산기 -->
+          <div id="tab-area" class="pi-tab-content active">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">매장·사무실 평수/면적 계산기</h3>
+              <p class="text-xs text-[#666666]">도면상 가로/세로 길이를 입력하시거나, 제곱미터(㎡)와 평수를 간편하게 변환해보세요.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="p-6 rounded-xl border border-gray-100 bg-[#fafafa] flex flex-col justify-between">
+                <div>
+                  <h4 class="text-sm font-bold text-primary mb-4 text-center"><i class="fas fa-vector-square mr-1"></i> 가로/세로 길이 ➔ 면적/평수</h4>
+                  <div class="space-y-4">
+                    <div class="relative">
+                      <label class="block text-xs font-bold text-gray-700 mb-1.5">가로 길이 (m)</label>
+                      <input type="number" id="t1_w" oninput="calcAreaFromLength()" class="w-full p-3.5 bg-white border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary" placeholder="0.0" />
+                      <span class="absolute right-4 top-9 text-xs font-bold text-gray-400">m</span>
+                    </div>
+                    <div class="relative">
+                      <label class="block text-xs font-bold text-gray-700 mb-1.5">세로 길이 (m)</label>
+                      <input type="number" id="t1_h" oninput="calcAreaFromLength()" class="w-full p-3.5 bg-white border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary" placeholder="0.0" />
+                      <span class="absolute right-4 top-9 text-xs font-bold text-gray-400">m</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-6 p-4 bg-primary/5 rounded border border-primary/10 text-center font-bold text-primary text-sm" id="t1_result">
+                  가로/세로 길이를 입력해주세요.
+                </div>
+              </div>
+
+              <div class="p-6 rounded-xl border border-gray-100 bg-[#fafafa] flex flex-col justify-between">
+                <div>
+                  <h4 class="text-sm font-bold text-primary mb-4 text-center"><i class="fas fa-exchange-alt mr-1"></i> 면적(㎡) ↔ 평수 상호 변환</h4>
+                  <div class="space-y-4">
+                    <div class="relative">
+                      <label class="block text-xs font-bold text-gray-700 mb-1.5">면적 (제곱미터)</label>
+                      <input type="number" id="t1_sqm" oninput="convertArea('sqm')" class="w-full p-3.5 bg-white border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary" placeholder="0" />
+                      <span class="absolute right-4 top-9 text-xs font-bold text-gray-400">㎡</span>
+                    </div>
+                    <div class="relative">
+                      <label class="block text-xs font-bold text-gray-700 mb-1.5">평수 (평)</label>
+                      <input type="number" id="t1_py" oninput="convertArea('py')" class="w-full p-3.5 bg-white border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary" placeholder="0" />
+                      <span class="absolute right-4 top-9 text-xs font-bold text-gray-400">평</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-6 p-4 bg-primary/5 rounded border border-primary/10 text-center font-bold text-primary text-sm" id="t1_result2">
+                  숫자를 입력해주세요.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 2: 상가 평당 견적 계산기 -->
+          <div id="tab-budget" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">상업공간 평당 견적 계산기</h3>
+              <p class="text-xs text-[#666666]">계약 예정이신 실평수를 적으시면 대략적인 예상 인테리어비 범위를 알려드립니다.</p>
+            </div>
+            <div class="max-w-md mx-auto space-y-6">
+              <div class="relative">
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">공사 실평수</label>
+                <input type="number" id="t2_py" oninput="calcBudget()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary text-right pr-12" placeholder="예: 30" />
+                <span class="absolute right-4 top-10 text-xs font-bold text-gray-400">평</span>
+              </div>
+              <div class="p-6 bg-primary/5 border border-primary/10 rounded-xl text-center text-sm font-bold text-[#333] leading-relaxed" id="t2_result">
+                평수를 입력해주세요.
+              </div>
+              <p class="text-center text-[10px] text-primary font-bold">※ 평당 100만 원(기본 전체수리 공정) 기준의 임시 모형 견적입니다.</p>
+            </div>
+          </div>
+
+          <!-- 탭 3: 냉난방기 용량 추천기 -->
+          <div id="tab-ac" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">냉난방기(에어컨) 용량 추천기</h3>
+              <p class="text-xs text-[#666666]">상업시설은 조명과 장비 등으로 열이 많이 발생하므로 실평수보다 큰 능력이 필요합니다.</p>
+            </div>
+            <div class="max-w-md mx-auto space-y-6">
+              <div class="relative">
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">매장 실제 평수</label>
+                <input type="number" id="t3_py" oninput="calcAC()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary text-right pr-12" placeholder="예: 20" />
+                <span class="absolute right-4 top-10 text-xs font-bold text-gray-400">평</span>
+              </div>
+              <div class="p-6 bg-primary/5 border border-primary/10 rounded-xl text-center text-sm font-bold text-[#333] leading-relaxed" id="t3_result">
+                실평수를 입력해주세요.
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 4: 전기 승압 계산기 -->
+          <div id="tab-power" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">계약전력(kW) 승압 자가진단</h3>
+              <p class="text-xs text-[#666666]">차단기가 내려가는 일이 없도록 적정 한전 계약전력을 사전에 진단해 보세요.</p>
+            </div>
+            <div class="max-w-md mx-auto space-y-6">
+              <div class="relative">
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">매장 평수</label>
+                <input type="number" id="t4_py" oninput="calcPower()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary text-right pr-12" placeholder="예: 15" />
+                <span class="absolute right-4 top-10 text-xs font-bold text-gray-400">평</span>
+              </div>
+              <div class="p-6 bg-primary/5 border border-primary/10 rounded-xl text-center text-sm font-bold text-[#333] leading-relaxed" id="t4_result">
+                평수를 입력해주세요.
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 5: 자재 수량 계산기 -->
+          <div id="tab-material" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">자재 수량 초간단 계산기</h3>
+              <p class="text-xs text-[#666666]">시공하고자 하는 면적의 평수를 적으시면 필요한 대략적인 박스 및 깡통 수를 산출합니다.</p>
+            </div>
+            <div class="max-w-xl mx-auto space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="relative">
+                  <label class="block text-xs font-bold text-gray-700 mb-1.5">시공 면적 (평)</label>
+                  <input type="number" id="t5_py" oninput="calcMaterial()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary text-right pr-12" placeholder="예: 10" />
+                  <span class="absolute right-4 top-10 text-xs font-bold text-gray-400">평</span>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-700 mb-1.5">시공할 자재의 종류</label>
+                  <select id="t5_type" onchange="calcMaterial()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary appearance-none">
+                    <option value="deco">바닥재: 데코타일 (1박스 = 약 1평)</option>
+                    <option value="tile600">바닥재: 600각 포세린 타일 (1박스 = 1.44㎡)</option>
+                    <option value="paint">벽/천장: 수성 페인트 (18L 말통 = 약 20평)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="p-6 bg-primary/5 border border-primary/10 rounded-xl text-center text-sm font-bold text-[#333] leading-relaxed" id="t5_result">
+                시공 면적과 자재를 선택해주세요.
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 6: 조명 밝기 가이드 -->
+          <div id="tab-light" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">매장 조명 갯수 가이드</h3>
+              <p class="text-xs text-[#666666]">상가 홀 평수에 맞추어 필요한 다운라이트 조명의 권장 설치 수량을 조언해 드립니다.</p>
+            </div>
+            <div class="max-w-md mx-auto space-y-6">
+              <div class="relative">
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">홀 평수</label>
+                <input type="number" id="t7_py" oninput="calcLight()" class="w-full p-4 bg-[#fafafa] border border-gray-200 rounded text-sm text-[#222] outline-none focus:border-primary text-right pr-12" placeholder="예: 15" />
+                <span class="absolute right-4 top-10 text-xs font-bold text-gray-400">평</span>
+              </div>
+              <div class="p-6 bg-primary/5 border border-primary/10 rounded-xl text-center text-sm font-bold text-[#333] leading-relaxed" id="t7_result">
+                평수를 입력하시면 권장 수량이 표시됩니다.
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 7: 상가 공정표 -->
+          <div id="tab-timeline" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">상가/사무실 인테리어 표준 공정표</h3>
+              <p class="text-xs text-[#666666]">실제 공사 시 꼬임 없이 진행되는 단계별 공정 흐름을 확인해 보세요.</p>
+            </div>
+            <div class="max-w-xl mx-auto">
+              <div class="timeline-box">
+                <div class="timeline-item">
+                  <h4>1단계. 행정 및 철거</h4>
+                  <p>용도변경/위생신고 확인 ➔ 관리소 동의서 및 신고 ➔ 기존 시설 철거</p>
+                </div>
+                <div class="timeline-item">
+                  <h4>2단계. 기본 설비</h4>
+                  <p>소방 스프링클러 이설 ➔ 급배수 설비(방수) ➔ 전기 승압 배선 ➔ 냉난방 배관</p>
+                </div>
+                <div class="timeline-item">
+                  <h4>3단계. 목공 및 금속</h4>
+                  <p>가벽 및 구획 조성 ➔ 수납/리셉션 카운터 조성 ➔ 외부 파사드 작업</p>
+                </div>
+                <div class="timeline-item">
+                  <h4>4단계. 마감 공사</h4>
+                  <p>도장 및 친환경 필름 ➔ 타일/바닥재 시공 ➔ 조명 기구 안착</p>
+                </div>
+                <div class="timeline-item" style="margin-bottom:0;">
+                  <h4>5단계. 세팅 및 검수</h4>
+                  <p>집기 및 가구 반입 ➔ 간판/사인물 부착 ➔ 준공 청소 ➔ 소방 인허가</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 8: 상가 체크리스트 -->
+          <div id="tab-check" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">계약서 도장 찍기 전 필수 체크리스트</h3>
+              <p class="text-xs text-[#666666]">인테리어 공사는 도장을 찍기 전의 협의와 서류 확인이 법적 안전을 가릅니다.</p>
+            </div>
+            <div class="max-w-xl mx-auto space-y-6">
+              <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-primary h-full w-0 transition-all duration-300" id="chk_progress"></div>
+              </div>
+              <p class="text-center font-bold text-primary text-xs" id="chk_text">0 / 5 필수 항목 완료</p>
+              
+              <div class="space-y-3">
+                <label class="chk-item">
+                  <input type="checkbox" onclick="updateProgress()" class="mt-1" />
+                  <div>
+                    <span>건축물대장 용도 확인</span>
+                    <p>등록하려는 신규 업종이 건물 대장상의 용도(예: 제1종, 2종 근생 등)와 맞는지 구청에 먼저 확인해야 합니다.</p>
+                  </div>
+                </label>
+                <label class="chk-item">
+                  <input type="checkbox" onclick="updateProgress()" class="mt-1" />
+                  <div>
+                    <span>기존 전력량 및 소방 확인</span>
+                    <p>스프링클러 살수 반경 규정과 냉난방기 사용을 위한 기본 인프라 용량을 사전에 확인해 둡니다.</p>
+                  </div>
+                </label>
+                <label class="chk-item">
+                  <input type="checkbox" onclick="updateProgress()" class="mt-1" />
+                  <div>
+                    <span>임대 렌트프리(Rent-free) 기간 약속</span>
+                    <p>공사 기간 동안 월세를 받지 않는 렌트프리 혜택의 범위와 기간을 건물주와 계약서에 미리 삽입해야 합니다.</p>
+                  </div>
+                </label>
+                <label class="chk-item">
+                  <input type="checkbox" onclick="updateProgress()" class="mt-1" />
+                  <div>
+                    <span>간판 및 파사드 자체 규정 유무</span>
+                    <p>건물 디자인 통일을 위해 간판의 크기나 색상 등을 제약하는 건물 관리 규정이 있는지 미리 알아둡니다.</p>
+                  </div>
+                </label>
+                <label class="chk-item">
+                  <input type="checkbox" onclick="updateProgress()" class="mt-1" />
+                  <div>
+                    <span>수도 인입 및 하수관 물매 확인</span>
+                    <p>원하는 탕비 공간이나 수도 꼭지 위치까지 하수관 구배(물매 기울기)가 원활하게 빠질 수 있는지 확인합니다.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 9: 실수방지 특약 -->
+          <div id="tab-contract" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">계약서 하단 필수 실수방지 특약</h3>
+              <p class="text-xs text-[#666666]">구두 약속은 분쟁 예방에 효력이 없습니다. 아래 조항들을 특약에 명시하세요.</p>
+            </div>
+            <div class="max-w-2xl mx-auto space-y-4">
+              <div class="contract-box">
+                <h4>1. 공기 지연에 따른 보상 명시</h4>
+                <p>시공사의 귀책 사유로 인하여 약정된 준공일이 지연될 시, 지연일수 1일당 총 공사 대금의 1/1,000에 해당하는 금액을 지체상금으로 공제한다.</p>
+              </div>
+              <div class="contract-box">
+                <h4>2. 인허가 소방 필증 등의 책임 귀속</h4>
+                <p>시공의 문제나 불량으로 인해 관할 소방서 또는 구청의 인허가 심사(소방필증 등)가 반려될 경우, 시공자는 본인 비용으로 무상 즉시 재시공한다.</p>
+              </div>
+              <div class="contract-box">
+                <h4>3. 임의 추가 비용 불가 조항</h4>
+                <p>도면 및 최초 내역서에 합의된 항목 외에, 발주자의 서면 요청에 의한 설계 변경이 없는 한 현장 임의 변수를 이유로 추가 공사비를 일체 요구하지 아니한다.</p>
+              </div>
+              <div class="contract-box">
+                <h4>4. 하자이행 조건 및 잔금 지급</h4>
+                <p>잔금은 준공 후 발생한 하자보수 항목들이 최종적으로 완전 이행되었음을 발주자가 상호 확인한 시점 이후 지급한다.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 10: 업체 면허 조회 -->
+          <div id="tab-license" class="pi-tab-content hidden">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+              <h3 class="text-xl font-bold text-[#111111] mb-2">국토교통부 키스콘(KISCON) 실시간 면허 조회</h3>
+              <p class="text-xs text-[#666666]">법적 보호 장치를 확보하기 위해, 실내건축공업 면허가 있는 정식 시공사와 거래하셔야 안전합니다.</p>
+            </div>
+            <div class="max-w-lg mx-auto p-8 rounded-xl border-2 border-dashed border-primary bg-primary/5 text-center space-y-4">
+              <i class="fas fa-shield-alt fa-3x text-primary"></i>
+              <h4 class="text-base font-bold text-gray-800">조회 전 '업체 정보' 파악</h4>
+              <p class="text-xs text-gray-600">계약서나 견적서에 표시되어 있는 정확한 '상호(법인명)' 또는 '사업자등록번호'를 메모해 두세요.</p>
+              <a href="https://www.kiscon.net" target="_blank" rel="noopener noreferrer" class="inline-block px-8 py-3 bg-primary text-white text-xs font-bold rounded-lg hover:bg-accent transition-colors">
+                <i class="fas fa-external-link-alt mr-1.5"></i>키스콘 사이트 바로가기
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- [섹션 4: 메디컬 전문가 칼럼] -->
     <section class="mb-32 scroll-mt-24" id="columns">
       <div class="max-w-3xl mx-auto text-center mb-16">
         <span class="text-xs font-bold text-primary tracking-widest uppercase">Expert Column</span>
@@ -540,6 +865,135 @@
           <button onclick="openModal(6)" class="mt-5 self-start px-4 py-2 border border-gray-200 hover:border-primary hover:text-primary text-xs font-medium rounded text-[#555555] transition-colors duration-250">
             자세히 보기
           </button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- [신규 전면 추가] 애드센스용 SEO 하드코딩 인테리어 실전 칼럼 8선 (대폭적인 텍스트 풍부화로 검색 인덱스 최적화) -->
+    <section class="mb-32 py-16 border-t border-gray-100">
+      <div class="max-w-3xl mx-auto text-center mb-16">
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">SEO Guide Articles</span>
+        <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2 mb-4">
+          상가 · 사무실 창업 인테리어 백과
+        </h2>
+        <p class="text-[#666666] text-sm">
+          부산 지역 및 전국에서 창업을 준비하시는 대표님들이 반드시 실패를 예방하기 위해 읽어보셔야 할 업종별 전문 지식 아카이브입니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- 칼럼 1 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">비용 절감 가이드</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">1. 상가 인테리어, 평당 견적의 무서운 함정</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              많은 창업자분들이 인테리어 업체를 선정할 때 "평당 얼마인가요?"라는 질문을 가장 먼저 던집니다. 하지만 상업공간 인테리어에서 평당 견적은 사실상 무의미에 가깝습니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              주거공간과 달리 상가는 현재 현장의 철거 상태, 소방 설비 유무, 전기 승압 필요성, 그리고 수도 배수의 위치에 따라 동일한 20평이라도 천만 원 이상의 견적 차이가 발생할 수 있습니다. 특히 식당이나 카페의 경우 주방 방수 공사와 덕트(환기) 시설이 차지하는 비용 비중이 막대합니다. 따라서 단순히 평당 단가가 저렴한 업체를 고르기보다는, 현장 실측 후 '가설, 목공, 전기, 설비, 도장' 등 공정별로 상세하게 나뉜 산출 내역서를 제공하는 업체를 선택해야 추후 눈덩이처럼 불어나는 추가 요금 폭탄을 피할 수 있습니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 2 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">카페 창업 필수</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">2. 카페 창업 전 필수 확인: 전기 승압과 배수</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              아늑하고 예쁜 카페를 꿈꾸며 덜컥 상가 계약부터 하셨나요? 인테리어 공사 직전 가장 많이 겪는 낭패가 바로 '전기'와 '물' 문제입니다. 상가의 기본 계약 전력은 보통 5kW입니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              하지만 에스프레소 머신 하나만 5~7kW의 전력을 잡아먹으며, 오븐, 제빙기, 냉난방기까지 동시에 가동하려면 최소 15kW~20kW 이상의 전력이 필요합니다. 기존 전력이 모자라면 한전에 승압을 신청해야 하며, 이 과정에서 1kW당 약 10~15만 원의 한전 불입금과 수십만 원의 내부 전기 배선 교체 비용이 발생합니다. 또한 주방이 들어설 자리에 배수구가 멀다면 바닥을 깨거나 단을 높이는 추가 설비 공사가 불가피합니다. 반드시 계약 전 건물주에게 현재 계약전력과 배관 위치를 확인하세요.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 3 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">식당/외식업</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">3. 식당 인테리어의 심장, 주방 방수 공사</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              음식점 창업 시 눈에 보이는 홀 디자인보다 100배 더 중요한 것이 바로 '주방 방수'입니다. 홀 인테리어가 아무리 화려해도 주방에서 아래층으로 물이 새기 시작하면 그날로 영업 중단은 물론, 엄청난 손해배상까지 떠안아야 합니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              완벽한 주방 방수를 위해서는 바닥 철거 후 이물질을 깨끗이 제거하고, 액체 방수와 우레탄 방수(또는 도막 방수)를 2~3회에 걸쳐 꼼꼼하게 시공해야 합니다. 방수액이 벽면을 타고 올라가는 '조인트' 부분의 처리가 핵심이며, 방수층이 완전히 마르기 전까지는 절대 다음 공정(타일 시공 등)으로 넘어가서는 안 됩니다. 공사 기간이 하루 이틀 늦어지더라도 방수 양생 시간을 철저히 지키는 양심적인 시공사를 만나는 것이 외식업 인테리어 성공의 핵심입니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 4 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">학원/교육공간</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">4. 학원 인테리어, 소방 인허가 기준 완벽 정리</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              학원이나 교습소를 창업할 때는 디자인보다 관할 교육청의 인허가 및 소방서의 완비 증명서 발급이 최우선입니다. 법적 기준을 맞추지 못한 인테리어는 전부 다 철거해야 하는 대참사를 부릅니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              가장 중요한 것은 '방염' 처리입니다. 학원에 사용되는 벽지, 커튼, 블라인드, 실내 장식물(목재)은 반드시 방염 성적서가 있는 자재를 사용하거나, 현장에서 방염 도료를 칠한 뒤 관할 소방서의 방염 필증을 받아야 합니다. 또한, 학원법상 지역마다 '최소 강의실 면적' 규정이 다릅니다(예: 서울은 70㎡ 이상, 부산은 60㎡ 이상 등). 복도나 원장실을 제외한 순수 강의 공간의 내측 면적만 측정하므로, 인테리어 가벽을 세울 때 도면상 면적이 아닌 실제 내부 면적을 반드시 여유 있게 설계해야 합니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 5 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">사무실 오피스</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">5. 업무 효율 200% 올리는 사무실 조명 설계</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              사무실 인테리어에서 가장 적은 비용으로 가장 큰 효과를 내는 요소는 단연 '조명(Lighting)'입니다. 과거처럼 사무실 전체를 차가운 흰색 형광등(주광색)으로만 도배하는 시대는 지났습니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              장시간 모니터를 봐야 하는 개발자나 디자이너의 사무공간은 눈의 피로를 덜어주는 눈부심 방지(플리커 프리) 조명을 필수적으로 적용해야 합니다. 또한, 집중력이 필요한 개별 업무 공간은 4000K~5000K의 주백색 조명으로 세팅하고, 직원들이 휴식을 취하거나 자유로운 아이디어를 나누는 라운지 및 탕비실 공간은 카페처럼 아늑한 3000K 이하의 전구색 조명을 사용하는 '구역별 조명 온도 분리' 설계를 추천합니다. 빛의 색온도만 바꿔도 회사에 대한 직원들의 만족도가 크게 상승합니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 6 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">미용/뷰티샵</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">6. 미용실 창업, 온수기 용량과 배관의 중요성</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              헤어살롱이나 바버샵 등 미용업 인테리어의 심장부는 바로 '샴푸대'입니다. 미용실은 물과 전기를 가장 많이, 그리고 쉴 새 없이 사용하는 상업공간이므로 이에 특화된 설비 공사가 생명입니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              먼저 온수기 용량입니다. 경대 3~4개 기준 샴푸대 1~2대를 쓴다면 최소 100~150리터 이상의 대용량 전기온수기가 필요합니다. 겨울철에 손님 머리를 감겨주다 찬물이 나오면 최악의 컴플레인으로 이어집니다. 둘째는 배관의 구배(기울기)와 사이즈입니다. 머리카락과 염색약이 매일 흘러가는 하수 배관은 일반 상가보다 훨씬 굵은 배관을 써야 하며, 물이 고이지 않고 시원하게 내려가도록 바닥 단을 넉넉히 높여 완벽한 물매를 잡아주는 것이 미용실 인테리어 업체의 진짜 실력입니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 7 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">계약 및 법률</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">7. 상가 원상복구와 철거, 계약 전 필수 특약</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              멋진 인테리어를 완성하는 것만큼이나 중요한 것이 나중에 상가를 비워줄 때의 '원상복구' 문제입니다. 많은 자영업자분들이 퇴점 시 임대인과의 철거 범위 다툼으로 수백만 원을 잃곤 합니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              건물주와 상가 임대차 계약을 맺을 때 특약사항에 "원상복구의 범위는 임차인이 입주할 당시의 상태로 한다"라는 애매한 문구 대신, 입주 전 텅 빈 상가 상태를 동영상과 사진으로 꼼꼼히 촬영해 두고 "어디까지 부수고 나갈 것인지"를 명확히 적어야 합니다. 천장 텍스를 털어내고 노출 천장 인테리어를 했다면, 퇴점 시 다시 천장을 덮어놓고 나가야 하는지 계약 전 임대인과 미리 합의하고 문서화해 두는 것이 미래의 내 돈을 지키는 가장 확실한 실수 방지법입니다.
+            </p>
+          </div>
+        </article>
+
+        <!-- 칼럼 8 -->
+        <article class="p-8 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between hover:border-primary transition-all duration-300">
+          <div>
+            <span class="inline-block bg-primary/5 text-primary text-xs font-bold px-3 py-1 rounded-full mb-4">자재 비교 가이드</span>
+            <h3 class="text-lg font-bold text-[#111111] mb-4">8. 상가 바닥재 비교: 에폭시 vs 데코타일 vs 포세린</h3>
+            <p class="text-xs text-[#555555] leading-relaxed mb-3">
+              상업공간의 분위기를 가장 크게 결정하는 부분은 바로 바닥재의 재질 선택입니다. 에폭시, 데코타일, 포세린 타일 각각의 장단점을 명확히 알아야 합니다.
+            </p>
+            <p class="text-xs text-[#555555] leading-relaxed">
+              첫째, 빈티지한 감성의 에폭시는 일체형 구조라 이음새가 없고 물청소가 쉬우나 스크래치와 변색에 약합니다. 둘째, 가격이 가장 저렴하고 부분 보수가 쉬운 데코타일은 상가 임대차 매장에서 가장 흔히 쓰이지만 장시간 물이 고이면 틈새가 벌어지는 단점이 있습니다. 셋째, 최고급 프리미엄 룩을 선사하는 포세린 타일은 변형이 전혀 없고 열전도율이 우수해 겨울철 난방에 좋지만, 시공 단가가 비싸고 이음새 메디가 쉽게 오염될 수 있으므로 매장 특성에 맞춰 신중히 선택해야 합니다.
+            </p>
+          </div>
         </article>
 
       </div>
@@ -702,8 +1156,175 @@
     </div>
   </div>
 
+  <!-- Unified Javascript Logic for Tabs, Calculators, Progress bar, and Modals -->
   <script type="text/javascript">
-    // Article database storing experts content (500+ Korean words, EEAT compliant, LSI Keywords, Backlinks)
+    // 1. Tab Switching Engine
+    function openTab(tabId) {
+      // Hide all tabs
+      const contents = document.getElementsByClassName('pi-tab-content');
+      for (let i = 0; i < contents.length; i++) {
+        contents[i].classList.add('hidden');
+        contents[i].classList.remove('block');
+      }
+      // Deactivate all buttons
+      const buttons = document.getElementsByClassName('pi-tab-btn');
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('active');
+      }
+
+      // Show specific tab
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(tabId).classList.add('block');
+      // Activate specific button
+      document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    // 2. Tab 1 Logic: Area Calculator
+    function calcAreaFromLength() {
+      const w = parseFloat(document.getElementById('t1_w').value) || 0;
+      const h = parseFloat(document.getElementById('t1_h').value) || 0;
+      const resultEl = document.getElementById('t1_result');
+
+      if (w <= 0 || h <= 0) {
+        resultEl.innerHTML = "가로/세로 길이를 입력해주세요.";
+        return;
+      }
+      const sqm = w * h;
+      const py = sqm * 0.3025;
+      resultEl.innerHTML = `결과 면적: <span class="text-xl text-primary font-bold">${sqm.toFixed(2)}</span> ㎡ / 약 <span class="text-xl text-primary font-bold">${py.toFixed(1)}</span> 평`;
+    }
+
+    function convertArea(type) {
+      const sqmInput = document.getElementById('t1_sqm');
+      const pyInput = document.getElementById('t1_py');
+      const resultEl = document.getElementById('t1_result2');
+
+      if (type === 'sqm') {
+        const val = parseFloat(sqmInput.value) || 0;
+        if (val <= 0) {
+          pyInput.value = '';
+          resultEl.innerHTML = "숫자를 입력해주세요.";
+          return;
+        }
+        const convertedPy = val * 0.3025;
+        pyInput.value = convertedPy.toFixed(1);
+        resultEl.innerHTML = `<span class="text-primary font-bold">${val}</span> ㎡ ➔ 약 <span class="text-primary font-bold">${convertedPy.toFixed(1)}</span> 평`;
+      } else {
+        const val = parseFloat(pyInput.value) || 0;
+        if (val <= 0) {
+          sqmInput.value = '';
+          resultEl.innerHTML = "숫자를 입력해주세요.";
+          return;
+        }
+        const convertedSqm = val / 0.3025;
+        sqmInput.value = convertedSqm.toFixed(1);
+        resultEl.innerHTML = `<span class="text-primary font-bold">${val}</span> 평 ➔ 약 <span class="text-primary font-bold">${convertedSqm.toFixed(1)}</span> ㎡`;
+      }
+    }
+
+    // 3. Tab 2 Logic: Budget Calculator (1,000,000 KRW / Pyung standard)
+    function calcBudget() {
+      const py = parseFloat(document.getElementById('t2_py').value) || 0;
+      const resultEl = document.getElementById('t2_result');
+
+      if (py <= 0) {
+        resultEl.innerHTML = "평수를 입력해주세요.";
+        return;
+      }
+      const rawCost = py * 100; // In ten-thousand KRW
+      let costStr = "";
+      if (rawCost >= 10000) {
+        const eok = Math.floor(rawCost / 10000);
+        const man = rawCost % 10000;
+        costStr = `${eok}억 ${man > 0 ? man + '만' : ''}원`;
+      } else {
+        costStr = `${rawCost}만 원`;
+      }
+      resultEl.innerHTML = `대략적인 예상 최저 공사비: 약 <span class="text-xl text-primary font-bold">${costStr}</span> 내외`;
+    }
+
+    // 4. Tab 3 Logic: Air Conditioner Capacity
+    function calcAC() {
+      const py = parseFloat(document.getElementById('t3_py').value) || 0;
+      const resultEl = document.getElementById('t3_result');
+
+      if (py <= 0) {
+        resultEl.innerHTML = "실평수를 입력해주세요.";
+        return;
+      }
+      // Basic recommendation rules
+      const reqCapacityKw = py * 0.4; // 1 py = approx 0.4kW cooling power needed
+      const reqCapacityPy = Math.ceil(py * 1.5); // Safety margin 1.5x
+      resultEl.innerHTML = `권장 냉난방기 용량: 실평수의 1.5배인 <span class="text-primary font-bold">최소 ${reqCapacityPy}평형</span> 장비 권장 (정격 냉방 능력: <span class="text-primary font-bold">${reqCapacityKw.toFixed(1)} kW</span> 이상)`;
+    }
+
+    // 5. Tab 4 Logic: Contract Power Diagnosis
+    function calcPower() {
+      const py = parseFloat(document.getElementById('t4_py').value) || 0;
+      const resultEl = document.getElementById('t4_result');
+
+      if (py <= 0) {
+        resultEl.innerHTML = "평수를 입력해주세요.";
+        return;
+      }
+      // Estimating based on square footage
+      let recommendKw = 5;
+      if (py > 10) {
+        recommendKw = Math.ceil(5 + (py - 10) * 0.5);
+      }
+      resultEl.innerHTML = `권장 한전 계약전력: <span class="text-primary font-bold">최소 ${recommendKw} kW</span> 이상 필요 (특수 열장비가 많은 요식업/미용업은 추가 협의 필요)`;
+    }
+
+    // 6. Tab 5 Logic: Material Calculator
+    function calcMaterial() {
+      const py = parseFloat(document.getElementById('t5_py').value) || 0;
+      const type = document.getElementById('t5_type').value;
+      const resultEl = document.getElementById('t5_result');
+
+      if (py <= 0) {
+        resultEl.innerHTML = "시공 면적과 자재를 선택해주세요.";
+        return;
+      }
+
+      if (type === 'deco') {
+        const box = Math.ceil(py * 1.05); // 5% loss rate
+        resultEl.innerHTML = `데코타일 권장 필요량: 약 <span class="text-primary font-bold">${box} 박스</span> (실평수 대비 5% 로스율 반영)`;
+      } else if (type === 'tile600') {
+        const sqm = py / 0.3025;
+        const box = Math.ceil(sqm / 1.44 * 1.1); // 10% loss rate
+        resultEl.innerHTML = `600각 포세린 타일 권장 필요량: 약 <span class="text-primary font-bold">${box} 박스</span> (로스율 10% 반영, 총 ${sqm.toFixed(1)}㎡ 분량)`;
+      } else {
+        const bucket = Math.ceil(py / 20); // 1 bucket covers approx 20 pyungs
+        resultEl.innerHTML = `수성 페인트 권장 필요량: 약 <span class="text-primary font-bold">${bucket} 말 (18L 통)</span> (2회 도장 기준)`;
+      }
+    }
+
+    // 7. Tab 6 Logic: Lighting Guide
+    function calcLight() {
+      const py = parseFloat(document.getElementById('t7_py').value) || 0;
+      const resultEl = document.getElementById('t7_result');
+
+      if (py <= 0) {
+        resultEl.innerHTML = "평수를 입력하시면 추천 조명 갯수가 표시됩니다.";
+        return;
+      }
+      const count = Math.ceil(py * 1.8);
+      resultEl.innerHTML = `권장 3인치/4인치 매립등 수량: 약 <span class="text-primary font-bold">${count} 개</span> (조도 분리를 고려한 적정 간격 설계 기준)`;
+    }
+
+    // 8. Tab 8 Logic: Checklist Progress
+    function updateProgress() {
+      const list = document.querySelectorAll('#tab-check input[type="checkbox"]');
+      let checked = 0;
+      list.forEach(chk => {
+        if (chk.checked) checked++;
+      });
+      const pct = (checked / list.length) * 100;
+      document.getElementById('chk_progress').style.width = pct + '%';
+      document.getElementById('chk_text').textContent = `${checked} / ${list.length} 필수 항목 완료`;
+    }
+
+    // 9. Article Database (Experts Content)
     const articles = {
       1: {
         title: "성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획",
@@ -731,7 +1352,7 @@
             특히 정형외과나 성형외과 등 수술실이 포함된 병원의 경우, 의료법 기준에 따른 무균 수술실 환경 조성이 필수적입니다. 수술실 내 공기 정화 설비(HEPA 필터 적용 공조기)와 압력 제어 시스템(양압 시스템)을 통해 외부 오염 물질의 유입을 철저히 차단해야 합니다. 
           </p>
           <p class="text-[#444444] leading-relaxed text-base mb-4 font-normal">
-            또한, 엑스레이실이나 CT실의 경우 방사선 누출을 완벽하게 차단하기 위해 벽면과 문 내부에 납판(Lead sheet) 차폐 공사를 꼼꼼히 시행해야 하며, 관할 보건소의 사용 승인을 받기 위한 정밀 측정이 병행되어야 합니다. 각 <strong>진료과목별 맞춤 설계</strong> 시 이러한 법적 기준과 설비 기술력이 뒷받침되지 않으면 준공 허가 지연이나 재시공이라는 막대한 피해가 발생할 수 있습니다. 당사는 오랜 현장 경험을 바탕으로 공조, 소방, 전기, 가스 설비 등 병원 특수 인프라를 완벽히 책임 시공하여 의뢰하시는 원장님들께 신뢰를 드립니다.
+            또한, 엑스레이실이나 CT실의 경우 방사선 누출을 완벽하게 차단하기 위해 벽면과 문 내부에 납판(Lead sheet) 차폐 공사를 꼼꼼히 시행해야 하며, 관할 보건소의 사용 승인을 받기 위한 정밀 측정들이 병행되어야 합니다. 각 <strong>진료과목별 맞춤 설계</strong> 시 이러한 법적 기준과 설비 기술력이 뒷받침되지 않으면 준공 허가 지연이나 재시공이라는 막대한 피해가 발생할 수 있습니다. 당사는 오랜 현장 경험을 바탕으로 공조, 소방, 전기, 가스 설비 등 병원 특수 인프라를 완벽히 책임 시공하여 의뢰하시는 원장님들께 신뢰를 드립니다.
           </p>
         `
       },

@@ -204,7 +204,7 @@
 <body class="antialiased text-[#333333] bg-white">
 
   <!-- Header Section (Clean minimalist Navigation) -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+  <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <span class="w-2.5 h-2.5 bg-primary rounded-full"></span>
@@ -223,44 +223,46 @@
     </div>
   </header>
 
-  <!-- Hero Section (Split Layout for maximizing main1.webp visibility and premium contrast) -->
-  <section class="relative min-h-[80vh] flex items-center justify-start pt-20 overflow-hidden bg-white">
-    <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-12">
-      
-      <!-- Left side: Information -->
-      <div class="lg:col-span-6 space-y-6 z-10">
-        <div class="inline-block bg-gray-100 px-3 py-1 rounded text-[11px] font-semibold text-[#555555] uppercase tracking-wider">
+  <!-- Hero Section (Full-screen Background Layout for maximum impact of main1.webp) -->
+  <section class="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden bg-black">
+    <!-- Main Background Image: 100% full screen cover, slightly dimmed for text readability -->
+    <div class="absolute inset-0 z-0">
+      <img src="./main1.webp" loading="lazy" alt="부산_병원_인테리어_실내건축면허_보유업체" class="w-full h-full object-cover opacity-45" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#111111]/90 via-[#111111]/60 to-[#111111]/30"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 w-full py-24 text-center">
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="inline-block bg-white/10 border border-white/20 backdrop-blur-md px-3 py-1 rounded text-[11px] font-semibold text-white uppercase tracking-wider">
           안과 · 내과 복합 메디컬 공간 특화
         </div>
         
         <!-- Single H1 tag for perfect SEO structure -->
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#111111] leading-tight">
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight">
           성공적인 개원의 시작,<br />
           <span class="text-primary">부산 병원 공간 디자인</span>
         </h1>
         
-        <p class="text-sm md:text-base text-[#555555] font-normal leading-relaxed max-w-xl">
+        <p class="text-sm md:text-lg text-gray-200/90 font-normal leading-relaxed max-w-2xl mx-auto pt-2">
           내과, 외과, 안과, 피부과, 성형외과까지, 각 진료과목의 특성과 의료법을 완벽히 이해한 맞춤형 인테리어를 선보입니다. 실내건축공사업 면허를 보유한 검증된 전문성과 감각으로, 환자와 의료진 모두에게 신뢰감을 주는 품격 있는 병원 공간을 완성합니다.
         </p>
         
-        <!-- Small recommendations bar -->
-        <div class="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <div class="flex items-center gap-2 text-xs text-[#666666] bg-white border border-gray-200 px-4 py-3 rounded shadow-sm">
+        <!-- Understated recommendations bar in dark layout style -->
+        <div class="pt-8 flex flex-col sm:flex-row justify-center items-center gap-3">
+          <div class="flex items-center gap-2 text-xs text-white bg-white/10 border border-white/20 backdrop-blur-md px-4 py-3 rounded shadow-lg">
             <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            <span>병원인테리어 추천업체 바로가기</span>
-            <span class="text-gray-300">|</span>
+            <span>병원인테리어 추천업체</span>
+            <span class="text-white/30">|</span>
             <a href="https://inde.co.kr" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">
               인디컴퍼니 공식 홈페이지
             </a>
           </div>
+          
+          <a href="#columns" class="px-6 py-3 rounded text-xs bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all backdrop-blur-md font-medium">
+            전문 칼럼 읽어보기
+          </a>
         </div>
       </div>
-
-      <!-- Right side: Visual (main1.webp cleanly displayed without wash-out effect) -->
-      <div class="lg:col-span-6 relative h-[380px] sm:h-[450px] lg:h-[500px] w-full overflow-hidden rounded-2xl bg-gray-50 border border-gray-100 shadow-sm">
-        <img src="./main1.webp" loading="lazy" alt="부산_병원_인테리어_실내건축면허_보유업체 메인 디자인 완공 사진" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
-      </div>
-
     </div>
   </section>
 
@@ -410,20 +412,20 @@
         </div>
 
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
-          <img src="./dsc02106-home.webp" loading="lazy" alt="내시경실 및 안과 수술실 공간 시공" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src="./dsc02106-home.webp" loading="lazy" alt="내시경실 및 안과 검안실 공간 시공" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
           <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
-            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Operating Room</p>
-            <h4 class="text-sm font-bold mt-0.5">내시경실 및 안과 수술 전용 공간</h4>
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Examination Room</p>
+            <h4 class="text-sm font-bold mt-0.5">종합 검진실 및 내시경 구역</h4>
           </div>
         </div>
 
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
-          <img src="./dsc02109-home.webp" loading="lazy" alt="환자 전용 케어룸 파우더 공간" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src="./dsc02109-home.webp" loading="lazy" alt="검안실 및 정밀 시력 측정 공간" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
           <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
-            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Care Room</p>
-            <h4 class="text-sm font-bold mt-0.5">환자 전용 케어룸 및 세면 공간</h4>
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Optometry Room</p>
+            <h4 class="text-sm font-bold mt-0.5">검안실 및 정밀 시력 측정 공간</h4>
           </div>
         </div>
       </div>
@@ -444,7 +446,7 @@
       <!-- Asymmetric Custom Grid - clean minimal design -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <!-- Card 1 (Flow layout image mapping) -->
+        <!-- Card 1 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -460,7 +462,7 @@
           </button>
         </article>
 
-        <!-- Card 2 (Surgery layout image mapping) -->
+        <!-- Card 2 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -476,7 +478,7 @@
           </button>
         </article>
 
-        <!-- Card 3 (Lounge layout image mapping) -->
+        <!-- Card 3 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -492,7 +494,7 @@
           </button>
         </article>
 
-        <!-- Card 4 (Facade layout image mapping) -->
+        <!-- Card 4 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -508,7 +510,7 @@
           </button>
         </article>
 
-        <!-- Card 5 (License/Consultation image mapping) -->
+        <!-- Card 5 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -524,7 +526,7 @@
           </button>
         </article>
 
-        <!-- Card 6 (Maintenance/Inspection image mapping) -->
+        <!-- Card 6 -->
         <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
           <div class="space-y-4">
             <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
@@ -708,7 +710,7 @@
         category: "맞춤형 동선 기획",
         content: `
           <p class="text-[#444444] leading-relaxed text-base mb-4 font-normal">
-            병원 개원은 단순한 미적 공간 창출을 넘어, 복잡한 의료법 규정과 환자 및 의료진의 실질적인 편의성을 완벽하게 매칭시켜야 하는 정밀한 작업입니다. 특히 <strong>병원 개원 인테리어</strong>를 진행할 때 가장 먼저 고려해야 할 부분은 바로 <strong>환자 중심 동선 기획</strong>입니다. 환자가 내원하여 접수하고 대기하며, 진료을 받고 수납 후 귀가하기까지의 모든 과정이 막힘없이 흘러가도록 동선을 구성해야 합니다.
+            병원 개원은 단순한 미적 공간 창출을 넘어, 복잡한 의료법 규정과 환자 및 의료진의 실질적인 편의성을 완벽하게 매칭시켜야 하는 정밀한 작업입니다. 특히 <strong>병원 개원 인테리어</strong>를 진행할 때 가장 먼저 고려해야 할 부분은 바로 <strong>환자 중심 동선 기획</strong>입니다. 환자가 내원하여 접수하고 대기하며, 진료를 받고 수납 후 귀가하기까지의 모든 과정이 막힘없이 흘러가도록 동선을 구성해야 합니다.
           </p>
           <p class="text-[#444444] leading-relaxed text-base mb-4 font-normal">
             예를 들어, 소아청소년과나 내과의 경우 교차 감염의 우려를 줄이기 위해 호흡기 대기실을 분리 설계하거나, 치과의 경우에는 체어 간의 간격과 환자의 프라이버시 보호가 최우선으로 고려되어야 합니다. 또한 의료진의 업무 효율성을 향상하기 위한 서브 동선과 수술실, 소독실 등의 위생 공간 배치 또한 면밀하게 설계되어야 합니다.

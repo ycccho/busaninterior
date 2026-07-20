@@ -453,100 +453,88 @@
       </div>
 
       <!-- Asymmetric Custom Grid - clean minimal design -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         
         <!-- Card 1 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_flow.png" loading="lazy" alt="진료과목별 동선 레이아웃 설계 설계도" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              내과, 치과, 이비인후과 등 각 진료과목의 특성에 맞춘 환자 및 의료진 동선 기획은 병원 운영의 효율성과 직결됩니다. 환자의 심리적 부담을 덜고 직원의 이동을 최소화하는 비법을 공개합니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_flow.png" loading="lazy" alt="진료과목별 동선 레이아웃 설계 설계도" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(1)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            내과, 치과, 이비인후과 등 각 진료과목의 특성에 맞춘 환자 및 의료진 동선 기획은 병원 운영의 효율성과 직결됩니다. 환자의 심리적 부담을 덜고 직원의 이동을 최소화하는 비법을 공개합니다.
+          </p>
+          <button onclick="openModal(1)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>
 
         <!-- Card 2 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_surgery.png" loading="lazy" alt="병원 무균 수술실 공조 설비 시공" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">의료법 기준을 충족하는 무균 수술실 및 공조 설비 구축 가이드</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              병원 인테리어에서 가장 까다로운 소방, 공조 및 방사선 차폐 설비의 기준을 명확히 제시하고 시공 시 주의해야 할 점을 알아봅니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_surgery.png" loading="lazy" alt="병원 무균 수술실 공조 설비 시공" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(2)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">의료법 기준을 충족하는 무균 수술실 및 공조 설비 구축 가이드</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            병원 인테리어에서 가장 까다로운 소방, 공조 및 방사선 차폐 설비의 기준을 명확히 제시하고 시공 시 주의해야 할 점을 알아봅니다.
+          </p>
+          <button onclick="openModal(2)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>
 
         <!-- Card 3 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_lounge.png" loading="lazy" alt="호텔식 병원 라운지 인테리어 디자인" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">환자에게 신뢰감을 주는 프리미엄 대기실 라운지 연출법</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              단순한 대기 공간을 넘어, 고급스러운 호텔식 라운지 감성을 더해 환자의 불안감을 해소하고 병원의 브랜드 가치를 높이는 인테리어 기법입니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_lounge.png" loading="lazy" alt="호텔식 병원 라운지 인테리어 디자인" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(3)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">환자에게 신뢰감을 주는 프리미엄 대기실 라운지 연출법</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            단순한 대기 공간을 넘어, 고급스러운 호텔식 라운지 감성을 더해 환자의 불안감을 해소하고 병원의 브랜드 가치를 높이는 인테리어 기법입니다.
+          </p>
+          <button onclick="openModal(3)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>
 
         <!-- Card 4 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_facade.png" loading="lazy" alt="병원 입구 파사드 사인 브랜딩 설계" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">첫눈에 사로잡는 병원 파사드 디자인과 아이덴티티 구축</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              건물의 외부 전면과 입구 디자인을 통해 병원의 전문성과 신뢰감을 전달하고 브랜드 가치를 극대화하는 브랜딩 전략을 다룹니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_facade.png" loading="lazy" alt="병원 입구 파사드 사인 브랜딩 설계" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(4)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">첫눈에 사로잡는 병원 파사드 디자인과 아이덴티티 구축</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            건물의 외부 전면과 입구 디자인을 통해 병원의 전문성과 신뢰감을 전달하고 브랜드 가치를 극대화하는 브랜딩 전략을 다룹니다.
+          </p>
+          <button onclick="openModal(4)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>
 
         <!-- Card 5 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_license.png" loading="lazy" alt="실내건축공업 면허 업체 상담 설계" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">안전한 메디컬 공사를 위한 실내건축공사업 면허 확인의 중요성</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              병원 공사는 1,500만 원 이상의 고액 시공이 대부분이므로, 법적으로 등록된 전문 면허 업체와 계약해야 법적 보호와 투명한 사후관리를 기대할 수 있습니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_license.png" loading="lazy" alt="실내건축공업 면허 업체 상담 설계" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(5)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">안전한 메디컬 공사를 위한 실내건축공사업 면허 확인의 중요성</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            병원 공사는 1,500만 원 이상의 고액 시공이 대부분이므로, 법적으로 등록된 전문 면허 업체와 계약해야 법적 보호와 투명한 사후관리를 기대할 수 있습니다.
+          </p>
+          <button onclick="openModal(5)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>
 
         <!-- Card 6 -->
-        <article class="p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-between h-[480px]">
-          <div class="space-y-4">
-            <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
-              <img src="./hospital_maintenance.png" loading="lazy" alt="병원 준공 후 철저한 유지보수 점검" class="w-full h-full object-cover" />
-            </div>
-            <h3 class="text-lg font-bold text-[#111111] line-clamp-2 leading-snug">체계적인 감리 프로세스와 준공 후 완벽한 사후관리 시스템</h3>
-            <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
-              착공부터 준공, 그리고 개원 이후까지 단계별 품질 검증 및 하자보수 이행 보증을 통해 병원의 지속 가능성에 신뢰를 더하는 사후 관리 체계를 상세 설명합니다.
-            </p>
+        <article class="p-5 md:p-6 rounded border border-gray-200 bg-white asym-grid-item flex flex-col justify-start space-y-3 md:space-y-4">
+          <div class="aspect-video w-full overflow-hidden rounded bg-gray-50 border border-gray-100">
+            <img src="./hospital_maintenance.png" loading="lazy" alt="병원 준공 후 철저한 유지보수 점검" class="w-full h-full object-cover" />
           </div>
-          <button onclick="openModal(6)" class="mt-5 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
+          <h3 class="text-base md:text-lg font-bold text-[#111111] line-clamp-2 leading-snug">체계적인 감리 프로세스와 준공 후 완벽한 사후관리 시스템</h3>
+          <p class="text-xs text-[#666666] font-normal line-clamp-3 leading-relaxed">
+            착공부터 준공, 그리고 개원 이후까지 단계별 품질 검증 및 하자보수 이행 보증을 통해 병원의 지속 가능성에 신뢰를 더하는 사후 관리 체계를 상세 설명합니다.
+          </p>
+          <button onclick="openModal(6)" class="mt-1 self-start px-4 py-2 bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold rounded transition-colors duration-250 shadow-sm">
             자세히 보기
           </button>
         </article>

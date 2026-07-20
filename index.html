@@ -342,13 +342,13 @@
       </div>
     </section>
 
-    <!-- Section 3: Portfolio Showcase (안과/내과 통합 메디컬 센터 이미지 매핑 완료) -->
+    <!-- Section 3-1: Portfolio Showcase 1 (안과/내과 포트폴리오) -->
     <section class="mb-32">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
         <div>
           <span class="text-xs font-bold text-primary tracking-widest uppercase">Portfolio</span>
           <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2">
-            완공 포트폴리오
+            안과/내과 포트폴리오
           </h2>
         </div>
         <div class="text-[#666666] text-sm max-w-sm">
@@ -358,6 +358,7 @@
 
       <!-- Minimalist grid featuring webp images -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
           <img src="./dsc02190-home.webp" loading="lazy" alt="내시경실 및 회복실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
@@ -367,6 +368,7 @@
           </div>
         </div>
 
+        <!-- 2번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
           <img src="./dsc02214-home.webp" loading="lazy" alt="안과 데스크" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
@@ -376,6 +378,7 @@
           </div>
         </div>
 
+        <!-- 3번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
           <img src="./dsc02284-home.webp" loading="lazy" alt="원내 서비스테이블" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
@@ -385,32 +388,127 @@
           </div>
         </div>
 
+        <!-- 4, 5, 6번 카드 (초기 숨김 - 더보기 클릭 시 펼쳐짐) -->
+        <div id="portfolio-extra-1" class="hidden col-span-1 sm:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02298-home.webp" loading="lazy" alt="스태프 룸 벽 디자인" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Staff Room</p>
+              <h4 class="text-sm font-bold mt-0.5">스태프 룸 벽 디자인</h4>
+            </div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02106-home.webp" loading="lazy" alt="기초검사실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Examination Room</p>
+              <h4 class="text-sm font-bold mt-0.5">기초검사실</h4>
+            </div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02068-home.webp" loading="lazy" alt="메인 대기공간" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Main Lounge</p>
+              <h4 class="text-sm font-bold mt-0.5">메인 대기공간</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 더보기 버튼 -->
+      <div class="mt-8 text-center">
+        <button onclick="togglePortfolio('portfolio-extra-1', this)" class="px-8 py-3 rounded border border-gray-200 hover:border-primary text-xs font-bold text-[#555555] hover:text-primary transition-all duration-300">
+          더보기 <i class="fas fa-chevron-down ml-1 text-[10px]"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Section 3-2: Portfolio Showcase 2 (다른 진료과목 포트폴리오 - 신규 추가) -->
+    <section class="mb-32">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div>
+          <span class="text-xs font-bold text-primary tracking-widest uppercase">Portfolio</span>
+          <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2">
+            다른 진료과목 포트폴리오
+          </h2>
+        </div>
+        <div class="text-[#666666] text-sm max-w-sm">
+          치과, 피부과, 성형외과 등 다양한 특수 진료과목별 프리미엄 메디컬 완공 현장입니다.
+        </div>
+      </div>
+
+      <!-- Minimalist grid featuring webp images -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
-          <img src="./dsc02298-home.webp" loading="lazy" alt="스태프 룸 벽 디자인" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src="./dsc02190-home.webp" loading="lazy" alt="내시경실 및 회복실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
           <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
-            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Staff Room</p>
-            <h4 class="text-sm font-bold mt-0.5">스태프 룸 벽 디자인</h4>
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Recovery Room</p>
+            <h4 class="text-sm font-bold mt-0.5">내시경실 및 회복실</h4>
           </div>
         </div>
 
+        <!-- 2번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
-          <img src="./dsc02106-home.webp" loading="lazy" alt="기초검사실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src="./dsc02214-home.webp" loading="lazy" alt="안과 데스크" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
           <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
-            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Examination Room</p>
-            <h4 class="text-sm font-bold mt-0.5">기초검사실</h4>
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Eye Clinic Desk</p>
+            <h4 class="text-sm font-bold mt-0.5">안과 데스크</h4>
           </div>
         </div>
 
+        <!-- 3번 카드 -->
         <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
-          <img src="./dsc02068-home.webp" loading="lazy" alt="메인 대기공간" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src="./dsc02284-home.webp" loading="lazy" alt="원내 서비스테이블" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
           <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
-            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Main Lounge</p>
-            <h4 class="text-sm font-bold mt-0.5">메인 대기공간</h4>
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Service Table</p>
+            <h4 class="text-sm font-bold mt-0.5">원내 서비스테이블</h4>
           </div>
         </div>
+
+        <!-- 4, 5, 6번 카드 (초기 숨김 - 더보기 클릭 시 펼쳐짐) -->
+        <div id="portfolio-extra-2" class="hidden col-span-1 sm:col-span-2 lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02298-home.webp" loading="lazy" alt="스태프 룸 벽 디자인" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Staff Room</p>
+              <h4 class="text-sm font-bold mt-0.5">스태프 룸 벽 디자인</h4>
+            </div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02106-home.webp" loading="lazy" alt="기초검사실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Examination Room</p>
+              <h4 class="text-sm font-bold mt-0.5">기초검사실</h4>
+            </div>
+          </div>
+
+          <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+            <img src="./dsc02068-home.webp" loading="lazy" alt="메인 대기공간" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+            <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p class="text-[10px] text-primary font-bold uppercase tracking-wider">Main Lounge</p>
+              <h4 class="text-sm font-bold mt-0.5">메인 대기공간</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 더보기 버튼 -->
+      <div class="mt-8 text-center">
+        <button onclick="togglePortfolio('portfolio-extra-2', this)" class="px-8 py-3 rounded border border-gray-200 hover:border-primary text-xs font-bold text-[#555555] hover:text-primary transition-all duration-300">
+          더보기 <i class="fas fa-chevron-down ml-1 text-[10px]"></i>
+        </button>
       </div>
     </section>
 
@@ -697,6 +795,20 @@
   </div>
 
   <script type="text/javascript">
+    // Toggle extra portfolio items
+    function togglePortfolio(targetId, btnEl) {
+      const extraTarget = document.getElementById(targetId);
+      if (!extraTarget) return;
+
+      if (extraTarget.classList.contains('hidden')) {
+        extraTarget.classList.remove('hidden');
+        btnEl.innerHTML = '접기 <i class="fas fa-chevron-up ml-1 text-[10px]"></i>';
+      } else {
+        extraTarget.classList.add('hidden');
+        btnEl.innerHTML = '더보기 <i class="fas fa-chevron-down ml-1 text-[10px]"></i>';
+      }
+    }
+
     // Article database storing experts content (500+ Korean words, EEAT compliant, LSI Keywords, Backlinks)
     const articles = {
       1: {

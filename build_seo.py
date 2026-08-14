@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 # ==============================================================================
 # HOMPAGE_KEYWORD SEO 자동화 빌더 (busaninterior.kr 전용)
 # 검색엔진(네이버 Yeti, 구글 Googlebot) 가이드라인 100% 준수
+# 정적 HTML 20,580개 일괄 빌더 + Cloudflare Pages 엣지 렌더러 동시 지원
 # ==============================================================================
 
 SITE_URL = "https://busaninterior.kr"
@@ -146,7 +147,6 @@ def generate_sitemaps(dataset, output_dir):
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-derma.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-eye-internal.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-dental.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
-    xml_content.append(f'  <url><loc>{SITE_URL}/sitemap/</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
     
     # HTML 사이트맵 페이지 (1~42)
     total_pages = max(1, math.ceil(len(dataset) / 500))
@@ -332,6 +332,40 @@ def update_index_and_base_html(total_pages):
     with open(base_file, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"Created/Updated busaninterior_base.html template.")
+    return html
+
+def generate_static_pages(dataset, base_html, output_dir):
+    print(f"Generating all {len(dataset)} static keyword HTML pages...")
+    for item in dataset:
+        page_id = item["id"]
+        page_dir = os.path.join(output_dir, str(page_id))
+        os.makedirs(page_dir, exist_ok=True)
+
+        html = base_html
+
+        # 1. Title & 메타태그 치환
+        html = re.sub(r'<title>.*?</title>', f'<title>{item["title"]}</title>', html, flags=re.I)
+        html = re.sub(r'<meta name="description" content=".*?" />', f'<meta name="description" content="{item["description"]}" />\n  <link rel="canonical" href="{item["url"]}" />', html, flags=re.I)
+        html = re.sub(r'<meta property="og:title" content=".*?" />', f'<meta property="og:title" content="{item["title"]}" />', html, flags=re.I)
+        html = re.sub(r'<meta property="og:description" content=".*?" />', f'<meta property="og:description" content="{item["description"]}" />\n  <meta property="og:url" content="{item["url"]}" />', html, flags=re.I)
+
+        # 2. Schema.org JSON-LD 주입
+        schema_script = f"""  <script type="application/ld+json">
+  {json.dumps(item["schema_json"], ensure_ascii=False)}
+  </script>
+</head>"""
+        html = html.replace('</head>', schema_script)
+
+        # 3. 헤더 로고 서브 텍스트 치환
+        html = html.replace('메디컬 공간 디자인</span>', f'{item["keyword"]}</span>')
+
+        # 4. 히어로 H1 타이틀 치환
+        html = html.replace('<span class="text-primary">부산 병원 공간 디자인</span>', f'<span class="text-primary">{item["keyword"]}</span>')
+
+        with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+
+    print(f"Successfully generated all {len(dataset)} static pages in {output_dir}")
 
 def create_cloudflare_edge_function(total_pages):
     functions_dir = os.path.join(OUTPUT_DIR, "functions")
@@ -461,7 +495,7 @@ def main():
     total_pages = max(1, math.ceil(len(dataset) / 500))
     
     # 4. index.html 및 busaninterior_base.html 갱신
-    update_index_and_base_html(total_pages)
+    base_html = update_index_and_base_html(total_pages)
     
     # 5. sitemap.xml 및 robots.txt 생성
     generate_sitemaps(dataset, OUTPUT_DIR)
@@ -471,6 +505,9 @@ def main():
     
     # 7. Cloudflare Pages Functions 엣지 렌더러 생성
     create_cloudflare_edge_function(total_pages)
+
+    # 8. GitHub Pages 정적 20,580개 HTML 일괄 생성
+    generate_static_pages(dataset, base_html, OUTPUT_DIR)
     
     print("=== HOMPAGE_KEYWORD SEO 빌드 완료! ===")
 

@@ -291,25 +291,26 @@ def update_index_and_base_html(total_pages):
     with open(index_file, "r", encoding="utf-8") as f:
         html = f.read()
 
-    # 사이트맵 1~N 네비게이션 섹션 생성
-    sitemap_buttons = []
-    for p in range(1, total_pages + 1):
-        s_url = f"{SITE_URL}/sitemap/" if p == 1 else f"{SITE_URL}/sitemap/page/{p}/"
-        sitemap_buttons.append(
-            f'<a href="{s_url}" title="사이트맵 {p}페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">{p}</a>'
-        )
-    sitemap_buttons_str = "\n        ".join(sitemap_buttons)
+    # 1. 모든 상대 경로(./)를 루트 절대 경로(/)로 변환하여 하위 폴더(/8018/ 등) 이미지 깨짐 원천 방지
+    html = html.replace('href="./', 'href="/')
+    html = html.replace('src="./', 'src="/')
+    html = html.replace('content="./', f'content="{SITE_URL}/')
 
-    sitemap_section = f"""  <!-- 전체 사이트맵 네비게이션 (검색엔진 크롤링 최적화 허브) -->
-  <section class="max-w-7xl mx-auto px-6 py-10 border-t border-gray-200" id="sitemap-hub">
-    <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-6 text-center shadow-sm">
+    # 2. 사용자 요청에 맞춘 심플한 '전국 키워드 모음' 1, 2, 3 ... 42 다음 » 네비게이션
+    sitemap_section = f"""  <!-- 전국 키워드 모음 네비게이션 허브 -->
+  <section class="max-w-7xl mx-auto px-6 py-6 border-t border-gray-200" id="sitemap-hub">
+    <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-4 sm:p-5 text-center shadow-sm">
       <div class="flex items-center justify-center gap-2 mb-3">
         <span class="w-2 h-2 rounded-full bg-[#dd5828]"></span>
-        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">전체 진료과목 &amp; 지역별 서비스 사이트맵</h3>
+        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">전국 키워드 모음</h3>
       </div>
-      <p class="text-[11px] text-gray-500 mb-4">원하시는 지역과 병원 진료과목의 맞춤 인테리어 포트폴리오 및 견적 정보를 바로 확인하실 수 있습니다.</p>
-      <div class="flex flex-wrap justify-center gap-1.5">
-        {sitemap_buttons_str}
+      <div class="flex items-center justify-center flex-wrap gap-1.5 text-xs">
+        <a href="{SITE_URL}/sitemap/" title="사이트맵 1페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">1</a>
+        <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 2페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">2</a>
+        <a href="{SITE_URL}/sitemap/page/3/" title="사이트맵 3페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">3</a>
+        <span class="px-1 text-gray-400 font-bold">...</span>
+        <a href="{SITE_URL}/sitemap/page/{total_pages}/" title="사이트맵 {total_pages}페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">{total_pages}</a>
+        <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 다음 페이지 바로가기" class="px-3 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-[#dd5828] hover:text-white transition-all font-semibold ml-1">다음 &raquo;</a>
       </div>
     </div>
   </section>
@@ -317,7 +318,7 @@ def update_index_and_base_html(total_pages):
 
     # 기존 sitemap-hub 섹션이 있다면 교체, 없다면 <!-- Footer Section --> 또는 <footer 앞에 삽입
     if 'id="sitemap-hub"' in html:
-        html = re.sub(r'<!-- 전체 사이트맵 네비게이션[\s\S]*?</section>\n?', sitemap_section, html)
+        html = re.sub(r'<!-- (전체 사이트맵|전국 키워드)[\s\S]*?</section>\n?', sitemap_section, html)
     elif '<!-- Footer Section -->' in html:
         html = html.replace('<!-- Footer Section -->', f'{sitemap_section}\n  <!-- Footer Section -->')
     else:
@@ -325,7 +326,7 @@ def update_index_and_base_html(total_pages):
 
     with open(index_file, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Updated index.html with sitemap navigation hub.")
+    print(f"Updated index.html with simple sitemap navigation hub and root asset paths.")
 
     # busaninterior_base.html 생성
     base_file = os.path.join(OUTPUT_DIR, "busaninterior_base.html")
@@ -335,7 +336,7 @@ def update_index_and_base_html(total_pages):
     return html
 
 def generate_static_pages(dataset, base_html, output_dir):
-    print(f"Generating all {len(dataset)} static keyword HTML pages...")
+    print(f"Generating all {len(dataset)} static keyword HTML pages with fixed root paths...")
     for item in dataset:
         page_id = item["id"]
         page_dir = os.path.join(output_dir, str(page_id))
@@ -494,7 +495,7 @@ def main():
     # 3. 사이트맵 페이지 수
     total_pages = max(1, math.ceil(len(dataset) / 500))
     
-    # 4. index.html 및 busaninterior_base.html 갱신
+    # 4. index.html 및 busaninterior_base.html 갱신 (상대경로 -> 루트 절대경로 일괄 수정 포함)
     base_html = update_index_and_base_html(total_pages)
     
     # 5. sitemap.xml 및 robots.txt 생성

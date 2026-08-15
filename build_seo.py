@@ -173,7 +173,7 @@ Sitemap: {SITE_URL}/sitemap.xml
         f.write(robots_content)
     print(f"Updated: {robots_path}")
 
-def generate_html_sitemaps(dataset, output_dir):
+def generate_html_sitemaps(dataset, base_html, output_dir):
     PAGE_SIZE = 500
     total_items = len(dataset)
     total_pages = max(1, math.ceil(total_items / PAGE_SIZE))
@@ -189,103 +189,72 @@ def generate_html_sitemaps(dataset, output_dir):
         
         # 페이지네이션 링크 생성
         pagination_html = []
-        pagination_html.append('<nav class="sitemap-pagination" aria-label="사이트맵 페이지 네비게이션">')
+        pagination_html.append('<div class="flex flex-wrap justify-center gap-1.5 my-4">')
         if page_num > 1:
             prev_url = f"{SITE_URL}/sitemap/page/{page_num - 1}/" if page_num > 2 else f"{SITE_URL}/sitemap/"
-            pagination_html.append(f'<a href="{prev_url}" class="page-btn prev">&laquo; 이전</a>')
+            pagination_html.append(f'<a href="{prev_url}" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">&laquo; 이전</a>')
             
         for p in range(1, total_pages + 1):
             p_url = f"{SITE_URL}/sitemap/page/{p}/" if p > 1 else f"{SITE_URL}/sitemap/"
-            active_class = "active" if p == page_num else ""
-            aria_current = ' aria-current="page"' if p == page_num else ''
-            pagination_html.append(f'<a href="{p_url}" class="page-num {active_class}"{aria_current}>{p}</a>')
+            active_class = "bg-[#dd5828] text-white font-bold" if p == page_num else "bg-white text-gray-600 hover:bg-[#dd5828] hover:text-white"
+            pagination_html.append(f'<a href="{p_url}" class="px-2.5 py-1 border border-gray-200 rounded text-xs transition-all {active_class}">{p}</a>')
             
         if page_num < total_pages:
             next_url = f"{SITE_URL}/sitemap/page/{page_num + 1}/"
-            pagination_html.append(f'<a href="{next_url}" class="page-btn next">다음 &raquo;</a>')
-        pagination_html.append('</nav>')
+            pagination_html.append(f'<a href="{next_url}" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">다음 &raquo;</a>')
+        pagination_html.append('</div>')
         pagination_str = "".join(pagination_html)
         
         # 키워드 그리드 링크 목록 생성
         list_items = []
         for item in page_items:
-            list_items.append(f'<li><a href="{item["url"]}" title="{item["keyword"]}">• {item["keyword"]}</a></li>')
+            list_items.append(f'<li><a href="{item["url"]}" title="{item["keyword"]}" class="block p-2 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-[#dd5828] hover:text-[#dd5828] rounded text-xs text-gray-700 transition-all duration-150 truncate">• {item["keyword"]}</a></li>')
         list_str = "\n".join(list_items)
         
-        canonical_url = f"{SITE_URL}/sitemap/page/{page_num}/" if page_num > 1 else f"{SITE_URL}/sitemap/"
-        
-        # ⚠️ CRITICAL SEO: HTML 사이트맵은 크롤러 수집 경로용이므로 noindex, follow 설정 (검색 결과에 사이트맵 N페이지 노출 방지)
-        html_doc = f"""<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>전국 키워드 모음 사이트맵 (페이지 {page_num} / {total_pages}) | {BRAND_NAME}</title>
-  <meta name="description" content="{BRAND_NAME} 진료과목 및 지역별 인테리어 포트폴리오 전체 사이트맵 목록입니다.">
-  <meta name="robots" content="noindex, follow">
-  <link rel="canonical" href="{canonical_url}">
-  
-  <!-- Favicon Setting -->
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="icon" href="/favicon.png" type="image/png" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/favicon.png" />
-  
-  <!-- Pretendard Web Font CDN -->
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-  
-  <style>
-    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }}
-    .container {{ max-width: 1200px; margin: 0 auto; padding: 40px 20px; }}
-    header.site-header {{ text-align: center; margin-bottom: 24px; }}
-    h1 {{ font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }}
-    p.subtitle {{ font-size: 13px; color: #64748b; }}
-    .sitemap-grid {{ list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; margin: 24px 0; }}
-    .sitemap-grid li a {{ display: block; padding: 8px 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; text-decoration: none; color: #334155; font-size: 13px; transition: all 0.2s ease; }}
-    .sitemap-grid li a:hover {{ background: #fff7ed; border-color: #dd5828; color: #dd5828; transform: translateY(-1px); }}
-    .sitemap-pagination {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 24px 0; }}
-    .sitemap-pagination a {{ padding: 5px 10px; border: 1px solid #cbd5e1; border-radius: 4px; text-decoration: none; color: #334155; font-size: 12.5px; background: #ffffff; transition: all 0.15s; }}
-    .sitemap-pagination a.active {{ background: #dd5828; color: #ffffff; border-color: #dd5828; font-weight: bold; }}
-    .sitemap-pagination a:hover:not(.active) {{ background: #f1f5f9; }}
-    .nav-links {{ display: flex; justify-content: center; gap: 16px; margin-top: 30px; font-size: 13px; }}
-    .nav-links a {{ color: #dd5828; text-decoration: none; font-weight: 600; }}
-    .nav-links a:hover {{ text-decoration: underline; }}
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header class="site-header">
-      <h1>전국 키워드 모음 (페이지 {page_num} / {total_pages})</h1>
-      <p class="subtitle">진료과목별(내과·치과·피부과·안과·성형외과 등) 및 지역별 인테리어/리모델링 전문 포트폴리오 바로가기</p>
-    </header>
-    
-    {pagination_str}
-    
-    <ul class="sitemap-grid">
-      {list_str}
-    </ul>
-    
-    {pagination_str}
-    
-    <div class="nav-links">
-      <a href="{SITE_URL}/">← 메인 페이지로 이동</a>
-      <a href="{PARTNER_URL}" target="_blank" rel="noopener noreferrer">추천업체 인디컴퍼니 바로가기 →</a>
+        sitemap_section = f"""  <!-- 전국 키워드 모음 전체 네비게이션 허브 (풀 홈페이지 내장형) -->
+  <section class="max-w-7xl mx-auto px-6 py-10 border-t border-gray-200" id="sitemap-hub">
+    <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-5 sm:p-6 text-center shadow-sm">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#dd5828]"></span>
+        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">전국 키워드 모음 (페이지 {page_num} / {total_pages})</h3>
+      </div>
+      <p class="text-xs text-gray-500 mb-4">원하시는 지역과 병원 진료과목의 맞춤 인테리어 포트폴리오 및 견적 정보를 바로 확인하실 수 있습니다.</p>
+      
+      {pagination_str}
+      
+      <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 text-left my-6 list-none p-0">
+        {list_str}
+      </ul>
+      
+      {pagination_str}
     </div>
-  </div>
-</body>
-</html>
+  </section>
 """
+        
+        # 사이트맵 페이지를 풀 메인 홈페이지 템플릿으로 렌더링
+        html = base_html
+        canonical_url = f"{SITE_URL}/sitemap/page/{page_num}/" if page_num > 1 else f"{SITE_URL}/sitemap/"
+        html = re.sub(r'<title>.*?</title>', f'<title>부산 병원 인테리어 전문 업체 | 전국 키워드 모음 ({page_num}/{total_pages})</title>', html, flags=re.I)
+        html = re.sub(r'<meta name="robots" content=".*?" />', f'<meta name="robots" content="noindex, follow" />\n  <link rel="canonical" href="{canonical_url}" />', html, flags=re.I)
+        
+        # sitemap-hub 섹션 교체
+        if 'id="sitemap-hub"' in html:
+            html = re.sub(r'<!-- (전체 사이트맵|전국 키워드)[\s\S]*?</section>\n?', sitemap_section, html)
+        elif '<!-- Footer Section -->' in html:
+            html = html.replace('<!-- Footer Section -->', f'{sitemap_section}\n  <!-- Footer Section -->')
+        else:
+            html = html.replace('<footer', f'{sitemap_section}\n  <footer')
+            
         if page_num == 1:
             with open(os.path.join(sitemap_base_dir, "index.html"), "w", encoding="utf-8") as f:
-                f.write(html_doc)
+                f.write(html)
                 
         page_dir = os.path.join(sitemap_base_dir, "page", str(page_num))
         os.makedirs(page_dir, exist_ok=True)
         with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
-            f.write(html_doc)
+            f.write(html)
             
-    print(f"Generated: {total_pages} HTML sitemap pages with 'noindex, follow' in {sitemap_base_dir}")
+    print(f"Generated: {total_pages} Full-featured HTML sitemap pages with 'noindex, follow' in {sitemap_base_dir}")
 
 def update_index_and_base_html(total_pages):
     index_file = os.path.join(OUTPUT_DIR, "index.html")
@@ -511,8 +480,8 @@ def main():
     # 5. sitemap.xml 및 robots.txt 생성 (키워드 랜딩 페이지 집중)
     generate_sitemaps(dataset, OUTPUT_DIR)
     
-    # 6. HTML 사이트맵(1~42페이지) 생성 (noindex, follow 적용!)
-    generate_html_sitemaps(dataset, OUTPUT_DIR)
+    # 6. HTML 사이트맵(1~42페이지) 생성 (풀 메인 홈페이지 템플릿 탑재 + noindex, follow 적용!)
+    generate_html_sitemaps(dataset, base_html, OUTPUT_DIR)
     
     # 7. Cloudflare Pages Functions 엣지 렌더러 생성
     create_cloudflare_edge_function(total_pages)

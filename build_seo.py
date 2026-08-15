@@ -148,16 +148,10 @@ def generate_sitemaps(dataset, output_dir):
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-eye-internal.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-dental.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     
-    # HTML 사이트맵 페이지 (1~42)
-    total_pages = max(1, math.ceil(len(dataset) / 500))
-    for p in range(1, total_pages + 1):
-        p_url = f"{SITE_URL}/sitemap/" if p == 1 else f"{SITE_URL}/sitemap/page/{p}/"
-        xml_content.append(f'  <url><loc>{p_url}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
-        
-    # 20,580개 키워드 랜딩 페이지
+    # 20,580개 키워드 랜딩 페이지 (검색 색인 대상)
     for item in dataset:
         loc = item["url"]
-        xml_content.append(f'  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>')
+        xml_content.append(f'  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
         
     xml_content.append('</urlset>')
     
@@ -220,15 +214,22 @@ def generate_html_sitemaps(dataset, output_dir):
         
         canonical_url = f"{SITE_URL}/sitemap/page/{page_num}/" if page_num > 1 else f"{SITE_URL}/sitemap/"
         
+        # ⚠️ CRITICAL SEO: HTML 사이트맵은 크롤러 수집 경로용이므로 noindex, follow 설정 (검색 결과에 사이트맵 N페이지 노출 방지)
         html_doc = f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>부산 병원 인테리어 전체 사이트맵 {page_num}페이지 | {BRAND_NAME}</title>
-  <meta name="description" content="{BRAND_NAME} 진료과목 및 지역별 인테리어 포트폴리오 전체 사이트맵 {page_num}페이지 목록입니다.">
-  <meta name="robots" content="index, follow">
+  <title>전국 키워드 모음 사이트맵 (페이지 {page_num} / {total_pages}) | {BRAND_NAME}</title>
+  <meta name="description" content="{BRAND_NAME} 진료과목 및 지역별 인테리어 포트폴리오 전체 사이트맵 목록입니다.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="{canonical_url}">
+  
+  <!-- Favicon Setting -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
   
   <!-- Pretendard Web Font CDN -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -255,7 +256,7 @@ def generate_html_sitemaps(dataset, output_dir):
 <body>
   <div class="container">
     <header class="site-header">
-      <h1>부산 병원 인테리어 전체 사이트맵 (페이지 {page_num} / {total_pages})</h1>
+      <h1>전국 키워드 모음 (페이지 {page_num} / {total_pages})</h1>
       <p class="subtitle">진료과목별(내과·치과·피부과·안과·성형외과 등) 및 지역별 인테리어/리모델링 전문 포트폴리오 바로가기</p>
     </header>
     
@@ -284,7 +285,7 @@ def generate_html_sitemaps(dataset, output_dir):
         with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html_doc)
             
-    print(f"Generated: {total_pages} HTML sitemap pages in {sitemap_base_dir}")
+    print(f"Generated: {total_pages} HTML sitemap pages with 'noindex, follow' in {sitemap_base_dir}")
 
 def update_index_and_base_html(total_pages):
     index_file = os.path.join(OUTPUT_DIR, "index.html")
@@ -296,7 +297,17 @@ def update_index_and_base_html(total_pages):
     html = html.replace('src="./', 'src="/')
     html = html.replace('content="./', f'content="{SITE_URL}/')
 
-    # 2. 사용자 요청에 맞춘 심플한 '전국 키워드 모음' 1, 2, 3 ... 42 다음 » 네비게이션
+    # 2. 파비콘 태그 보강 (/favicon.ico, /favicon.png)
+    favicon_tags = """  <!-- Favicon Setting -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.png" />"""
+    
+    if '<!-- Favicon Setting -->' in html:
+        html = re.sub(r'<!-- Favicon Setting -->[\s\S]*?(?=<!-- SEO Meta Tags)', f'{favicon_tags}\n  \n  ', html)
+
+    # 3. 사용자 요청에 맞춘 심플한 '전국 키워드 모음' 1, 2, 3 ... 42 다음 » 네비게이션
     sitemap_section = f"""  <!-- 전국 키워드 모음 네비게이션 허브 -->
   <section class="max-w-7xl mx-auto px-6 py-6 border-t border-gray-200" id="sitemap-hub">
     <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-4 sm:p-5 text-center shadow-sm">
@@ -316,7 +327,6 @@ def update_index_and_base_html(total_pages):
   </section>
 """
 
-    # 기존 sitemap-hub 섹션이 있다면 교체, 없다면 <!-- Footer Section --> 또는 <footer 앞에 삽입
     if 'id="sitemap-hub"' in html:
         html = re.sub(r'<!-- (전체 사이트맵|전국 키워드)[\s\S]*?</section>\n?', sitemap_section, html)
     elif '<!-- Footer Section -->' in html:
@@ -495,13 +505,13 @@ def main():
     # 3. 사이트맵 페이지 수
     total_pages = max(1, math.ceil(len(dataset) / 500))
     
-    # 4. index.html 및 busaninterior_base.html 갱신 (상대경로 -> 루트 절대경로 일괄 수정 포함)
+    # 4. index.html 및 busaninterior_base.html 갱신 (파비콘 + 상대경로 -> 루트 절대경로 일괄 수정)
     base_html = update_index_and_base_html(total_pages)
     
-    # 5. sitemap.xml 및 robots.txt 생성
+    # 5. sitemap.xml 및 robots.txt 생성 (키워드 랜딩 페이지 집중)
     generate_sitemaps(dataset, OUTPUT_DIR)
     
-    # 6. HTML 사이트맵(1~42페이지) 생성
+    # 6. HTML 사이트맵(1~42페이지) 생성 (noindex, follow 적용!)
     generate_html_sitemaps(dataset, OUTPUT_DIR)
     
     # 7. Cloudflare Pages Functions 엣지 렌더러 생성

@@ -3,12 +3,13 @@ import sys
 import json
 import math
 import re
+import shutil
 from datetime import datetime, timezone
 
 # ==============================================================================
-# HOMPAGE_KEYWORD SEO 자동화 빌더 (busaninterior.kr 전용)
-# 검색엔진(네이버 Yeti, 구글 Googlebot) 가이드라인 100% 준수
-# 정적 HTML 20,580개 일괄 빌더 + Cloudflare Pages 엣지 렌더러 동시 지원
+# HOMPAGE_KEYWORD SEO 자동화 마스터 빌더 (busaninterior.kr 전용)
+# 네이버 Yeti / 구글 Googlebot 가이드라인 100% 준수
+# 598개 고품질 핵심 타겟 키워드 정적 HTML 빌더 + 사이트맵/로봇 최적화
 # ==============================================================================
 
 SITE_URL = "https://busaninterior.kr"
@@ -18,27 +19,45 @@ PARTNER_URL = "https://inde.co.kr"
 RAW_KEYWORD_FILE = os.path.join(os.path.dirname(__file__), "키워드작업", "keyword_combination.txt")
 OUTPUT_DIR = os.path.dirname(__file__)
 
-# 지역 매핑 목록 (긴 단어 우선)
+# 13개 핵심 타겟 지역 매핑
 REGIONS = [
-    "부산 중구", "부산 서구", "부산 동구", "부산 영도구", "부산 부산진구", "부산 동래구",
-    "부산 남구", "부산 북구", "부산 해운대구", "부산 사하구", "부산 금정구", "부산 강서구",
-    "부산 연제구", "부산 수영구", "부산 사상구", "부산 기장군", "부산진구", "해운대구", "수영구",
-    "동래구", "금정구", "강서구", "연제구", "사하구", "사상구", "부산",
-    "대구 중구", "대구 동구", "대구 서구", "대구 남구", "대구 북구", "대구 수성구", "대구 달서구", "대구 달성군", "대구 군위군", "대구 수성", "대구",
-    "울산 중구", "울산 남구", "울산 동구", "울산 북구", "울산 울주군", "울산",
-    "경북 포항", "경북 구미", "경북 경주", "경북 김천", "경북 안동", "경북 영주", "경북 영천", "경북 상주", "경북 문경", "경북 경산", "구미", "포항", "경주", "경북",
-    "경남 진주", "경남 통영", "경남 사천", "경남 김해", "경남 밀양", "경남 거제", "경남 양산", "경남 창원", "경남",
-    "명지신도시", "명지", "에코델타시티", "센텀시티", "센텀", "해운대", "기장", "서면", "광안리", "남포동",
-    "사상", "덕천", "화명", "동래", "진주", "창원", "김해", "밀양", "거제도", "거제", "양산", "통영", "사천",
-    "신논현", "논현", "압구정", "청담", "강남"
+    "부산", "대구", "밀양", "구미", "창원", "센텀", "해운대", "명지", "거제", "기장", "김해", "울산", "경남"
 ]
+
+# 진료과목별 고유 특화 전문 설명 DB (D.I.A+ 적합도 및 Thin Content 탈피용)
+CATEGORY_SPECS = {
+    "치과": "체어 전용 급배수 및 컴프레셔 설비 라인, 파노라마/CT실 방사선 납차폐 규격, 중앙 멸균 소독실의 위생 동선",
+    "피부과": "VIP 1인 관리실의 아늑한 간접 조도 설계, 프라이빗 파우더룸, 고출력 레이저 장비 전력 승압 및 환기 공조",
+    "성형외과": "무균 수술실 양압 공조 시스템, 수술 후 프라이빗 회복실, 상담실과 원장실 간 최단 진료 동선",
+    "내과": "호흡기 환자 분리 대기 공간, 내시경실 세척·소독 설비 라인, 건강검진 기초검사 및 채혈실 연계 동선",
+    "안과": "정밀 암실 굴절 검사실 조도 제어, 무균 수술실 공조 설비, 수납 및 안경 처방 라운지 동선",
+    "정형외과": "C-arm 방사선 차폐 벽체 공사, 물리치료실 베드 간격 최적화, 도수치료실 특수 방음 및 환자 탈의실 동선",
+    "도수치료": "도수치료실 벽체 이중 차음 방음 공사, 운동치료실 넓은 개방감 및 충격 흡수 바닥재, 쾌적한 환기 설비",
+    "이비인후과": "청력 검사 전용 방음 부스 시공, 호흡기 치료기 체어 배선, 네블라이저 공간 분리",
+    "한의원": "탕전실 배기 후드 및 방수 설비, 침구실 온돌/온열 전용 배선, 약재 보관실과 원장 진료실 동선",
+    "한방병원": "입원실 병상 간격 기준 준수, 탕전실 대용량 배기 공조, 물리치료실 및 침구치료실의 분리 조닝",
+    "산부인과": "프라이빗 진료 및 초음파실 조도 설계, 가족 분만실 및 회복실 방음, 신생아실 항균 공조",
+    "비뇨기과": "환자 프라이버시를 최우선한 진료/상담실 방음, 요역동학 검사실 및 처치실의 독립적 조닝",
+    "외과": "외래 처치실 및 무균 수술실 공조 인프라, 멸균 소독실과 회복실 간의 막힘없는 의료진 서브 동선",
+    "어린이병원": "어린이 눈높이 친환경 무독성 마감재, 안전 코너 보호대, 소아 전용 놀이 대기실 및 감염 분리실",
+    "요양병원": "휠체어·스트레처카 회전 반경 확보, 병실 간 넓은 복도 및 안전 손잡이, 각 층별 간호 스테이션 시야 확보",
+    "암요양병원": "온열치료실 및 면역치료실 특수 전력 설비, 쾌적한 웰니스 힐링 라운지, 환자 안심 친환경 마감",
+    "건강검진센터": "접수-기초검사-채혈-내시경-초음파로 이어지는 원스톱 원방향 검진 동선, 대형 라운지 대기 공간",
+    "노인주간보호센터": "낙상 방지 미끄럼 방지 바닥재, 문턱 없는 무단차 설계, 프로그램실 및 생활실의 채광 중심 배치",
+    "노인요양원": "치매 전담실 및 안전 케어 동선, 기저귀 교환 및 목욕실 특수 방수/배수, 소방 피난 구조 설비",
+    "약국": "조제실 클린 환기 및 약품 수납장 최적화, 처방전 접수·복약지도 카운터 동선, 대기 공간 시야 확보",
+    "산후조리원": "신생아실 개별 음압/양압 공조, 산모 전용 마사지 및 스파룸, 호텔 스위트급 객실 방음 및 공기정화",
+    "동물병원": "처치실 및 수술실 멸균 동선, 대형견·소형견 분리 대기실, 격리 입원실 방음 및 전용 배기 환기",
+    "병원": "진료과목별 의료법 규격 동선 설계, 무균 수술실 및 특수 공조 설비, 환자 신뢰를 주는 프리미엄 로비",
+    "의원": "원장실-진료실-처치실-대기공간의 효율적 공간 조닝, 소방 안전 기준 충족, 합리적인 평당 공사비 설계"
+}
 
 def parse_keyword(kw: str):
     kw = kw.strip()
     if not kw:
         return None
     
-    found_region = "부산 및 전국"
+    found_region = "부산"
     cleaned_kw = kw
     for r in REGIONS:
         if kw.startswith(r + " ") or kw == r:
@@ -62,7 +81,7 @@ def parse_keyword(kw: str):
     for remove_term in ["인테리어 전문 업체", "인테리어 전문 회사", "인테리어 회사", "리모델링 전문 업체", "리모델링 전문 회사", "리모델링 회사", "인테리어", "리모델링", "전문 업체", "전문 회사", "추천"]:
         category = category.replace(remove_term, "").strip()
     if not category:
-        category = "병원/의원"
+        category = "병원"
         
     return {
         "raw_keyword": kw,
@@ -94,14 +113,19 @@ def generate_seo_dataset(raw_keywords):
         category = parsed["category"]
         action = parsed["action"]
         
+        # 타이틀 (클린 & 전문성)
         title = f"{raw} 견적 및 시공 추천 | {BRAND_NAME}"
         
-        if region != "부산 및 전국":
-            desc = f"{region} 지역 {category} {action} 전문! 의료법 인허가 기준 동선 설계, 3D 도면 무료 제공 및 합리적인 평당 공사 비용 비교 견적 상담."
-        else:
-            desc = f"부산 및 전국 {category} {action} 전문 비교 견적! 의료 공간 최적화 설계, 실내건축공사업 면허 보유 업체의 신뢰할 수 있는 시공."
+        # 설명문 (민감 단어 완전 배제 & 전문 메디컬 가이드)
+        desc = f"{region} 지역 {category} {action} 전문! 의료 공간 최적화 동선 설계, 3D 도면 무료 제공 및 합리적인 평당 공사 비용 비교 견적 상담."
             
         canonical = f"{SITE_URL.rstrip('/')}/{page_id}/"
+        
+        # 고유 메타 키워드 (해당 페이지 지역 & 과목 맞춤형)
+        meta_keywords = f"{region} {category} {action}, {region} {category} 인테리어, {region} {category} 리모델링, {category} 인테리어 전문 업체, {region} 병원 인테리어, {region} 병원 리모델링"
+        
+        # 카테고리별 특화 스펙 텍스트
+        spec_text = CATEGORY_SPECS.get(category, CATEGORY_SPECS.get("병원"))
         
         schema_json = {
             "@context": "https://schema.org",
@@ -113,7 +137,7 @@ def generate_seo_dataset(raw_keywords):
             "priceRange": "$$",
             "areaServed": {
                 "@type": "AdministrativeArea",
-                "name": region if region != "부산 및 전국" else "부산광역시"
+                "name": region if region != "경남" else "경상남도"
             },
             "serviceType": f"{category} {action}",
             "provider": {
@@ -129,8 +153,10 @@ def generate_seo_dataset(raw_keywords):
             "region": region,
             "category": category,
             "action": action,
+            "spec_text": spec_text,
             "title": title,
             "description": desc,
+            "meta_keywords": meta_keywords,
             "url": canonical,
             "schema_json": schema_json
         }
@@ -150,7 +176,7 @@ def generate_sitemaps(dataset, output_dir):
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-eye-internal.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-dental.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
     
-    # 20,580개 키워드 랜딩 페이지 (검색 색인 대상)
+    # 598개 핵심 타겟 키워드 랜딩 페이지
     for item in dataset:
         loc = item["url"]
         xml_content.append(f'  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
@@ -176,11 +202,14 @@ Sitemap: {SITE_URL}/sitemap.xml
     print(f"Updated: {robots_path}")
 
 def generate_html_sitemaps(dataset, base_html, output_dir):
-    PAGE_SIZE = 500
+    PAGE_SIZE = 300
     total_items = len(dataset)
     total_pages = max(1, math.ceil(total_items / PAGE_SIZE))
     
     sitemap_base_dir = os.path.join(output_dir, "sitemap")
+    # 기존 sitemap 폴더 정리
+    if os.path.exists(sitemap_base_dir):
+        shutil.rmtree(sitemap_base_dir, ignore_errors=True)
     os.makedirs(sitemap_base_dir, exist_ok=True)
     os.makedirs(os.path.join(sitemap_base_dir, "page"), exist_ok=True)
     
@@ -189,7 +218,7 @@ def generate_html_sitemaps(dataset, base_html, output_dir):
         end_idx = min(total_items, page_num * PAGE_SIZE)
         page_items = dataset[start_idx:end_idx]
         
-        # 500개 앵커 텍스트 링크 그리드 생성 (크롤러 수집 그물망)
+        # 앵커 텍스트 링크 그리드 생성
         list_items = []
         for item in page_items:
             list_items.append(f'<li><a href="{item["url"]}" title="{item["keyword"]}" class="block p-2.5 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-[#dd5828] hover:text-[#dd5828] rounded text-xs text-gray-700 transition-all duration-150 truncate font-medium">• {item["keyword"]}</a></li>')
@@ -213,13 +242,13 @@ def generate_html_sitemaps(dataset, base_html, output_dir):
         pagination_html.append('</div>')
         pagination_str = "".join(pagination_html)
         
-        # 앵커 텍스트 허브 섹션 (풀 메인 홈페이지 하단에 단정하게 배치)
+        # 앵커 텍스트 허브 섹션 (풀 메인 홈페이지 하단)
         sitemap_section = f"""  <!-- 전국 키워드 모음 앵커 텍스트 크롤러 허브 (풀 홈페이지 내장형) -->
   <section class="max-w-7xl mx-auto px-6 py-10 border-t border-gray-200" id="sitemap-hub">
     <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-5 sm:p-6 text-center shadow-sm">
       <div class="flex items-center justify-center gap-2 mb-2">
         <span class="w-2.5 h-2.5 rounded-full bg-[#dd5828]"></span>
-        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">전국 키워드 모음 (페이지 {page_num} / {total_pages})</h3>
+        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">주요 지역별 병원 인테리어 키워드 모음 (페이지 {page_num} / {total_pages})</h3>
       </div>
       <p class="text-xs text-gray-500 mb-4">원하시는 지역과 병원 진료과목의 맞춤 인테리어 포트폴리오 및 견적 정보를 바로 확인하실 수 있습니다.</p>
       
@@ -234,10 +263,9 @@ def generate_html_sitemaps(dataset, base_html, output_dir):
   </section>
 """
         
-        # 사이트맵 페이지: 풀 메인 홈페이지 템플릿 + noindex, follow (사이트맵 자체 검색노출 차단, 앵커 링크는 100% 수집)
         html = base_html
         canonical_url = f"{SITE_URL}/sitemap/page/{page_num}/" if page_num > 1 else f"{SITE_URL}/sitemap/"
-        html = re.sub(r'<title>.*?</title>', f'<title>부산 병원 인테리어 전문 업체 | 전국 키워드 모음 ({page_num}/{total_pages})</title>', html, flags=re.I)
+        html = re.sub(r'<title>.*?</title>', f'<title>부산 병원 인테리어 전문 업체 | 주요 키워드 모음 ({page_num}/{total_pages})</title>', html, flags=re.I)
         html = re.sub(r'<meta name="robots" content=".*?" />', f'<meta name="robots" content="noindex, follow" />\n  <link rel="canonical" href="{canonical_url}" />', html, flags=re.I)
         
         if 'id="sitemap-hub"' in html:
@@ -263,7 +291,7 @@ def update_index_and_base_html(total_pages):
     with open(index_file, "r", encoding="utf-8") as f:
         html = f.read()
 
-    # 1. 모든 상대 경로(./)를 루트 절대 경로(/)로 변환하여 하위 폴더(/8018/ 등) 이미지 깨짐 원천 방지
+    # 1. 모든 상대 경로(./)를 루트 절대 경로(/)로 변환
     html = html.replace('href="./', 'href="/')
     html = html.replace('src="./', 'src="/')
     html = html.replace('content="./', f'content="{SITE_URL}/')
@@ -278,20 +306,17 @@ def update_index_and_base_html(total_pages):
     if '<!-- Favicon Setting -->' in html:
         html = re.sub(r'<!-- Favicon Setting -->[\s\S]*?(?=<!-- SEO Meta Tags)', f'{favicon_tags}\n  \n  ', html)
 
-    # 3. 메인 홈페이지 & 2만개 개별 페이지용 심플한 '전국 키워드 모음' 1, 2, 3 ... 42 다음 » 컴팩트 네비게이션
-    sitemap_section = f"""  <!-- 전국 키워드 모음 네비게이션 허브 -->
+    # 3. 메인 홈페이지 & 개별 페이지용 컴팩트 네비게이션 허브
+    sitemap_section = f"""  <!-- 주요 지역별 키워드 모음 네비게이션 허브 -->
   <section class="max-w-7xl mx-auto px-6 py-6 border-t border-gray-200" id="sitemap-hub">
     <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-4 sm:p-5 text-center shadow-sm">
       <div class="flex items-center justify-center gap-2 mb-3">
         <span class="w-2 h-2 rounded-full bg-[#dd5828]"></span>
-        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">전국 키워드 모음</h3>
+        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">주요 지역별 병원 인테리어 모음</h3>
       </div>
       <div class="flex items-center justify-center flex-wrap gap-1.5 text-xs">
         <a href="{SITE_URL}/sitemap/" title="사이트맵 1페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">1</a>
         <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 2페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">2</a>
-        <a href="{SITE_URL}/sitemap/page/3/" title="사이트맵 3페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">3</a>
-        <span class="px-1 text-gray-400 font-bold">...</span>
-        <a href="{SITE_URL}/sitemap/page/{total_pages}/" title="사이트맵 {total_pages}페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">{total_pages}</a>
         <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 다음 페이지 바로가기" class="px-3 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-[#dd5828] hover:text-white transition-all font-semibold ml-1">다음 &raquo;</a>
       </div>
     </div>
@@ -299,7 +324,7 @@ def update_index_and_base_html(total_pages):
 """
 
     if 'id="sitemap-hub"' in html:
-        html = re.sub(r'<!-- (전체 사이트맵|전국 키워드)[\s\S]*?</section>\n?', sitemap_section, html)
+        html = re.sub(r'<!-- (전체 사이트맵|전국 키워드|주요 지역별)[\s\S]*?</section>\n?', sitemap_section, html)
     elif '<!-- Footer Section -->' in html:
         html = html.replace('<!-- Footer Section -->', f'{sitemap_section}\n  <!-- Footer Section -->')
     else:
@@ -316,8 +341,18 @@ def update_index_and_base_html(total_pages):
     print(f"Created/Updated busaninterior_base.html template.")
     return html
 
+def clean_old_directories(output_dir, new_dataset_len):
+    print("Cleaning up old directory trees...")
+    # 숫자로 된 디렉토리들 중 새로운 범위(1~new_dataset_len) 외의 디렉토리 및 기존 디렉토리 안전 정리
+    for entry in os.listdir(output_dir):
+        full_path = os.path.join(output_dir, entry)
+        if os.path.isdir(full_path) and entry.isdigit():
+            shutil.rmtree(full_path, ignore_errors=True)
+    print("Old directories cleaned.")
+
 def generate_static_pages(dataset, base_html, output_dir):
-    print(f"Generating all {len(dataset)} static keyword HTML pages with fixed root paths...")
+    print(f"Generating all {len(dataset)} static keyword HTML pages with rich contextual enrichment...")
+    
     for item in dataset:
         page_id = item["id"]
         page_dir = os.path.join(output_dir, str(page_id))
@@ -325,11 +360,33 @@ def generate_static_pages(dataset, base_html, output_dir):
 
         html = base_html
 
-        # 1. Title & 메타태그 치환
-        html = re.sub(r'<title>.*?</title>', f'<title>{item["title"]}</title>', html, flags=re.I)
-        html = re.sub(r'<meta name="description" content=".*?" />', f'<meta name="description" content="{item["description"]}" />\n  <link rel="canonical" href="{item["url"]}" />', html, flags=re.I)
-        html = re.sub(r'<meta property="og:title" content=".*?" />', f'<meta property="og:title" content="{item["title"]}" />', html, flags=re.I)
-        html = re.sub(r'<meta property="og:description" content=".*?" />', f'<meta property="og:description" content="{item["description"]}" />\n  <meta property="og:url" content="{item["url"]}" />', html, flags=re.I)
+        # 1. Head 영역: Title, Description, Canonical, Single Og Tags, Meta Keywords 정밀 교체
+        head_block = f"""  <title>{item["title"]}</title>
+  
+  <!-- Favicon Setting -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  
+  <!-- SEO Meta Tags for Naver & Google -->
+  <meta name="description" content="{item["description"]}" />
+  <link rel="canonical" href="{item["url"]}" />
+  <meta name="keywords" content="{item["meta_keywords"]}" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="{BRAND_NAME}" />
+  <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
+  
+  <!-- Open Graph Tags (SNS Sharing) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{BRAND_NAME}" />
+  <meta property="og:title" content="{item["title"]}" />
+  <meta property="og:description" content="{item["description"]}" />
+  <meta property="og:image" content="{SITE_URL}/main1.webp" />
+  <meta property="og:url" content="{item["url"]}" />"""
+
+        # <head> 내부의 SEO 메타 블록 전체를 교체
+        html = re.sub(r'<title>.*?</title>[\s\S]*?(?=<!-- Pretendard Web Font CDN -->)', f'{head_block}\n  \n  ', html, flags=re.I)
 
         # 2. Schema.org JSON-LD 주입
         schema_script = f"""  <script type="application/ld+json">
@@ -341,113 +398,33 @@ def generate_static_pages(dataset, base_html, output_dir):
         # 3. 헤더 로고 서브 텍스트 치환
         html = html.replace('메디컬 공간 디자인</span>', f'{item["keyword"]}</span>')
 
-        # 4. 히어로 H1 타이틀 치환
+        # 4. 히어로 섹션 동적 치환 (H1 + 뱃지 + 설명문)
+        html = html.replace('안과 · 내과 복합 메디컬 공간 특화', f'{item["region"]} {item["category"]} 특화 메디컬 공간 디자인')
         html = html.replace('<span class="text-primary">부산 병원 공간 디자인</span>', f'<span class="text-primary">{item["keyword"]}</span>')
+
+        # 5. 본문 Intro 철학 인용구 동적 맞춤화 (D.I.A+ 본문 연관도 점수 극대화)
+        old_quote = '"공간 기획 단계에서부터 의료법과 현장 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
+        new_quote = f'"{item["region"]} 지역 {item["category"]} {item["action"]} 시, 진료과목 특성에 최적화된 동선과 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
+        html = html.replace(old_quote, new_quote)
+
+        # 6. FAQ 1 & 2 질문 및 답변 동적 맞춤화 (본문 형태소 매칭)
+        old_faq1 = '<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>'
+        new_faq1 = f'<span>{item["region"]} {item["category"]} 프리미엄 {item["action"]}는 일반 인테리어와 무엇이 다른가요?</span>'
+        html = html.replace(old_faq1, new_faq1)
+
+        old_faq2 = '<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>'
+        new_faq2 = f'<span>{item["region"]} {item["category"]} 공간 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>'
+        html = html.replace(old_faq2, new_faq2)
+
+        # FAQ 2 답변 내 진료과목별 특화 설명 삽입
+        old_faq2_ans = '의료 시설 법정 기준에 미달해 준공 검사가 지연되거나 수술실이 비법정 규격으로 완공될 시 대규모의 매몰 비용과 재공사가 수반될 수 있습니다.'
+        new_faq2_ans = f'{item["region"]} {item["category"]} 개원 시 {item["spec_text"]} 등 특수 조건들을 사전에 철저히 반영하여 안전하고 오차 없는 정밀 설계를 진행합니다.'
+        html = html.replace(old_faq2_ans, new_faq2_ans)
 
         with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 
-    print(f"Successfully generated all {len(dataset)} static pages in {output_dir}")
-
-def create_cloudflare_edge_function(total_pages):
-    functions_dir = os.path.join(OUTPUT_DIR, "functions")
-    os.makedirs(functions_dir, exist_ok=True)
-    
-    function_code = f"""/**
- * Cloudflare Pages Functions / Workers용 동적 SEO 엣지 렌더러
- * 대상 사이트: busaninterior.kr
- * 경로: functions/[id].js 및 functions/[id]/index.js
- */
-
-export async function onRequest(context) {{
-  const {{ request, params }} = context;
-  const url = new URL(request.url);
-  const idStr = params.id;
-  const pageId = parseInt(idStr, 10);
-
-  if (isNaN(pageId) || pageId < 1 || pageId > 25000) {{
-    return new Response('Page Not Found', {{ status: 404 }});
-  }}
-
-  // 1. 키워드 DB 조회
-  const dataResponse = await fetch(new URL('/seo_keywords.json', url.origin));
-  if (!dataResponse.ok) {{
-    return new Response('Keywords DB not loaded', {{ status: 500 }});
-  }}
-  const keywords = await dataResponse.json();
-  const item = keywords.find(k => k.id === pageId);
-
-  if (!item) {{
-    return new Response('Page Not Found', {{ status: 404 }});
-  }}
-
-  // 2. busaninterior 베이스 HTML 로드
-  const baseResponse = await fetch(new URL('/busaninterior_base.html', url.origin));
-  if (!baseResponse.ok) {{
-    return new Response('Base HTML not loaded', {{ status: 500 }});
-  }}
-  let html = await baseResponse.text();
-
-  // 3. Title & 메타태그 치환 (White-hat SEO 표준)
-  html = html.replace(
-    /<title>.*?<\\/title>/i,
-    `<title>${{item.title}}</title>`
-  );
-  html = html.replace(
-    /<meta name="description" content=".*?" \\/>/i,
-    `<meta name="description" content="${{item.description}}" />\\n  <link rel="canonical" href="${{item.url}}" />`
-  );
-  html = html.replace(
-    /<meta property="og:title" content=".*?" \\/>/i,
-    `<meta property="og:title" content="${{item.title}}" />`
-  );
-  html = html.replace(
-    /<meta property="og:description" content=".*?" \\/>/i,
-    `<meta property="og:description" content="${{item.description}}" />\\n  <meta property="og:url" content="${{item.url}}" />`
-  );
-
-  // 4. Schema.org JSON-LD 구조화 데이터 주입
-  const schemaScript = `
-  <!-- 동적 Schema.org 구조화 데이터 -->
-  <script type="application/ld+json">
-  ${{JSON.stringify(item.schema_json)}}
-  </script>
-</head>`;
-  html = html.replace('</head>', schemaScript);
-
-  // 5. 헤더 상단 로고 옆 서브 텍스트 치환
-  html = html.replace(
-    '메디컬 공간 디자인</span>',
-    `${{item.keyword}}</span>`
-  );
-
-  // 6. 히어로 H1 메인 타이틀 치환
-  html = html.replace(
-    '<span class="text-primary">부산 병원 공간 디자인</span>',
-    `<span class="text-primary">${{item.keyword}}</span>`
-  );
-
-  return new Response(html, {{
-    headers: {{
-      'content-type': 'text/html;charset=UTF-8',
-      'cache-control': 'public, max-age=86400, s-maxage=604800'
-    }}
-  }});
-}}
-"""
-    # 1) functions/[id].js
-    function_file = os.path.join(functions_dir, "[id].js")
-    with open(function_file, "w", encoding="utf-8") as f:
-        f.write(function_code)
-    print(f"Created: {function_file}")
-
-    # 2) functions/[id]/index.js (Trailing slash 지원)
-    id_dir = os.path.join(functions_dir, "[id]")
-    os.makedirs(id_dir, exist_ok=True)
-    function_index_file = os.path.join(id_dir, "index.js")
-    with open(function_index_file, "w", encoding="utf-8") as f:
-        f.write(function_code)
-    print(f"Created: {function_index_file}")
+    print(f"Successfully generated all {len(dataset)} enriched static pages in {output_dir}")
 
 def main():
     print("=== HOMPAGE_KEYWORD SEO 자동화 빌드 시작 ===")
@@ -458,39 +435,41 @@ def main():
         print(f"Error: {RAW_KEYWORD_FILE} not found.")
         sys.exit(1)
         
-    with open(RAW_KEYWORD_FILE, "r", encoding="utf-8-sig") as f:
+    with open(RAW_KEYWORD_FILE, "r", encoding="utf-8") as f:
         raw_keywords = [line.strip() for line in f if line.strip()]
         
-    print(f"원천 키워드 수: {len(raw_keywords)}개")
-    
-    # 1. SEO 데이터셋 생성
+    print(f"로딩된 키워드 수: {len(raw_keywords)}개")
     dataset = generate_seo_dataset(raw_keywords)
     print(f"파싱 완료된 고유 키워드 수: {len(dataset)}개")
     
-    # 2. JSON 데이터 저장
+    # 1. seo_keywords.json 저장
     json_path = os.path.join(OUTPUT_DIR, "seo_keywords.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(dataset, f, ensure_ascii=False, indent=2)
     print(f"Saved: {json_path}")
     
-    # 3. 사이트맵 페이지 수
-    total_pages = max(1, math.ceil(len(dataset) / 500))
-    
-    # 4. index.html 및 busaninterior_base.html 갱신 (파비콘 + 상대경로 -> 루트 절대경로 일괄 수정)
+    # 2. total_pages 계산 및 index.html / busaninterior_base.html 최신화
+    PAGE_SIZE = 300
+    total_pages = max(1, math.ceil(len(dataset) / PAGE_SIZE))
     base_html = update_index_and_base_html(total_pages)
     
-    # 5. sitemap.xml 및 robots.txt 생성 (키워드 랜딩 페이지 집중)
+    # 3. sitemap.xml & robots.txt 생성
     generate_sitemaps(dataset, OUTPUT_DIR)
     
-    # 6. HTML 사이트맵(1~42페이지) 생성 (500개 앵커 텍스트 그물망 복원 + noindex, follow 적용!)
+    # 4. HTML 사이트맵 생성 (noindex, follow 적용된 풀 홈페이지 템플릿)
     generate_html_sitemaps(dataset, base_html, OUTPUT_DIR)
     
-    # 7. Cloudflare Pages Functions 엣지 렌더러 생성
-    create_cloudflare_edge_function(total_pages)
-
-    # 8. GitHub Pages 정적 20,580개 HTML 일괄 생성
+    # 5. 기존 구 디렉토리 정리 및 598개 정적 HTML 생성
+    clean_old_directories(OUTPUT_DIR, len(dataset))
     generate_static_pages(dataset, base_html, OUTPUT_DIR)
     
+    # 6. GitHub Pages용 .nojekyll 보장
+    nojekyll_path = os.path.join(OUTPUT_DIR, ".nojekyll")
+    if not os.path.exists(nojekyll_path):
+        with open(nojekyll_path, "w", encoding="utf-8") as f:
+            f.write("")
+        print(f"Created: {nojekyll_path}")
+        
     print("=== HOMPAGE_KEYWORD SEO 빌드 완료! ===")
 
 if __name__ == "__main__":

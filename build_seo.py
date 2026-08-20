@@ -127,25 +127,57 @@ def generate_seo_dataset(raw_keywords):
         # 카테고리별 특화 스펙 텍스트
         spec_text = CATEGORY_SPECS.get(category, CATEGORY_SPECS.get("병원"))
         
-        schema_json = {
-            "@context": "https://schema.org",
-            "@type": "HomeAndConstructionBusiness",
-            "name": f"{raw} - {BRAND_NAME}",
-            "description": desc,
-            "url": canonical,
-            "telephone": "1588-0000",
-            "priceRange": "$$",
-            "areaServed": {
-                "@type": "AdministrativeArea",
-                "name": region if region != "경남" else "경상남도"
+        schema_json = [
+            {
+                "@context": "https://schema.org",
+                "@type": "HomeAndConstructionBusiness",
+                "name": f"{raw} - {BRAND_NAME}",
+                "description": desc,
+                "url": canonical,
+                "telephone": "1588-0000",
+                "priceRange": "$$",
+                "areaServed": {
+                    "@type": "AdministrativeArea",
+                    "name": region if region != "경남" else "경상남도"
+                },
+                "serviceType": f"{category} {action}",
+                "provider": {
+                    "@type": "Organization",
+                    "name": BRAND_NAME,
+                    "url": SITE_URL
+                }
             },
-            "serviceType": f"{category} {action}",
-            "provider": {
-                "@type": "Organization",
-                "name": BRAND_NAME,
-                "url": SITE_URL
+            {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": f"{region} {category} 프리미엄 {action}는 일반 인테리어와 무엇이 다른가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"{region} {category} 프리미엄 {action}는 최고급 프리미엄 마감재를 엄선하여 사용하며, 환자에게 안락함을 선사하는 정교한 조도 설계와 호텔 라운지급 대기실 조성을 통해 차별화된 가치와 브랜딩을 실현합니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": f"{region} {category} 공간 인테리어 설계 시 가장 중요한 점은 무엇인가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"{region} {category} 개원 시 {spec_text} 등 특수 조건들을 사전에 철저히 반영하여 안전하고 오차 없는 정밀 설계를 진행합니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "병원 인테리어 시 '실내건축공사업 면허'가 꼭 필요한가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "건설산업기본법에 따라 공사 금액이 1,500만 원 이상인 실내 인테리어 공사는 반드시 정부 등록 면허를 보유한 업체만 시공하도록 규정되어 있습니다. 무면허 업체 시공 시 하자보수(AS) 거부, 돌연 중단 및 먹튀, 소방 안전 기준 미달 등 중대 손실이 발생할 수 있습니다. 고객이 국토교통부 키스콘(KISCON, 건설산업지식정보시스템) 사이트에서 해당 인테리어 업체의 면허 보유 여부를 필히 조회할 것을 권장합니다."
+                        }
+                    }
+                ]
             }
-        }
+        ]
         
         item = {
             "id": page_id,
@@ -385,15 +417,17 @@ def generate_static_pages(dataset, base_html, output_dir):
   <meta property="og:image" content="{SITE_URL}/main1.webp" />
   <meta property="og:url" content="{item["url"]}" />"""
 
-        # <head> 내부의 SEO 메타 블록 전체를 교체
+        # 1. <head> 내부의 SEO 메타 블록 전체를 교체
         html = re.sub(r'<title>.*?</title>[\s\S]*?(?=<!-- Pretendard Web Font CDN -->)', f'{head_block}\n  \n  ', html, flags=re.I)
 
-        # 2. Schema.org JSON-LD 주입
-        schema_script = f"""  <script type="application/ld+json">
-  {json.dumps(item["schema_json"], ensure_ascii=False)}
-  </script>
-</head>"""
-        html = html.replace('</head>', schema_script)
+        # 2. Schema.org JSON-LD 단일 통합 주입 (동적 FAQPage 및 로컬 비즈니스 완벽 동기화)
+        schema_script = f"""<script type="application/ld+json">
+  {json.dumps(item["schema_json"], ensure_ascii=False, indent=2)}
+  </script>"""
+        if '<script type="application/ld+json">' in html:
+            html = re.sub(r'<script type="application/ld\+json">[\s\S]*?</script>', schema_script, html)
+        else:
+            html = html.replace('</head>', f'  {schema_script}\n</head>')
 
         # 3. 헤더 로고 서브 텍스트 치환
         html = html.replace('메디컬 공간 디자인</span>', f'{item["keyword"]}</span>')

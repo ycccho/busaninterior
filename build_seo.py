@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 
 # ==============================================================================
 # HOMPAGE_KEYWORD 23대 슈퍼 허브(Super Hub) 아키텍처 마스터 빌더 (busaninterior.kr)
-# - 구글 1위 조기 탈환 & AI Overviews / LLM 단독 인용 구조
+# - 메타 키워드, 설명문, 제목 등에서 '프리미엄' 단어 전면 배제 및 전문 메디컬 용어 최적화
 # - 13대 주요 지역 전용 종합 허브 + 10대 진료과목 전용 전문 허브 (총 27개 정예 URL)
 # - 네이버 톡톡 연동 + Schema 3종(LocalBusiness + BreadcrumbList + FAQPage)
 # ==============================================================================
@@ -40,7 +40,7 @@ REGIONAL_HUBS = {
         "badge": "창원·마산·진해 메디컬 공간 특화",
         "h1": "성공적인 창원 개원의 시작,<br /><span class=\"text-primary\">창원 병원 인테리어 전문 업체</span>",
         "landmarks": ["상남동", "중앙동", "용호동", "마산합포구", "마산회원구", "진해구", "팔용동"],
-        "highlight_text": "창원 최대 상권인 성산구 상남동 메디컬 빌딩 및 마산·진해 지역 신규 개원과 리모델링에 최적화된 프리미엄 공간 설계를 지원합니다.",
+        "highlight_text": "창원 최대 상권인 성산구 상남동 메디컬 빌딩 및 마산·진해 지역 신규 개원과 리모델링에 최적화된 맞춤 공간 설계를 지원합니다.",
         "specialties_summary": "의료법 필수 면적 기준과 소방 대피 규정을 선제적으로 반영하여 공기 지연 없는 완벽한 준공을 보장합니다."
     },
     "ulsan": {
@@ -51,7 +51,7 @@ REGIONAL_HUBS = {
         "badge": "울산 전 지역 메디컬 공간 특화",
         "h1": "성공적인 울산 개원의 시작,<br /><span class=\"text-primary\">울산 병원 인테리어 전문 업체</span>",
         "landmarks": ["삼산동", "달동", "성남동", "옥동", "무거동", "우정혁신도시", "남구 메디컬존"],
-        "highlight_text": "울산 남구 삼산동·달동 메디컬 중심지의 프리미엄 병의원 인테리어부터 옥동·무거동 신규 클리닉까지 맞춤형 럭셔리 공간을 구현합니다.",
+        "highlight_text": "울산 남구 삼산동·달동 메디컬 중심지의 병의원 인테리어부터 옥동·무거동 신규 클리닉까지 맞춤형 의료 공간을 구현합니다.",
         "specialties_summary": "환자 동선과 의료진 서브 동선의 정밀한 분리로 진료 효율을 극대화하고 호텔 라운지급 대기실을 조성합니다."
     },
     "haeundae": {
@@ -62,8 +62,8 @@ REGIONAL_HUBS = {
         "badge": "해운대·마린시티 하이엔드 메디컬 특화",
         "h1": "품격 있는 해운대 개원의 시작,<br /><span class=\"text-primary\">해운대 병원 인테리어 전문 업체</span>",
         "landmarks": ["우동", "중동", "좌동", "송정동", "마린시티", "센텀시티", "엘시티", "장산역", "해운대역"],
-        "highlight_text": "해운대 마린시티와 중동·우동 상권에 어울리는 최고급 천연 대리석 및 친환경 도료 기반의 하이엔드 메디컬 라운지를 디자인합니다.",
-        "specialties_summary": "피부과, 성형외과, 안과, 치과 등 프리미엄 진료과목에 걸맞은 호텔식 인테리어와 정밀 설비 인프라를 완벽 시공합니다."
+        "highlight_text": "해운대 마린시티와 중동·우동 상권에 어울리는 최고급 천연 대리석 및 친환경 도료 기반의 메디컬 라운지를 디자인합니다.",
+        "specialties_summary": "피부과, 성형외과, 안과, 치과 등 주요 진료과목에 걸맞은 호텔식 인테리어와 정밀 설비 인프라를 완벽 시공합니다."
     },
     "centum": {
         "slug": "centum.html",
@@ -162,7 +162,7 @@ REGIONAL_HUBS = {
         "h1": "성공적인 부산 개원의 시작,<br /><span class=\"text-primary\">부산 병원 인테리어 전문 업체</span>",
         "landmarks": ["서면 메디컬스트리트", "해운대", "센텀시티", "마린시티", "연산교차로", "동래역", "덕천", "남포동", "사상"],
         "highlight_text": "부산 전역(서면, 해운대, 센텀, 동래, 연산 등)의 메디컬 중심가에서 수많은 병의원 완공 실적을 쌓아온 검증된 면허 전문 업체입니다.",
-        "specialties_summary": "진료과목별 최적 동선 기획과 최고급 프리미엄 마감재 적용으로 브랜드 가치를 극대화합니다."
+        "specialties_summary": "진료과목별 최적 동선 기획과 최고급 친환경 마감재 적용으로 브랜드 가치를 극대화합니다."
     }
 }
 
@@ -187,8 +187,8 @@ SPECIALTY_HUBS = {
         "specialty_name": "피부과",
         "title": "피부과 인테리어 전문 업체 | VIP 1인 관리실 조도 & 레이저 공조 설계",
         "desc": "피부과·에스테틱 인테리어 전문! VIP 1인 관리실 아늑한 간접 조도 설계, 고출력 레이저실 전력 승압 및 환기 공조, 프라이빗 파우더룸 기획.",
-        "badge": "피부과 럭셔리 라운지 & 레이저 공조 특화",
-        "h1": "품격 있는 피부과 개원의 시작,<br /><span class=\"text-primary\">피부과 프리미엄 인테리어 디자인</span>",
+        "badge": "피부과 맞춤 라운지 & 레이저 공조 특화",
+        "h1": "품격 있는 피부과 개원의 시작,<br /><span class=\"text-primary\">피부과 맞춤 인테리어 디자인</span>",
         "area_range": "50평 ~ 100평 (관리실 4~8실 기준)",
         "infra_highlight": "VIP 1인실 조도 제어, 레이저실 전력 승압",
         "duration": "약 4주 ~ 6주",
@@ -319,12 +319,10 @@ def clean_all_old_directories(output_dir):
     print("All old numeric directories removed successfully.")
 
 def build_super_hub_navigation():
-    # 13대 지역 링크 뱃지 그리드
     reg_links = []
     for k, v in REGIONAL_HUBS.items():
         reg_links.append(f'<a href="{SITE_URL}/{v["slug"]}" title="{v["region_name"]} 병원 인테리어" class="p-3 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-primary hover:text-primary rounded-xl text-xs text-gray-700 transition-all font-semibold flex items-center justify-between shadow-sm"><span>📍 {v["region_name"]} 병원 인테리어</span><i class="fas fa-chevron-right text-[10px] text-gray-400"></i></a>')
         
-    # 10대 진료과목 링크 뱃지 그리드
     spec_links = []
     for k, v in SPECIALTY_HUBS.items():
         spec_links.append(f'<a href="{SITE_URL}/{v["slug"]}" title="{v["specialty_name"]} 인테리어" class="p-3 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-primary hover:text-primary rounded-xl text-xs text-gray-700 transition-all font-semibold flex items-center justify-between shadow-sm"><span>🩺 {v["specialty_name"]} 인테리어</span><i class="fas fa-chevron-right text-[10px] text-gray-400"></i></a>')
@@ -363,8 +361,44 @@ def build_super_hub_navigation():
     return hub_html
 
 def update_main_index_html(base_html):
-    print("Updating index.html with Super Hub Navigation & Naver TalkTalk...")
+    print("Updating index.html with Super Hub Navigation & Clean Meta Tags...")
     html = base_html
+
+    # 메인 Head 메타태그에서 '프리미엄' 완전 제거
+    clean_main_head = f"""  <title>부산 병원 인테리어 전문 업체 | 메디컬 공간 디자인</title>
+  
+  <!-- Favicon Setting -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  
+  <!-- SEO Meta Tags for Naver & Google -->
+  <meta name="description" content="부산 병원 인테리어 전문 업체. 실내건축공사업 면허를 보유하고, 진료과목별 의료법을 준수하는 메디컬 공간을 디자인합니다." />
+  <link rel="canonical" href="{SITE_URL}/" />
+  <meta name="keywords" content="부산 병원 인테리어, 부산 병원 리모델링, 부산 의원 인테리어, 부산 의원 리모델링, 부산 내과 인테리어, 부산 치과 인테리어, 부산 피부과 인테리어, 부산 성형외과 인테리어, 부산 정형외과 인테리어, 부산 안과 인테리어, 부산 이비인후과 인테리어, 부산 한의원 인테리어" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="{BRAND_NAME}" />
+  <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
+  
+  <!-- Open Graph Tags (SNS Sharing) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{BRAND_NAME}" />
+  <meta property="og:title" content="부산 병원 인테리어 전문 업체 | 메디컬 공간 디자인" />
+  <meta property="og:description" content="국가 인증 실내건축공사업 면허 보유, 각 진료과목별 의료법을 준수하는 맞춤 메디컬 디자인. 성공적인 개원의 시작을 함께합니다." />
+  <meta property="og:image" content="{SITE_URL}/main1.webp" />
+  <meta property="og:url" content="{SITE_URL}/" />"""
+
+    html = re.sub(r'<title>.*?</title>[\s\S]*?(?=<!-- Pretendard Web Font CDN -->)', f'{clean_main_head}\n  \n  ', html, flags=re.I)
+
+    # FAQ 및 텍스트 내 '프리미엄' 순화
+    html = html.replace('부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?', '부산 병원 전문 인테리어는 일반 인테리어와 무엇이 다른가요?')
+    html = html.replace('부산 프리미엄 병원 리모델링', '부산 병원 리모델링')
+    html = html.replace('최고급 프리미엄 마감재', '최고급 친환경 마감재')
+    html = html.replace('최상위 프리미엄 마감재', '최상위 친환경 마감재')
+    html = html.replace('프리미엄 대기실 라운지', '호텔식 대기실 라운지')
+    html = html.replace('프리미엄 경험', '안락한 경험')
+    html = html.replace('유럽 프리미엄 도료', '유럽 친환경 도료')
 
     # 네이버 톡톡 배너
     naver_talktalk_banner = f"""  <!-- 네이버 톡톡 실시간 1:1 상담 배너 -->
@@ -394,7 +428,6 @@ def update_main_index_html(base_html):
     hub_html = build_super_hub_navigation()
     bottom_block = f"{naver_talktalk_banner}\n{hub_html}"
 
-    # 기존 sitemap-hub, naver-talktalk-section 치환
     if 'id="naver-talktalk-section"' in html:
         html = re.sub(r'<!-- 네이버 톡톡[\s\S]*?<!-- (주요 지역별|13대 주요 지역)[\s\S]*?</section>\n?', bottom_block, html)
     elif 'id="sitemap-hub"' in html:
@@ -407,11 +440,11 @@ def update_main_index_html(base_html):
     index_path = os.path.join(OUTPUT_DIR, "index.html")
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print("Saved clean index.html with Super Hub Navigation.")
+    print("Saved clean index.html without '프리미엄'.")
     return html
 
 def generate_regional_pages(base_html):
-    print("Generating 13 Regional Super Hub Pages...")
+    print("Generating 13 Regional Super Hub Pages without '프리미엄'...")
     for key, data in REGIONAL_HUBS.items():
         html = base_html
         canonical_url = f"{SITE_URL}/{data['slug']}"
@@ -562,16 +595,17 @@ def generate_regional_pages(base_html):
 
         # 7. FAQ 질문 치환
         html = html.replace('<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["region_name"]} 지역 병원 인테리어 무료 현장 실측이 가능한가요?</span>')
+        html = html.replace('<span>부산 병원 전문 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["region_name"]} 지역 병원 인테리어 무료 현장 실측이 가능한가요?</span>')
         html = html.replace('<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>', f'<span>{data["region_name"]} 병원 인테리어 공사 시 가장 중요한 점은 무엇인가요?</span>')
 
         page_file = os.path.join(OUTPUT_DIR, data["slug"])
         with open(page_file, "w", encoding="utf-8") as f:
             f.write(html)
             
-    print("Generated all 13 Regional Super Hub Pages successfully.")
+    print("Generated all 13 Regional Super Hub Pages without '프리미엄'.")
 
 def generate_specialty_pages(base_html):
-    print("Generating 10 Specialty Super Hub Pages...")
+    print("Generating 10 Specialty Super Hub Pages without '프리미엄'...")
     for key, data in SPECIALTY_HUBS.items():
         html = base_html
         canonical_url = f"{SITE_URL}/{data['slug']}"
@@ -721,13 +755,14 @@ def generate_specialty_pages(base_html):
 
         # 7. FAQ 질문 치환
         html = html.replace('<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["specialty_name"]} 인테리어 설계 시 가장 중요한 설비 기준은 무엇인가요?</span>')
+        html = html.replace('<span>부산 병원 전문 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["specialty_name"]} 인테리어 설계 시 가장 중요한 설비 기준은 무엇인가요?</span>')
         html = html.replace('<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>', f'<span>{data["specialty_name"]} 개원 시 권장 평수와 공사 기간은 어떻게 되나요?</span>')
 
         page_file = os.path.join(OUTPUT_DIR, data["slug"])
         with open(page_file, "w", encoding="utf-8") as f:
             f.write(html)
             
-    print("Generated all 10 Specialty Super Hub Pages successfully.")
+    print("Generated all 10 Specialty Super Hub Pages without '프리미엄'.")
 
 def generate_clean_sitemaps(output_dir):
     print("Generating Clean 27-URL sitemap.xml...")
@@ -740,11 +775,9 @@ def generate_clean_sitemaps(output_dir):
         {"loc": f"{SITE_URL}/portfolio-dental.html", "priority": "0.9", "changefreq": "weekly"}
     ]
     
-    # 13개 지역 허브
     for k, v in REGIONAL_HUBS.items():
         urls.append({"loc": f"{SITE_URL}/{v['slug']}", "priority": "0.9", "changefreq": "weekly"})
         
-    # 10개 진료과목 허브
     for k, v in SPECIALTY_HUBS.items():
         urls.append({"loc": f"{SITE_URL}/{v['slug']}", "priority": "0.9", "changefreq": "weekly"})
         
@@ -762,7 +795,6 @@ def generate_clean_sitemaps(output_dir):
         
     print(f"Generated: {sitemap_path} (Total {len(urls)} Clean High-Value URLs)")
     
-    # robots.txt 최신화
     robots_path = os.path.join(output_dir, "robots.txt")
     robots_content = f"""User-agent: *
 Allow: /
@@ -775,31 +807,20 @@ Sitemap: {SITE_URL}/sitemap.xml
     print(f"Updated: {robots_path}")
 
 def main():
-    print("=== HOMPAGE_KEYWORD 23대 슈퍼 허브 빌드 시작 ===")
-    
-    # 1. 기존 598개 구 디렉토리 및 sitemap 폴더 완전 삭제
+    print("=== HOMPAGE_KEYWORD 23대 슈퍼 허브 ('프리미엄' 제외 정화) 빌드 시작 ===")
     clean_all_old_directories(OUTPUT_DIR)
     
-    # 2. base_html 로드
     base_file = os.path.join(OUTPUT_DIR, "busaninterior_base.html")
     if not os.path.exists(base_file):
         base_file = os.path.join(OUTPUT_DIR, "index.html")
     with open(base_file, "r", encoding="utf-8") as f:
         base_html = f.read()
         
-    # 3. index.html 최신화
     updated_main_html = update_main_index_html(base_html)
-    
-    # 4. 13대 지역 슈퍼 페이지 생성
     generate_regional_pages(updated_main_html)
-    
-    # 5. 10대 진료과목 슈퍼 페이지 생성
     generate_specialty_pages(updated_main_html)
-    
-    # 6. 초경량 27개 클린 sitemap.xml 생성
     generate_clean_sitemaps(OUTPUT_DIR)
     
-    # 7. GitHub Pages .nojekyll 보장
     nojekyll_path = os.path.join(OUTPUT_DIR, ".nojekyll")
     if not os.path.exists(nojekyll_path):
         with open(nojekyll_path, "w", encoding="utf-8") as f:

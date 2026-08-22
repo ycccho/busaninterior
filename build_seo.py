@@ -1,15 +1,15 @@
 import os
 import sys
 import json
-import math
 import re
 import shutil
 from datetime import datetime, timezone
 
 # ==============================================================================
-# HOMPAGE_KEYWORD SEO 자동화 마스터 빌더 (busaninterior.kr 전용)
-# 네이버 D.I.A+ 롱테일 세부 동(Dong) 융단폭격 + BreadcrumbList 스키마 +
-# 네이버 톡톡(TalkTalk) 공식 연동 + 연관 진료과목 메쉬 내부링킹(Mesh Linking)
+# HOMPAGE_KEYWORD 23대 슈퍼 허브(Super Hub) 아키텍처 마스터 빌더 (busaninterior.kr)
+# - 구글 1위 조기 탈환 & AI Overviews / LLM 단독 인용 구조
+# - 13대 주요 지역 전용 종합 허브 + 10대 진료과목 전용 전문 허브 (총 27개 정예 URL)
+# - 네이버 톡톡 연동 + Schema 3종(LocalBusiness + BreadcrumbList + FAQPage)
 # ==============================================================================
 
 SITE_URL = "https://busaninterior.kr"
@@ -17,524 +17,356 @@ BRAND_NAME = "부산 병원 인테리어 전문 업체"
 RECOMMENDED_PARTNER = "인디컴퍼니"
 PARTNER_URL = "https://inde.co.kr"
 NAVER_TALKTALK_URL = "https://talk.naver.com/ct/wc2c1f?frm=home"
-RAW_KEYWORD_FILE = os.path.join(os.path.dirname(__file__), "키워드작업", "keyword_combination.txt")
 OUTPUT_DIR = os.path.dirname(__file__)
 
-# 13개 핵심 타겟 지역 매핑 & 세부 행정동/랜드마크 딕셔너리 (네이버 D.I.A+ 지역 롱테일 공략)
-REGION_LANDMARKS = {
-    "부산": ["서면", "해운대", "센텀시티", "마린시티", "남포동", "덕천", "연산동", "동래", "사상", "명지", "정관", "일광"],
-    "대구": ["수성구", "범어동", "만촌동", "동성로", "삼덕동", "반월당", "상인동", "칠곡", "두산동"],
-    "창원": ["상남동", "중앙동", "용호동", "마산합포구", "마산회원구", "진해구", "팔용동"],
-    "해운대": ["우동", "중동", "좌동", "송정동", "마린시티", "센텀시티", "엘시티", "장산역", "해운대역"],
-    "센텀": ["센텀중앙로", "센텀동로", "센텀시티역", "벡스코 인근", "우동 센텀 메디컬존"],
-    "명지": ["명지국제신도시", "명지오션시티", "신호동", "강서구", "명지 메디컬타운"],
-    "울산": ["삼산동", "달동", "성남동", "옥동", "무거동", "우정혁신도시", "남구 메디컬존"],
-    "김해": ["내외동", "삼계동", "부원동", "율하", "장유", "진영", "구산동"],
-    "기장": ["정관신도시", "일광신도시", "기장읍", "오시리아", "교리"],
-    "구미": ["원평동", "인동", "옥계", "송정동", "형곡동", "사곡동", "진평동"],
-    "밀양": ["삼문동", "내이동", "가곡동", "교동", "밀양역 인근"],
-    "거제": ["고현동", "옥포동", "장평동", "아주동", "상문동", "수양동"],
-    "경남": ["김해", "양산", "진주", "거제", "통영", "사천", "밀양", "창원"]
+# 13대 핵심 지역 데이터 (랜드마크, 서브타이틀, 특화 설명)
+REGIONAL_HUBS = {
+    "daegu": {
+        "slug": "daegu.html",
+        "region_name": "대구",
+        "title": "대구 병원 인테리어 전문 업체 | 수성구·범어동·동성로 메디컬 공간 디자인",
+        "desc": "대구 지역 병원·의원 인테리어 및 리모델링 전문! 수성구, 범어동, 만촌동, 동성로 등 대구 전 지역 1:1 무료 방문 실측 및 3D 도면 비교 견적 지원.",
+        "badge": "대구 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 대구 개원의 시작,<br /><span class=\"text-primary\">대구 병원 인테리어 전문 업체</span>",
+        "landmarks": ["수성구", "범어동", "만촌동", "동성로", "삼덕동", "반월당", "상인동", "칠곡", "두산동"],
+        "highlight_text": "대구 메디컬 스트리트(수성구 범어네거리, 중구 동성로·삼덕동 일대)의 최신 개원 트렌드와 진료과목별 의료법 규격을 완벽하게 충족하는 맞춤형 공간 솔루션을 제공합니다.",
+        "specialties_summary": "내과 호흡기 분리 대기실, 치과 체어 배관 인프라, 피부과 1인 관리실 조도 설계, 정형외과 C-arm 납차폐 등 대구 지역 병의원에 최적화된 시공을 약속합니다."
+    },
+    "changwon": {
+        "slug": "changwon.html",
+        "region_name": "창원",
+        "title": "창원 병원 인테리어 전문 업체 | 상남동·마산·진해 메디컬 공간 디자인",
+        "desc": "창원 병원·의원 인테리어 및 리모델링 전문! 상남동, 중앙동, 마산, 진해 등 창원 전 지역 1:1 무료 현장 실측 및 3D 설계 견적 지원.",
+        "badge": "창원·마산·진해 메디컬 공간 특화",
+        "h1": "성공적인 창원 개원의 시작,<br /><span class=\"text-primary\">창원 병원 인테리어 전문 업체</span>",
+        "landmarks": ["상남동", "중앙동", "용호동", "마산합포구", "마산회원구", "진해구", "팔용동"],
+        "highlight_text": "창원 최대 상권인 성산구 상남동 메디컬 빌딩 및 마산·진해 지역 신규 개원과 리모델링에 최적화된 프리미엄 공간 설계를 지원합니다.",
+        "specialties_summary": "의료법 필수 면적 기준과 소방 대피 규정을 선제적으로 반영하여 공기 지연 없는 완벽한 준공을 보장합니다."
+    },
+    "ulsan": {
+        "slug": "ulsan.html",
+        "region_name": "울산",
+        "title": "울산 병원 인테리어 전문 업체 | 삼산동·달동·옥동 메디컬 공간 디자인",
+        "desc": "울산 병원·의원 인테리어 및 리모델링 전문! 남구 삼산동, 달동, 옥동, 무거동, 우정혁신도시 등 울산 전 지역 3D 도면 무료 견적 상담.",
+        "badge": "울산 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 울산 개원의 시작,<br /><span class=\"text-primary\">울산 병원 인테리어 전문 업체</span>",
+        "landmarks": ["삼산동", "달동", "성남동", "옥동", "무거동", "우정혁신도시", "남구 메디컬존"],
+        "highlight_text": "울산 남구 삼산동·달동 메디컬 중심지의 프리미엄 병의원 인테리어부터 옥동·무거동 신규 클리닉까지 맞춤형 럭셔리 공간을 구현합니다.",
+        "specialties_summary": "환자 동선과 의료진 서브 동선의 정밀한 분리로 진료 효율을 극대화하고 호텔 라운지급 대기실을 조성합니다."
+    },
+    "haeundae": {
+        "slug": "haeundae.html",
+        "region_name": "해운대",
+        "title": "해운대 병원 인테리어 전문 업체 | 우동·중동·마린시티·좌동 메디컬 디자인",
+        "desc": "해운대 병원·의원 인테리어 및 리모델링 전문! 우동, 중동, 마린시티, 좌동 신시가지, 엘시티 등 해운대구 전 지역 3D 무료 설계 견적.",
+        "badge": "해운대·마린시티 하이엔드 메디컬 특화",
+        "h1": "품격 있는 해운대 개원의 시작,<br /><span class=\"text-primary\">해운대 병원 인테리어 전문 업체</span>",
+        "landmarks": ["우동", "중동", "좌동", "송정동", "마린시티", "센텀시티", "엘시티", "장산역", "해운대역"],
+        "highlight_text": "해운대 마린시티와 중동·우동 상권에 어울리는 최고급 천연 대리석 및 친환경 도료 기반의 하이엔드 메디컬 라운지를 디자인합니다.",
+        "specialties_summary": "피부과, 성형외과, 안과, 치과 등 프리미엄 진료과목에 걸맞은 호텔식 인테리어와 정밀 설비 인프라를 완벽 시공합니다."
+    },
+    "centum": {
+        "slug": "centum.html",
+        "region_name": "센텀",
+        "title": "센텀 병원 인테리어 전문 업체 | 센텀시티·우동 메디컬 타운 디자인",
+        "desc": "센텀시티 병원·의원 인테리어 전문! 센텀중앙로, 센텀동로, 벡스코 인근 메디컬 빌딩 특화 설계 및 3D 도면 무료 견적 상담.",
+        "badge": "센텀시티 메디컬 타운 특화",
+        "h1": "성공적인 센텀 개원의 시작,<br /><span class=\"text-primary\">센텀 병원 인테리어 전문 업체</span>",
+        "landmarks": ["센텀중앙로", "센텀동로", "센텀시티역", "벡스코 인근", "우동 센텀 메디컬존"],
+        "highlight_text": "부산 최고 수준의 병의원이 밀집한 센텀시티 메디컬 타운의 고품격 브랜드 아이덴티티를 확립하는 차별화된 디자인을 제공합니다.",
+        "specialties_summary": "무균 수술실 공조 시스템, 대형 검진센터 원스톱 동선 기획 등 고난도 메디컬 엔지니어링을 책임 시공합니다."
+    },
+    "myeongji": {
+        "slug": "myeongji.html",
+        "region_name": "명지",
+        "title": "명지 병원 인테리어 전문 업체 | 명지국제신도시·오션시티 메디컬 디자인",
+        "desc": "명지국제신도시 병원·의원 인테리어 전문! 강서구 명지오션시티, 신호동 등 신도시 상권에 최적화된 소아과, 이비인후과, 내과 맞춤 설계.",
+        "badge": "명지국제신도시 메디컬 특화",
+        "h1": "성공적인 명지 개원의 시작,<br /><span class=\"text-primary\">명지 병원 인테리어 전문 업체</span>",
+        "landmarks": ["명지국제신도시", "명지오션시티", "신호동", "강서구", "명지 메디컬타운"],
+        "highlight_text": "젊은 가족 단위 환자가 많은 명지국제신도시 특성에 맞춰 감염 예방 호흡기 분리 동선과 안심 키즈존을 결합한 스마트 클리닉을 설계합니다.",
+        "specialties_summary": "소아청소년과, 이비인후과, 치과, 내과, 정형외과 등 가족 중심 진료과목에 최적화된 안전하고 쾌적한 인테리어를 구현합니다."
+    },
+    "gimhae": {
+        "slug": "gimhae.html",
+        "region_name": "김해",
+        "title": "김해 병원 인테리어 전문 업체 | 내외동·장유·율하 메디컬 공간 디자인",
+        "desc": "김해 병원·의원 인테리어 및 리모델링 전문! 내외동, 삼계동, 율하신도시, 장유 등 김해 전 지역 1:1 방문 실측 및 3D 도면 무료 견적.",
+        "badge": "김해·율하·장유 메디컬 특화",
+        "h1": "성공적인 김해 개원의 시작,<br /><span class=\"text-primary\">김해 병원 인테리어 전문 업체</span>",
+        "landmarks": ["내외동", "삼계동", "부원동", "율하", "장유", "진영", "구산동"],
+        "highlight_text": "김해 내외동 중심 상권과 율하·장유 신도시의 신규 개원 병의원을 위한 합리적인 평당 공사비와 정밀 설비 시공을 지원합니다.",
+        "specialties_summary": "실내건축공사업 면허 기반의 책임 시공과 하자보증증권 발행으로 안전한 개원을 뒷받침합니다."
+    },
+    "gumi": {
+        "slug": "gumi.html",
+        "region_name": "구미",
+        "title": "구미 병원 인테리어 전문 업체 | 원평동·인동·옥계 메디컬 공간 디자인",
+        "desc": "구미 병원·의원 인테리어 및 리모델링 전문! 원평동, 인동, 옥계동, 송정동, 형곡동 등 구미 전 지역 직영 감리 및 3D 도면 무료 견적.",
+        "badge": "구미 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 구미 개원의 시작,<br /><span class=\"text-primary\">구미 병원 인테리어 전문 업체</span>",
+        "landmarks": ["원평동", "인동", "옥계", "송정동", "형곡동", "사곡동", "진평동"],
+        "highlight_text": "구미 원평동 및 옥계·인동 핵심 메디컬 상권의 병원 개원을 위해 직영 현장 감리팀이 상주하며 완벽한 공기를 준수합니다.",
+        "specialties_summary": "진료과목별 특수 전기 승압, 엑스레이실 납차폐, 위생 급배수 설비를 철저한 기준에 맞춰 시공합니다."
+    },
+    "geoje": {
+        "slug": "geoje.html",
+        "region_name": "거제",
+        "title": "거제 병원 인테리어 전문 업체 | 고현동·옥포동·아주동 메디컬 디자인",
+        "desc": "거제 병원·의원 인테리어 및 리모델링 전문! 고현동, 옥포동, 장평동, 아주동 등 거제 전 지역 현장 실측 및 3D 도면 비교 견적 상담.",
+        "badge": "거제 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 거제 개원의 시작,<br /><span class=\"text-primary\">거제 병원 인테리어 전문 업체</span>",
+        "landmarks": ["고현동", "옥포동", "장평동", "아주동", "상문동", "수양동"],
+        "highlight_text": "거제 고현동 메디컬 중심지 및 주요 주거 권역의 병의원 인테리어를 위해 내구성 높은 마감재와 신속한 AS 전담팀을 운영합니다.",
+        "specialties_summary": "도서 및 해안 지역 특성을 고려한 방습·방염 자재 시공과 체계적인 감리로 만족도 높은 공간을 완성합니다."
+    },
+    "miryang": {
+        "slug": "miryang.html",
+        "region_name": "밀양",
+        "title": "밀양 병원 인테리어 전문 업체 | 삼문동·내이동 메디컬 공간 디자인",
+        "desc": "밀양 병원·의원 인테리어 및 리모델링 전문! 삼문동, 내이동, 가곡동 등 밀양 전 지역 맞춤형 메디컬 공간 기획 및 3D 무료 도면 지원.",
+        "badge": "밀양 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 밀양 개원의 시작,<br /><span class=\"text-primary\">밀양 병원 인테리어 전문 업체</span>",
+        "landmarks": ["삼문동", "내이동", "가곡동", "교동", "밀양역 인근"],
+        "highlight_text": "밀양 삼문동 및 내이동 메디컬 상권의 내과, 정형외과, 한의원, 치과 등 진료과목별 맞춤 리모델링을 신속하게 지원합니다.",
+        "specialties_summary": "환자 중심의 무단차 배리어프리 설계와 안락한 조도 디자인으로 지역 주민들의 신뢰를 얻는 병원을 만듭니다."
+    },
+    "gijang": {
+        "slug": "gijang.html",
+        "region_name": "기장",
+        "title": "기장 병원 인테리어 전문 업체 | 정관신도시·일광신도시 메디컬 디자인",
+        "desc": "기장 병원·의원 인테리어 전문! 정관신도시, 일광신도시, 오시리아 등 기장군 전 지역 신규 클리닉 인테리어 및 3D 도면 무료 상담.",
+        "badge": "기장·정관·일광 신도시 메디컬 특화",
+        "h1": "성공적인 기장 개원의 시작,<br /><span class=\"text-primary\">기장 병원 인테리어 전문 업체</span>",
+        "landmarks": ["정관신도시", "일광신도시", "기장읍", "오시리아", "교리"],
+        "highlight_text": "정관신도시와 일광신도시의 대형 상가 메디컬 빌딩에 입점하는 병의원을 위한 원스톱 공간 조닝 및 인테리어 솔루션을 제공합니다.",
+        "specialties_summary": "소아과, 이비인후과, 치과, 피부과 등 신도시 맞춤형 스마트 동선과 감성적인 대기실 라운지를 연출합니다."
+    },
+    "gyeongnam": {
+        "slug": "gyeongnam.html",
+        "region_name": "경남",
+        "title": "경남 병원 인테리어 전문 업체 | 양산·진주·통영·사천 메디컬 디자인",
+        "desc": "경상남도 병원·의원 인테리어 및 리모델링 전문! 양산 물금, 진주 충무공동, 통영, 사천 등 경남 전역 1:1 방문 실측 및 3D 도면 지원.",
+        "badge": "경남 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 경남 개원의 시작,<br /><span class=\"text-primary\">경남 병원 인테리어 전문 업체</span>",
+        "landmarks": ["양산 물금", "진주 혁신도시", "통영", "사천", "김해", "창원", "거제"],
+        "highlight_text": "양산 신도시, 진주 혁신도시를 비롯한 경상남도 전역의 병원·요양병원·의원 인테리어를 직영 시스템으로 책임 시공합니다.",
+        "specialties_summary": "의료 시설 법정 규격 충족과 하자이행보증증권 공식 발급으로 믿을 수 있는 병원 시공 파트너가 되어 드립니다."
+    },
+    "busan": {
+        "slug": "busan.html",
+        "region_name": "부산",
+        "title": "부산 병원 인테리어 전문 업체 | 서면·남포동·동래·연산 메디컬 디자인",
+        "desc": "부산 전 지역 병원·의원 인테리어 및 리모델링 전문! 서면 메디컬 스트리트, 동래, 연산동, 남포동, 덕천 등 3D 무료 도면 비교 견적.",
+        "badge": "부산 전 지역 메디컬 공간 특화",
+        "h1": "성공적인 부산 개원의 시작,<br /><span class=\"text-primary\">부산 병원 인테리어 전문 업체</span>",
+        "landmarks": ["서면 메디컬스트리트", "해운대", "센텀시티", "마린시티", "연산교차로", "동래역", "덕천", "남포동", "사상"],
+        "highlight_text": "부산 전역(서면, 해운대, 센텀, 동래, 연산 등)의 메디컬 중심가에서 수많은 병의원 완공 실적을 쌓아온 검증된 면허 전문 업체입니다.",
+        "specialties_summary": "진료과목별 최적 동선 기획과 최고급 프리미엄 마감재 적용으로 브랜드 가치를 극대화합니다."
+    }
 }
 
-REGIONS = list(REGION_LANDMARKS.keys())
-
-# 진료과목별 고유 특화 실무 데이터 (Google Information Gain & NavBoost Dwell Time 극대화)
-CATEGORY_INFO_GAIN = {
-    "치과": {
-        "area_range": "35평 ~ 60평 (체어 4~6대 기준)",
-        "infra_highlight": "체어 급배수/컴프레셔 배관, CT실 납차폐",
+# 10대 진료과목 데이터 (전문 설비, 규격, 핵심 체크포인트)
+SPECIALTY_HUBS = {
+    "dental": {
+        "slug": "dental.html",
+        "specialty_name": "치과",
+        "title": "치과 인테리어 전문 업체 | 체어 배관 인프라 & CT 납차폐 정밀 설계",
+        "desc": "치과 인테리어 및 리모델링 전문! 유닛체어 전용 급배수/컴프레셔 설비 라인, 파노라마 CT실 방사선 차폐 규격, 중앙 멸균 소독실 맞춤 설계.",
+        "badge": "치과 체어 설비 & 멸균 동선 특화",
+        "h1": "성공적인 치과 개원의 시작,<br /><span class=\"text-primary\">치과 인테리어 전문 설계 & 시공</span>",
+        "area_range": "35평 ~ 60평 (유닛체어 4~6대 기준)",
+        "infra_highlight": "체어 전용 급배수·컴프레셔 배관, CT실 납차폐",
         "duration": "약 4주 ~ 5주",
-        "spec_text": "체어 전용 급배수 및 컴프레셔 설비 라인, 파노라마/CT실 방사선 납차폐 규격, 중앙 멸균 소독실의 위생 동선",
-        "related": ["병원", "의원", "이비인후과", "성형외과", "피부과"]
+        "spec_text": "체어 전용 급배수 및 기계실 배관 인프라, 파노라마/CT실 방사선 납차폐 벽체, 중앙 멸균 소독실의 위생적인 일방향 동선",
+        "guide_title": "치과 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "치과는 타 진료과목 대비 기계실(컴프레셔, 석션)과 체어 하부 배관 공사가 가장 핵심입니다. 진료 중 배수 역류나 공기압 저하가 발생하지 않도록 완벽한 구배와 전용 배관 슬리브를 사전 시공합니다."
     },
-    "피부과": {
+    "derma": {
+        "slug": "derma.html",
+        "specialty_name": "피부과",
+        "title": "피부과 인테리어 전문 업체 | VIP 1인 관리실 조도 & 레이저 공조 설계",
+        "desc": "피부과·에스테틱 인테리어 전문! VIP 1인 관리실 아늑한 간접 조도 설계, 고출력 레이저실 전력 승압 및 환기 공조, 프라이빗 파우더룸 기획.",
+        "badge": "피부과 럭셔리 라운지 & 레이저 공조 특화",
+        "h1": "품격 있는 피부과 개원의 시작,<br /><span class=\"text-primary\">피부과 프리미엄 인테리어 디자인</span>",
         "area_range": "50평 ~ 100평 (관리실 4~8실 기준)",
-        "infra_highlight": "VIP 1인 관리실 조도 제어, 레이저실 전력 승압",
+        "infra_highlight": "VIP 1인실 조도 제어, 레이저실 전력 승압",
         "duration": "약 4주 ~ 6주",
         "spec_text": "VIP 1인 관리실의 아늑한 간접 조도 설계, 프라이빗 파우더룸, 고출력 레이저 장비 전력 승압 및 환기 공조",
-        "related": ["성형외과", "안과", "도수치료", "병원", "의원"]
+        "guide_title": "피부과 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "피부과는 환자의 프라이버시 보호와 심리적 안락함이 최우선입니다. 눈부심을 억제한 간접 광원 설계와 고출력 레이저 장비 발열을 신속히 해소하는 전용 공조 배기 라인을 필수 시공합니다."
     },
-    "성형외과": {
+    "plastic": {
+        "slug": "plastic.html",
+        "specialty_name": "성형외과",
+        "title": "성형외과 인테리어 전문 업체 | 무균 양압 수술실 & 프라이빗 회복실",
+        "desc": "성형외과 인테리어 전문! 의료법 기준 무균 수술실 양압 공조 시스템(HEPA 필터), 프라이빗 1인 회복실, 상담실-원장실 최단 진료 동선.",
+        "badge": "무균 양압 수술실 & 회복실 특화",
+        "h1": "성공적인 성형외과 개원의 시작,<br /><span class=\"text-primary\">성형외과 인테리어 전문 설계 & 시공</span>",
         "area_range": "60평 ~ 120평 (무균수술실 포함)",
-        "infra_highlight": "무균 수술실 양압 공조(HEPA 필터), 프라이빗 회복실",
+        "infra_highlight": "무균 수술실 양압 공조(HEPA 필터), 1인 회복실",
         "duration": "약 5주 ~ 7주",
         "spec_text": "무균 수술실 양압 공조 시스템, 수술 후 프라이빗 회복실, 상담실과 원장실 간 최단 진료 동선",
-        "related": ["피부과", "외과", "안과", "마취통증의학과", "병원"]
+        "guide_title": "성형외과 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "의료법 기준에 부합하는 무균 수술실 클린룸 공조(HEPA 필터 0.3마이크론 포집, 차압 제어)와 수술 환자가 대기실에 노출되지 않고 퇴원할 수 있는 프라이빗 서브 동선을 완벽히 구획합니다."
     },
-    "내과": {
-        "area_range": "45평 ~ 80평 (진료 2실, 내시경실)",
+    "internal": {
+        "slug": "internal.html",
+        "specialty_name": "내과·검진센터",
+        "title": "내과·건강검진센터 인테리어 | 호흡기 분리 동선 & 내시경 세척실",
+        "desc": "내과 및 건강검진센터 인테리어 전문! 감염 방지 호흡기 분리 대기실, 내시경실 세척·소독 라인, 접수-기초검사-채혈-내시경 원스톱 검진 동선.",
+        "badge": "내과 호흡기 분리 & 원스톱 검진 동선 특화",
+        "h1": "성공적인 내과 개원의 시작,<br /><span class=\"text-primary\">내과·건강검진센터 인테리어 전문</span>",
+        "area_range": "45평 ~ 150평 (진료실 및 검진존 기준)",
         "infra_highlight": "호흡기 분리 대기실, 내시경 세척실, 채혈실 동선",
-        "duration": "약 4주 ~ 6주",
+        "duration": "약 4주 ~ 7주",
         "spec_text": "호흡기 환자 분리 대기 공간, 내시경실 세척·소독 설비 라인, 건강검진 기초검사 및 채혈실 연계 동선",
-        "related": ["건강검진센터", "소아청소년과", "이비인후과", "가정의학과", "병원"]
+        "guide_title": "내과·검진센터 공간 설계 핵심 체크포인트",
+        "guide_desc": "일반 환자와 호흡기 환자의 감염 예방 교차 방지 동선 및 내시경 검사실과 세척·소독실 간의 누수 없는 방수 급배수 배관 시공이 안정적인 병원 운영의 핵심입니다."
     },
-    "안과": {
-        "area_range": "50평 ~ 100평 (암실 검사실 포함)",
+    "ortho": {
+        "slug": "ortho.html",
+        "specialty_name": "정형외과·도수치료",
+        "title": "정형외과·도수치료 인테리어 | C-arm 차폐 & 물리치료실 공간 조닝",
+        "desc": "정형외과 및 도수치료센터 인테리어 전문! C-arm 방사선 차폐 벽체 공사, 물리치료실 베드 간격 최적화, 도수치료실 특수 이중 방음벽 시공.",
+        "badge": "C-arm 차폐 & 도수치료실 방음 특화",
+        "h1": "성공적인 정형외과 개원의 시작,<br /><span class=\"text-primary\">정형외과·도수치료 인테리어 전문</span>",
+        "area_range": "60평 ~ 150평 (물리·도수치료실 포함)",
+        "infra_highlight": "C-arm 납차폐 벽체, 도수치료실 이중 차음 방음",
+        "duration": "약 5주 ~ 7주",
+        "spec_text": "C-arm 방사선 차폐 벽체 공사, 물리치료실 베드 간격 최적화, 도수치료실 특수 방음 및 환자 탈의실 동선",
+        "guide_title": "정형외과·도수치료 공간 설계 핵심 체크포인트",
+        "guide_desc": "방사선실 납판 차폐와 함께 도수치료실의 환자 비명 및 기구 소음이 대기실로 전달되지 않도록 차음 석고와 흡음재를 적용한 특수 이중 벽체를 시공합니다."
+    },
+    "eye": {
+        "slug": "eye.html",
+        "specialty_name": "안과",
+        "title": "안과 인테리어 전문 업체 | 정밀 암실 검사실 & 라식 수술실 공조",
+        "desc": "안과 인테리어 전문! 정밀 암실 굴절 검사실 조도 제어 시스템, 라식·백내장 무균 수술실 공조 인프라, 처방 및 수납 라운지 동선 최적화.",
+        "badge": "안과 암실 검사실 & 백내장 수술실 특화",
+        "h1": "성공적인 안과 개원의 시작,<br /><span class=\"text-primary\">안과 인테리어 전문 설계 & 시공</span>",
+        "area_range": "50평 ~ 120평 (검사실 및 수술실 포함)",
         "infra_highlight": "암실 굴절 검사실 조도 제어, 수술실 공조 설비",
         "duration": "약 4주 ~ 6주",
         "spec_text": "정밀 암실 굴절 검사실 조도 제어, 무균 수술실 공조 설비, 수납 및 안경 처방 라운지 동선",
-        "related": ["성형외과", "피부과", "내과", "병원", "의원"]
+        "guide_title": "안과 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "시력 및 굴절 검사를 위한 완벽한 암실 조도 제어 시스템과 미세 먼지를 100% 통제하는 백내장·시력교정 전용 클린룸 수술실을 구축합니다."
     },
-    "정형외과": {
-        "area_range": "60평 ~ 120평 (물리치료실 포함)",
-        "infra_highlight": "C-arm 납차폐 벽체, 물리치료 베드 간격, 도수치료실",
-        "duration": "약 5주 ~ 7주",
-        "spec_text": "C-arm 방사선 차폐 벽체 공사, 물리치료실 베드 간격 최적화, 도수치료실 특수 방음 및 환자 탈의실 동선",
-        "related": ["도수치료", "재활의학과", "마취통증의학과", "외과", "병원"]
-    },
-    "도수치료": {
-        "area_range": "40평 ~ 80평 (도수 4~8베드)",
-        "infra_highlight": "벽체 이중 차음 방음, 운동치료 충격흡수 바닥재",
-        "duration": "약 3주 ~ 5주",
-        "spec_text": "도수치료실 벽체 이중 차음 방음 공사, 운동치료실 넓은 개방감 및 충격 흡수 바닥재, 쾌적한 환기 설비",
-        "related": ["정형외과", "재활의학과", "마취통증의학과", "한의원", "의원"]
-    },
-    "이비인후과": {
-        "area_range": "35평 ~ 60평 (청력검사실 포함)",
+    "ent": {
+        "slug": "ent.html",
+        "specialty_name": "이비인후과·소아과",
+        "title": "이비인후과·소아청소년과 인테리어 | 청력검사 부스 & 감염 예방 동선",
+        "desc": "이비인후과 및 소아청소년과 인테리어 전문! 청력 검사 전용 방음 부스, 호흡기 치료기 체어 배선, 소아 안심 놀이 대기실 및 감염 분리실.",
+        "badge": "청력검사 방음부스 & 소아 안심 대기실 특화",
+        "h1": "성공적인 이비인후과 개원의 시작,<br /><span class=\"text-primary\">이비인후과·소아청소년과 인테리어</span>",
+        "area_range": "35평 ~ 80평 (진료 및 치료실 기준)",
         "infra_highlight": "청력검사 방음 부스, 호흡기 체어 배선, 네블라이저",
         "duration": "약 3주 ~ 5주",
-        "spec_text": "청력 검사 전용 방음 부스 시공, 호흡기 치료기 체어 배선, 네블라이저 공간 분리",
-        "related": ["내과", "소아청소년과", "치과", "병원", "의원"]
+        "spec_text": "청력 검사 전용 방음 부스 시공, 호흡기 치료기 체어 배선, 네블라이저 공간 분리, 친환경 무독성 마감재",
+        "guide_title": "이비인후과·소아과 공간 설계 핵심 체크포인트",
+        "guide_desc": "오차 없는 청력 검사를 위한 특수 방음 부스 시공과 어린이 환자의 부딪힘 사고를 방지하는 둥근 모서리 코너 보호대 및 친환경 무독성 페인트를 적용합니다."
     },
-    "한의원": {
-        "area_range": "35평 ~ 70평 (침구실 6~10베드)",
+    "oriental": {
+        "slug": "oriental.html",
+        "specialty_name": "한의원·한방병원",
+        "title": "한의원·한방병원 인테리어 | 탕전실 배기 후드 & 입원실 규격 설계",
+        "desc": "한의원 및 한방병원 인테리어 전문! 탕전실 대용량 배기 후드 및 방수 설비, 침구실 온돌/온열 전용 배선, 한방병원 입원실 병상 간격 기준 준수.",
+        "badge": "탕전실 배기 & 침구실 온열 배선 특화",
+        "h1": "성공적인 한의원 개원의 시작,<br /><span class=\"text-primary\">한의원·한방병원 인테리어 전문</span>",
+        "area_range": "35평 ~ 200평 (침구실 및 입원실 기준)",
         "infra_highlight": "탕전실 배기 후드/방수, 침구실 온돌/온열 배선",
+        "duration": "약 4주 ~ 8주",
+        "spec_text": "탕전실 배기 후드 및 방수 설비, 침구실 온돌/온열 전용 배선, 약재 보관실과 원장 진료실 동선, 입원실 병상 규격",
+        "guide_title": "한의원·한방병원 공간 설계 핵심 체크포인트",
+        "guide_desc": "한약 냄새와 열기를 완벽히 배출하는 탕전실 직배기 덕트 라인과 환자가 편안하게 뜸과 침을 맞을 수 있는 베드별 독립 온열 제어 인프라를 구축합니다."
+    },
+    "vet": {
+        "slug": "vet.html",
+        "specialty_name": "동물병원",
+        "title": "동물병원 인테리어 전문 업체 | 대형견 분리 대기실 & 멸균 수술실",
+        "desc": "동물병원 인테리어 전문! 대형견·소형견 분리 대기 공간, 처치실 멸균 동선, 격리 입원실 특수 방음 및 냄새 역류 방지 전용 배기 공조 설계.",
+        "badge": "반려동물 분리 대기실 & 격리실 방음 특화",
+        "h1": "성공적인 동물병원 개원의 시작,<br /><span class=\"text-primary\">동물병원 인테리어 전문 설계 & 시공</span>",
+        "area_range": "30평 ~ 80평 (처치실 및 수술실 기준)",
+        "infra_highlight": "대형/소형견 분리 대기실, 격리 입원실 방음/배기",
         "duration": "약 3주 ~ 5주",
-        "spec_text": "탕전실 배기 후드 및 방수 설비, 침구실 온돌/온열 전용 배선, 약재 보관실과 원장 진료실 동선",
-        "related": ["한방병원", "도수치료", "재활의학과", "요양병원", "의원"]
+        "spec_text": "처치실 및 수술실 멸균 동선, 대형견·소형견 분리 대기실, 격리 입원실 방음 및 전용 배기 환기, 미끄럼 방지 바닥재",
+        "guide_title": "동물병원 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "동물 간의 시야 차단 및 소음 차단을 위한 분리 대기실과 반려동물 관절을 보호하는 논슬립 항균 바닥재, 냄새를 즉각 배출하는 전용 음압 환기 설비를 시공합니다."
     },
-    "한방병원": {
-        "area_range": "100평 ~ 300평 (입원실 20~50병상)",
-        "infra_highlight": "입원실 병상 간격 규격, 탕전실 대용량 공조 설비",
-        "duration": "약 6주 ~ 10주",
-        "spec_text": "입원실 병상 간격 기준 준수, 탕전실 대용량 배기 공조, 물리치료실 및 침구치료실의 분리 조닝",
-        "related": ["한의원", "요양병원", "암요양병원", "재활의학과", "병원"]
-    },
-    "산부인과": {
-        "area_range": "60평 ~ 150평 (초음파/분만/회복)",
-        "infra_highlight": "초음파실 조도 제어, 회복실 방음, 신생아실 항균 공조",
-        "duration": "약 5주 ~ 8주",
-        "spec_text": "프라이빗 진료 및 초음파실 조도 설계, 가족 분만실 및 회복실 방음, 신생아실 항균 공조",
-        "related": ["산후조리원", "소아청소년과", "피부과", "병원", "의원"]
-    },
-    "비뇨기과": {
-        "area_range": "40평 ~ 70평 (검사실/처치실)",
-        "infra_highlight": "진료/상담실 차음 방음, 요역동학 검사실 독립 조닝",
-        "duration": "약 4주 ~ 5주",
-        "spec_text": "환자 프라이버시를 최우선한 진료/상담실 방음, 요역동학 검사실 및 처치실의 독립적 조닝",
-        "related": ["내과", "외과", "피부과", "병원", "의원"]
-    },
-    "외과": {
-        "area_range": "50평 ~ 100평 (처치/수술실)",
-        "infra_highlight": "외래 처치실 및 무균 수술실 공조, 멸균 소독실",
-        "duration": "약 4주 ~ 6주",
-        "spec_text": "외래 처치실 및 무균 수술실 공조 인프라, 멸균 소독실과 회복실 간의 막힘없는 의료진 서브 동선",
-        "related": ["정형외과", "성형외과", "마취통증의학과", "내과", "병원"]
-    },
-    "어린이병원": {
-        "area_range": "50평 ~ 120평 (놀이대기실 포함)",
-        "infra_highlight": "친환경 무독성 마감, 모서리 안전 보호대, 감염 분리실",
-        "duration": "약 4주 ~ 6주",
-        "spec_text": "어린이 눈높이 친환경 무독성 마감재, 안전 코너 보호대, 소아 전용 놀이 대기실 및 감염 분리실",
-        "related": ["소아청소년과", "이비인후과", "내과", "치과", "병원"]
-    },
-    "요양병원": {
-        "area_range": "150평 ~ 500평 (병상/간호스테이션)",
-        "infra_highlight": "휠체어 회전 복도폭, 안전 손잡이, 간호스테이션 시야",
-        "duration": "약 8주 ~ 14주",
-        "spec_text": "휠체어·스트레처카 회전 반경 확보, 병실 간 넓은 복도 및 안전 손잡이, 각 층별 간호 스테이션 시야 확보",
-        "related": ["암요양병원", "노인요양원", "한방병원", "재활의학과", "병원"]
-    },
-    "암요양병원": {
-        "area_range": "100평 ~ 400평 (고주파온열치료실)",
-        "infra_highlight": "고주파 온열치료실 전력 승압, 웰니스 힐링 라운지",
-        "duration": "약 7주 ~ 12주",
-        "spec_text": "온열치료실 및 면역치료실 특수 전력 설비, 쾌적한 웰니스 힐링 라운지, 환자 안심 친환경 마감",
-        "related": ["요양병원", "한방병원", "건강검진센터", "병원", "의원"]
-    },
-    "건강검진센터": {
-        "area_range": "80평 ~ 250평 (원스톱 검진존)",
-        "infra_highlight": "접수-기초-채혈-내시경-초음파 원웨이 동선, 대기 라운지",
-        "duration": "약 6주 ~ 9주",
-        "spec_text": "접수-기초검사-채혈-내시경-초음파로 이어지는 원스톱 원방향 검진 동선, 대형 라운지 대기 공간",
-        "related": ["내과", "안과", "영상의학과", "병원", "의원"]
-    },
-    "노인주간보호센터": {
-        "area_range": "50평 ~ 150평 (프로그램실/생활실)",
-        "infra_highlight": "낙상 방지 미끄럼 방지재, 문턱 없는 무단차 설계",
-        "duration": "약 4주 ~ 6주",
-        "spec_text": "낙상 방지 미끄럼 방지 바닥재, 문턱 없는 무단차 설계, 프로그램실 및 생활실의 채광 중심 배치",
-        "related": ["노인요양원", "요양병원", "재활의학과", "한의원", "병원"]
-    },
-    "노인요양원": {
-        "area_range": "80평 ~ 300평 (치매전담실/목욕실)",
-        "infra_highlight": "치매 전담실 케어 동선, 특수 방수 목욕실, 피난 설비",
-        "duration": "약 6주 ~ 10주",
-        "spec_text": "치매 전담실 및 안전 케어 동선, 기저귀 교환 및 목욕실 특수 방수/배수, 소방 피난 구조 설비",
-        "related": ["노인주간보호센터", "요양병원", "한방병원", "병원", "의원"]
-    },
-    "약국": {
-        "area_range": "15평 ~ 40평 (조제실/수납장)",
-        "infra_highlight": "조제실 클린 환기, 약품 수납장 최적화, 복약지도대",
-        "duration": "약 2주 ~ 3주",
-        "spec_text": "조제실 클린 환기 및 약품 수납장 최적화, 처방전 접수·복약지도 카운터 동선, 대기 공간 시야 확보",
-        "related": ["내과", "이비인후과", "소아청소년과", "병원", "의원"]
-    },
-    "산후조리원": {
-        "area_range": "80평 ~ 250평 (신생아실/모자동실)",
-        "infra_highlight": "신생아실 개별 양압 공조, 산모 스파룸, 객실 차음 방음",
-        "duration": "약 6주 ~ 10주",
-        "spec_text": "신생아실 개별 음압/양압 공조, 산모 전용 마사지 및 스파룸, 호텔 스위트급 객실 방음 및 공기정화",
-        "related": ["산부인과", "소아청소년과", "피부과", "병원", "의원"]
-    },
-    "동물병원": {
-        "area_range": "30평 ~ 80평 (수술/처치/격리실)",
-        "infra_highlight": "대형/소형견 분리 대기실, 처치실 멸균 동선, 격리실 방음",
+    "clinic": {
+        "slug": "clinic.html",
+        "specialty_name": "의원·클리닉",
+        "title": "의원·클리닉 인테리어 전문 업체 | 원장실·진료실·대기공간 맞춤 조닝",
+        "desc": "일반 의원 및 메디컬 클리닉 인테리어 전문! 원장실, 진료실, 처치실, 대기공간의 기능적 공간 조닝 및 소방 안전 기준 충족 3D 도면 무료 상담.",
+        "badge": "원장실·진료실 최단 동선 & 가성비 시공 특화",
+        "h1": "성공적인 클리닉 개원의 시작,<br /><span class=\"text-primary\">의원·클리닉 인테리어 전문 설계</span>",
+        "area_range": "35평 ~ 80평 (진료실 및 처치실 기준)",
+        "infra_highlight": "진료실-처치실 최단 동선, 소방 안전 기준 충족",
         "duration": "약 3주 ~ 5주",
-        "spec_text": "처치실 및 수술실 멸균 동선, 대형견·소형견 분리 대기실, 격리 입원실 방음 및 전용 배기 환기",
-        "related": ["병원", "의원", "외과", "약국"]
-    },
-    "병원": {
-        "area_range": "60평 ~ 200평 (맞춤형 설계)",
-        "infra_highlight": "진료과목별 의료법 규격 동선, 무균 수술실 공조 인프라",
-        "duration": "약 5주 ~ 8주",
-        "spec_text": "진료과목별 의료법 규격 동선 설계, 무균 수술실 및 특수 공조 설비, 환자 신뢰를 주는 프리미엄 로비",
-        "related": ["의원", "내과", "피부과", "성형외과", "치과", "정형외과"]
-    },
-    "의원": {
-        "area_range": "40평 ~ 80평 (진료실/대기실)",
-        "infra_highlight": "진료실-처치실-대기실 기능적 조닝, 소방 안전 기준 충족",
-        "duration": "약 4주 ~ 6주",
         "spec_text": "원장실-진료실-처치실-대기공간의 효율적 공간 조닝, 소방 안전 기준 충족, 합리적인 평당 공사비 설계",
-        "related": ["병원", "내과", "이비인후과", "소아청소년과", "피부과", "치과"]
+        "guide_title": "의원·클리닉 개원 공간 설계 핵심 체크포인트",
+        "guide_desc": "한정된 면적 안에서도 데드스페이스를 없애고 원장님의 진료 동선과 환자의 접수·수납 동선이 부드럽게 흐르도록 컴팩트하고 세련된 공간을 완성합니다."
     }
 }
 
-def parse_keyword(kw: str):
-    kw = kw.strip()
-    if not kw:
-        return None
-    
-    found_region = "부산"
-    cleaned_kw = kw
-    for r in REGIONS:
-        if kw.startswith(r + " ") or kw == r:
-            found_region = r
-            cleaned_kw = kw[len(r):].strip()
-            break
-            
-    action = "인테리어"
-    if "리모델링" in cleaned_kw:
-        action = "리모델링"
-        
-    suffix = "전문 업체"
-    if "전문 회사" in cleaned_kw or "회사" in cleaned_kw:
-        suffix = "전문 회사"
-    elif "전문 업체" in cleaned_kw or "전문업체" in cleaned_kw:
-        suffix = "전문 업체"
-    elif "추천" in cleaned_kw:
-        suffix = "추천"
-        
-    category = cleaned_kw
-    for remove_term in ["인테리어 전문 업체", "인테리어 전문 회사", "인테리어 회사", "리모델링 전문 업체", "리모델링 전문 회사", "리모델링 회사", "인테리어", "리모델링", "전문 업체", "전문 회사", "추천"]:
-        category = category.replace(remove_term, "").strip()
-    if not category:
-        category = "병원"
-        
-    return {
-        "raw_keyword": kw,
-        "region": found_region,
-        "category": category,
-        "action": action,
-        "suffix": suffix
-    }
+def clean_all_old_directories(output_dir):
+    print("Cleaning up old numeric directory trees and legacy sitemaps...")
+    for entry in os.listdir(output_dir):
+        full_path = os.path.join(output_dir, entry)
+        if os.path.isdir(full_path) and (entry.isdigit() or entry == "sitemap"):
+            shutil.rmtree(full_path, ignore_errors=True)
+    print("All old numeric directories removed successfully.")
 
-def generate_seo_dataset(raw_keywords):
-    dataset = []
-    seen = set()
-    id_counter = 1
-    
-    # 1차 파싱 및 인덱스 매핑 (연관 링크 상호 참조용)
-    kw_to_id = {}
-    parsed_items = []
-    for raw in raw_keywords:
-        raw = raw.strip()
-        if not raw or raw in seen:
-            continue
-        seen.add(raw)
-        parsed = parse_keyword(raw)
-        if not parsed:
-            continue
-        page_id = id_counter
-        id_counter += 1
-        kw_to_id[raw] = page_id
-        parsed_items.append((page_id, raw, parsed))
+def build_super_hub_navigation():
+    # 13대 지역 링크 뱃지 그리드
+    reg_links = []
+    for k, v in REGIONAL_HUBS.items():
+        reg_links.append(f'<a href="{SITE_URL}/{v["slug"]}" title="{v["region_name"]} 병원 인테리어" class="p-3 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-primary hover:text-primary rounded-xl text-xs text-gray-700 transition-all font-semibold flex items-center justify-between shadow-sm"><span>📍 {v["region_name"]} 병원 인테리어</span><i class="fas fa-chevron-right text-[10px] text-gray-400"></i></a>')
         
-    for page_id, raw, parsed in parsed_items:
-        region = parsed["region"]
-        category = parsed["category"]
-        action = parsed["action"]
-        
-        # 타이틀 (클린 & 전문성)
-        title = f"{raw} 견적 및 시공 추천 | {BRAND_NAME}"
-        
-        # 설명문 (민감 단어 완전 배제 & 전문 메디컬 가이드)
-        desc = f"{region} 지역 {category} {action} 전문! 의료 공간 최적화 동선 설계, 3D 도면 무료 제공 및 합리적인 평당 공사 비용 비교 견적 상담."
-            
-        canonical = f"{SITE_URL.rstrip('/')}/{page_id}/"
-        
-        # 고유 메타 키워드
-        meta_keywords = f"{region} {category} {action}, {region} {category} 인테리어, {region} {category} 리모델링, {category} 인테리어 전문 업체, {region} 병원 인테리어, {region} 병원 리모델링"
-        
-        # 카테고리별 특화 Information Gain 데이터
-        info_gain = CATEGORY_INFO_GAIN.get(category, CATEGORY_INFO_GAIN.get("병원"))
-        spec_text = info_gain["spec_text"]
-        area_range = info_gain["area_range"]
-        infra_highlight = info_gain["infra_highlight"]
-        duration = info_gain["duration"]
-        related_cats = info_gain.get("related", ["병원", "의원", "내과", "피부과"])
-        
-        # 지역별 세부 동/랜드마크
-        landmarks = REGION_LANDMARKS.get(region, [region])
-        landmarks_text = ", ".join(landmarks[:6])
-        
-        # 스키마용 areaServed 배열 (지역명 + 세부 랜드마크 5개)
-        area_served_array = [region] + landmarks[:5]
-        
-        # Schema 3종 세트: LocalBusiness + FAQPage + BreadcrumbList
-        schema_json = [
-            {
-                "@context": "https://schema.org",
-                "@type": "HomeAndConstructionBusiness",
-                "name": f"{raw} - {BRAND_NAME}",
-                "description": desc,
-                "url": canonical,
-                "telephone": "1588-0000",
-                "priceRange": "$$",
-                "areaServed": area_served_array,
-                "serviceType": f"{category} {action}",
-                "provider": {
-                    "@type": "Organization",
-                    "name": BRAND_NAME,
-                    "url": SITE_URL
-                }
-            },
-            {
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                "mainEntity": [
-                    {
-                        "@type": "Question",
-                        "name": f"{region} {category} 프리미엄 {action}는 일반 인테리어와 무엇이 다른가요?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": f"{region} {category} 프리미엄 {action}는 최고급 프리미엄 마감재를 엄선하여 사용하며, 환자에게 안락함을 선사하는 정교한 조도 설계와 호텔 라운지급 대기실 조성을 통해 차별화된 가치와 브랜딩을 실현합니다."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": f"{region} {category} 공간 인테리어 설계 시 가장 중요한 점은 무엇인가요?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": f"{region} {category} 개원 시 {spec_text} 등 특수 조건들을 사전에 철저히 반영하여 안전하고 오차 없는 정밀 설계를 진행합니다."
-                        }
-                    },
-                    {
-                        "@type": "Question",
-                        "name": "병원 인테리어 시 '실내건축공사업 면허'가 꼭 필요한가요?",
-                        "acceptedAnswer": {
-                            "@type": "Answer",
-                            "text": "건설산업기본법에 따라 공사 금액이 1,500만 원 이상인 실내 인테리어 공사는 반드시 정부 등록 면허를 보유한 업체만 시공하도록 규정되어 있습니다. 무면허 업체 시공 시 하자보수(AS) 거부, 돌연 중단 및 먹튀, 소방 안전 기준 미달 등 중대 손실이 발생할 수 있습니다. 고객이 국토교통부 키스콘(KISCON, 건설산업지식정보시스템) 사이트에서 해당 인테리어 업체의 면허 보유 여부를 필히 조회할 것을 권장합니다."
-                        }
-                    }
-                ]
-            },
-            {
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "홈", "item": f"{SITE_URL}/"},
-                    {"@type": "ListItem", "position": 2, "name": raw, "item": canonical}
-                ]
-            }
-        ]
-        
-        # 연관 진료과목 링크 목록 구성 (동일 지역 내 연관 페이지 연결)
-        mesh_links = []
-        for r_cat in related_cats:
-            target_kw = f"{region} {r_cat} {action} 전문 업체"
-            if target_kw in kw_to_id and kw_to_id[target_kw] != page_id:
-                mesh_links.append({"name": f"{region} {r_cat} {action}", "url": f"{SITE_URL}/{kw_to_id[target_kw]}/"})
-            else:
-                target_kw2 = f"{region} {r_cat} 인테리어 전문 업체"
-                if target_kw2 in kw_to_id and kw_to_id[target_kw2] != page_id:
-                    mesh_links.append({"name": f"{region} {r_cat} 인테리어", "url": f"{SITE_URL}/{kw_to_id[target_kw2]}/"})
-                    
-        item = {
-            "id": page_id,
-            "keyword": raw,
-            "region": region,
-            "category": category,
-            "action": action,
-            "landmarks_text": landmarks_text,
-            "area_range": area_range,
-            "infra_highlight": infra_highlight,
-            "duration": duration,
-            "spec_text": spec_text,
-            "mesh_links": mesh_links[:6],
-            "title": title,
-            "description": desc,
-            "meta_keywords": meta_keywords,
-            "url": canonical,
-            "schema_json": schema_json
-        }
-        dataset.append(item)
-        
-    return dataset
+    # 10대 진료과목 링크 뱃지 그리드
+    spec_links = []
+    for k, v in SPECIALTY_HUBS.items():
+        spec_links.append(f'<a href="{SITE_URL}/{v["slug"]}" title="{v["specialty_name"]} 인테리어" class="p-3 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-primary hover:text-primary rounded-xl text-xs text-gray-700 transition-all font-semibold flex items-center justify-between shadow-sm"><span>🩺 {v["specialty_name"]} 인테리어</span><i class="fas fa-chevron-right text-[10px] text-gray-400"></i></a>')
 
-def generate_sitemaps(dataset, output_dir):
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    
-    xml_content = ['<?xml version="1.0" encoding="UTF-8"?>']
-    xml_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    
-    # 주요 메인 및 포트폴리오 페이지
-    xml_content.append(f'  <url><loc>{SITE_URL}/</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>')
-    xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-derma.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
-    xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-eye-internal.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
-    xml_content.append(f'  <url><loc>{SITE_URL}/portfolio-dental.html</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>')
-    
-    # 598개 핵심 타겟 키워드 랜딩 페이지
-    for item in dataset:
-        loc = item["url"]
-        xml_content.append(f'  <url><loc>{loc}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>')
-        
-    xml_content.append('</urlset>')
-    
-    sitemap_path = os.path.join(output_dir, "sitemap.xml")
-    with open(sitemap_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(xml_content))
-        
-    print(f"Generated: {sitemap_path} ({len(xml_content) - 2} URLs included)")
-    
-    # robots.txt 최신화
-    robots_path = os.path.join(output_dir, "robots.txt")
-    robots_content = f"""User-agent: *
-Allow: /
-Disallow:
-
-Sitemap: {SITE_URL}/sitemap.xml
-"""
-    with open(robots_path, "w", encoding="utf-8") as f:
-        f.write(robots_content)
-    print(f"Updated: {robots_path}")
-
-def generate_html_sitemaps(dataset, base_html, output_dir):
-    PAGE_SIZE = 300
-    total_items = len(dataset)
-    total_pages = max(1, math.ceil(total_items / PAGE_SIZE))
-    
-    sitemap_base_dir = os.path.join(output_dir, "sitemap")
-    if os.path.exists(sitemap_base_dir):
-        shutil.rmtree(sitemap_base_dir, ignore_errors=True)
-    os.makedirs(sitemap_base_dir, exist_ok=True)
-    os.makedirs(os.path.join(sitemap_base_dir, "page"), exist_ok=True)
-    
-    for page_num in range(1, total_pages + 1):
-        start_idx = (page_num - 1) * PAGE_SIZE
-        end_idx = min(total_items, page_num * PAGE_SIZE)
-        page_items = dataset[start_idx:end_idx]
-        
-        # 앵커 텍스트 링크 그리드 생성
-        list_items = []
-        for item in page_items:
-            list_items.append(f'<li><a href="{item["url"]}" title="{item["keyword"]}" class="block p-2.5 bg-white hover:bg-[#fff7ed] border border-gray-200 hover:border-[#dd5828] hover:text-[#dd5828] rounded text-xs text-gray-700 transition-all duration-150 truncate font-medium">• {item["keyword"]}</a></li>')
-        list_str = "\n".join(list_items)
-        
-        # 페이지네이션 링크 생성
-        pagination_html = []
-        pagination_html.append('<div class="flex flex-wrap justify-center gap-1.5 my-4">')
-        if page_num > 1:
-            prev_url = f"{SITE_URL}/sitemap/page/{page_num - 1}/" if page_num > 2 else f"{SITE_URL}/sitemap/"
-            pagination_html.append(f'<a href="{prev_url}" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">&laquo; 이전</a>')
-            
-        for p in range(1, total_pages + 1):
-            p_url = f"{SITE_URL}/sitemap/page/{p}/" if p > 1 else f"{SITE_URL}/sitemap/"
-            active_class = "bg-[#dd5828] text-white font-bold" if p == page_num else "bg-white text-gray-600 hover:bg-[#dd5828] hover:text-white"
-            pagination_html.append(f'<a href="{p_url}" class="px-2.5 py-1 border border-gray-200 rounded text-xs transition-all {active_class}">{p}</a>')
-            
-        if page_num < total_pages:
-            next_url = f"{SITE_URL}/sitemap/page/{page_num + 1}/"
-            pagination_html.append(f'<a href="{next_url}" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">다음 &raquo;</a>')
-        pagination_html.append('</div>')
-        pagination_str = "".join(pagination_html)
-        
-        # 앵커 텍스트 허브 섹션 (풀 메인 홈페이지 하단)
-        sitemap_section = f"""  <!-- 전국 키워드 모음 앵커 텍스트 크롤러 허브 (풀 홈페이지 내장형) -->
-  <section class="max-w-7xl mx-auto px-6 py-10 border-t border-gray-200" id="sitemap-hub">
-    <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-5 sm:p-6 text-center shadow-sm">
-      <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-[#dd5828]"></span>
-        <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider">주요 지역별 병원 인테리어 키워드 모음 (페이지 {page_num} / {total_pages})</h3>
+    hub_html = f"""  <!-- 13대 주요 지역 & 10대 진료과목 메디컬 인테리어 슈퍼 허브 네비게이션 -->
+  <section class="max-w-7xl mx-auto px-6 py-12 border-t border-gray-200" id="super-hub-section">
+    <div class="bg-gray-50 border border-gray-200/80 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+      
+      <!-- 13대 주요 지역 허브 -->
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+          <h3 class="text-sm sm:text-base font-bold text-gray-800 uppercase tracking-wider">영남권 13대 주요 지역별 병원 인테리어 안내</h3>
+        </div>
+        <p class="text-xs text-gray-500 mb-4">부산 전역 및 대구, 창원, 울산 등 영남권 13개 주요 도시의 직영 방문 실측과 3D 도면 비교 견적을 확인하실 수 있습니다.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+          {''.join(reg_links)}
+        </div>
       </div>
-      <p class="text-xs text-gray-500 mb-4">원하시는 지역과 병원 진료과목의 맞춤 인테리어 포트폴리오 및 견적 정보를 바로 확인하실 수 있습니다.</p>
-      
-      {pagination_str}
-      
-      <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 text-left my-6 list-none p-0">
-        {list_str}
-      </ul>
-      
-      {pagination_str}
+
+      <!-- 10대 진료과목별 전문 허브 -->
+      <div class="pt-6 border-t border-gray-200">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#03c75a]"></span>
+          <h3 class="text-sm sm:text-base font-bold text-gray-800 uppercase tracking-wider">진료과목별 특화 메디컬 인테리어 설계 가이드</h3>
+        </div>
+        <p class="text-xs text-gray-500 mb-4">치과, 피부과, 내과, 성형외과 등 진료과목별 필수 설비 인프라와 권장 평수, 의료법 시설 기준을 확인하실 수 있습니다.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+          {''.join(spec_links)}
+        </div>
+      </div>
+
     </div>
   </section>
 """
-        
-        html = base_html
-        canonical_url = f"{SITE_URL}/sitemap/page/{page_num}/" if page_num > 1 else f"{SITE_URL}/sitemap/"
-        html = re.sub(r'<title>.*?</title>', f'<title>부산 병원 인테리어 전문 업체 | 주요 키워드 모음 ({page_num}/{total_pages})</title>', html, flags=re.I)
-        html = re.sub(r'<meta name="robots" content=".*?" />', f'<meta name="robots" content="noindex, follow" />\n  <link rel="canonical" href="{canonical_url}" />', html, flags=re.I)
-        
-        if 'id="sitemap-hub"' in html:
-            html = re.sub(r'<!-- (전체 사이트맵|전국 키워드)[\s\S]*?</section>\n?', sitemap_section, html)
-        elif '<!-- Footer Section -->' in html:
-            html = html.replace('<!-- Footer Section -->', f'{sitemap_section}\n  <!-- Footer Section -->')
-        else:
-            html = html.replace('<footer', f'{sitemap_section}\n  <footer')
-            
-        if page_num == 1:
-            with open(os.path.join(sitemap_base_dir, "index.html"), "w", encoding="utf-8") as f:
-                f.write(html)
-                
-        page_dir = os.path.join(sitemap_base_dir, "page", str(page_num))
-        os.makedirs(page_dir, exist_ok=True)
-        with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
-            f.write(html)
-            
-    print(f"Generated: {total_pages} Full-featured HTML sitemap pages with anchor links in {sitemap_base_dir}")
+    return hub_html
 
-def update_index_and_base_html(total_pages):
-    index_file = os.path.join(OUTPUT_DIR, "index.html")
-    with open(index_file, "r", encoding="utf-8") as f:
-        html = f.read()
+def update_main_index_html(base_html):
+    print("Updating index.html with Super Hub Navigation & Naver TalkTalk...")
+    html = base_html
 
-    # 1. 모든 상대 경로(./)를 루트 절대 경로(/)로 변환
-    html = html.replace('href="./', 'href="/')
-    html = html.replace('src="./', 'src="/')
-    html = html.replace('content="./', f'content="{SITE_URL}/')
-
-    # 2. 파비콘 태그 보강 (/favicon.ico, /favicon.png)
-    favicon_tags = """  <!-- Favicon Setting -->
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="icon" href="/favicon.png" type="image/png" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/favicon.png" />"""
-    
-    if '<!-- Favicon Setting -->' in html:
-        html = re.sub(r'<!-- Favicon Setting -->[\s\S]*?(?=<!-- SEO Meta Tags)', f'{favicon_tags}\n  \n  ', html)
-
-    # 3. 네이버 톡톡 실시간 1:1 상담 배너 (주요 지역별 모음 바로 위에 배치)
+    # 네이버 톡톡 배너
     naver_talktalk_banner = f"""  <!-- 네이버 톡톡 실시간 1:1 상담 배너 -->
   <section class="max-w-7xl mx-auto px-6 py-6 border-t border-gray-100" id="naver-talktalk-section">
     <div class="bg-gradient-to-r from-[#03c75a]/10 via-[#03c75a]/5 to-transparent border border-[#03c75a]/30 rounded-2xl p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
@@ -559,64 +391,34 @@ def update_index_and_base_html(total_pages):
   </section>
 """
 
-    # 4. 메인 홈페이지 & 개별 페이지용 컴팩트 네비게이션 허브
-    sitemap_section = f"""{naver_talktalk_banner}
-  <!-- 주요 지역별 키워드 모음 네비게이션 허브 -->
-  <section class="max-w-7xl mx-auto px-6 py-6 border-t border-gray-200" id="sitemap-hub">
-    <div class="bg-gray-50 border border-gray-200/80 rounded-xl p-4 sm:p-5 text-center shadow-sm">
-      <div class="flex items-center justify-center gap-2 mb-3">
-        <span class="w-2 h-2 rounded-full bg-[#dd5828]"></span>
-        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">주요 지역별 병원 인테리어 모음</h3>
-      </div>
-      <div class="flex items-center justify-center flex-wrap gap-1.5 text-xs">
-        <a href="{SITE_URL}/sitemap/" title="사이트맵 1페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">1</a>
-        <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 2페이지 바로가기" class="px-2.5 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-gray-600 transition-all font-medium">2</a>
-        <a href="{SITE_URL}/sitemap/page/2/" title="사이트맵 다음 페이지 바로가기" class="px-3 py-1 bg-white hover:bg-[#dd5828] hover:text-white border border-gray-200 rounded text-xs text-[#dd5828] hover:text-white transition-all font-semibold ml-1">다음 &raquo;</a>
-      </div>
-    </div>
-  </section>
-"""
+    hub_html = build_super_hub_navigation()
+    bottom_block = f"{naver_talktalk_banner}\n{hub_html}"
 
-    # 기존 톡톡 섹션 및 sitemap-hub 치환
+    # 기존 sitemap-hub, naver-talktalk-section 치환
     if 'id="naver-talktalk-section"' in html:
-        html = re.sub(r'<!-- 네이버 톡톡[\s\S]*?<!-- 주요 지역별 키워드 모음 네비게이션 허브 -->[\s\S]*?</section>\n?', sitemap_section, html)
+        html = re.sub(r'<!-- 네이버 톡톡[\s\S]*?<!-- (주요 지역별|13대 주요 지역)[\s\S]*?</section>\n?', bottom_block, html)
     elif 'id="sitemap-hub"' in html:
-        html = re.sub(r'<!-- (전체 사이트맵|전국 키워드|주요 지역별)[\s\S]*?</section>\n?', sitemap_section, html)
+        html = re.sub(r'<!-- (전체 사이트맵|전국 키워드|주요 지역별)[\s\S]*?</section>\n?', bottom_block, html)
     elif '<!-- Footer Section -->' in html:
-        html = html.replace('<!-- Footer Section -->', f'{sitemap_section}\n  <!-- Footer Section -->')
+        html = html.replace('<!-- Footer Section -->', f'{bottom_block}\n  <!-- Footer Section -->')
     else:
-        html = html.replace('<footer', f'{sitemap_section}\n  <footer')
+        html = html.replace('<footer', f'{bottom_block}\n  <footer')
 
-    with open(index_file, "w", encoding="utf-8") as f:
+    index_path = os.path.join(OUTPUT_DIR, "index.html")
+    with open(index_path, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Updated index.html with Naver TalkTalk banner and sitemap navigation hub.")
-
-    base_file = os.path.join(OUTPUT_DIR, "busaninterior_base.html")
-    with open(base_file, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"Created/Updated busaninterior_base.html template.")
+    print("Saved clean index.html with Super Hub Navigation.")
     return html
 
-def clean_old_directories(output_dir, new_dataset_len):
-    print("Cleaning up old directory trees...")
-    for entry in os.listdir(output_dir):
-        full_path = os.path.join(output_dir, entry)
-        if os.path.isdir(full_path) and entry.isdigit():
-            shutil.rmtree(full_path, ignore_errors=True)
-    print("Old directories cleaned.")
-
-def generate_static_pages(dataset, base_html, output_dir):
-    print(f"Generating all {len(dataset)} static keyword HTML pages with Benchmarked SEO Features & Naver TalkTalk...")
-    
-    for item in dataset:
-        page_id = item["id"]
-        page_dir = os.path.join(output_dir, str(page_id))
-        os.makedirs(page_dir, exist_ok=True)
-
+def generate_regional_pages(base_html):
+    print("Generating 13 Regional Super Hub Pages...")
+    for key, data in REGIONAL_HUBS.items():
         html = base_html
-
-        # 1. Head 영역: Title, Description, Canonical, Single Og Tags, Meta Keywords 정밀 교체
-        head_block = f"""  <title>{item["title"]}</title>
+        canonical_url = f"{SITE_URL}/{data['slug']}"
+        landmarks_str = ", ".join(data["landmarks"][:6])
+        
+        # 1. Head 메타태그 교체
+        head_block = f"""  <title>{data["title"]}</title>
   
   <!-- Favicon Setting -->
   <link rel="icon" href="/favicon.ico" />
@@ -625,9 +427,9 @@ def generate_static_pages(dataset, base_html, output_dir):
   <link rel="apple-touch-icon" href="/favicon.png" />
   
   <!-- SEO Meta Tags for Naver & Google -->
-  <meta name="description" content="{item["description"]}" />
-  <link rel="canonical" href="{item["url"]}" />
-  <meta name="keywords" content="{item["meta_keywords"]}" />
+  <meta name="description" content="{data["desc"]}" />
+  <link rel="canonical" href="{canonical_url}" />
+  <meta name="keywords" content="{data["region_name"]} 병원 인테리어, {data["region_name"]} 의원 인테리어, {data["region_name"]} 병원 리모델링, {data["region_name"]} 병원 인테리어 전문 업체, {landmarks_str}" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="{BRAND_NAME}" />
   <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
@@ -635,48 +437,249 @@ def generate_static_pages(dataset, base_html, output_dir):
   <!-- Open Graph Tags (SNS Sharing) -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="{BRAND_NAME}" />
-  <meta property="og:title" content="{item["title"]}" />
-  <meta property="og:description" content="{item["description"]}" />
+  <meta property="og:title" content="{data["title"]}" />
+  <meta property="og:description" content="{data["desc"]}" />
   <meta property="og:image" content="{SITE_URL}/main1.webp" />
-  <meta property="og:url" content="{item["url"]}" />"""
+  <meta property="og:url" content="{canonical_url}" />"""
 
         html = re.sub(r'<title>.*?</title>[\s\S]*?(?=<!-- Pretendard Web Font CDN -->)', f'{head_block}\n  \n  ', html, flags=re.I)
 
-        # 2. Schema.org JSON-LD 3종 주입 (LocalBusiness + FAQPage + BreadcrumbList 완벽 동기화)
+        # 2. Schema.org 3종 세트
+        schema_json = [
+            {
+                "@context": "https://schema.org",
+                "@type": "HomeAndConstructionBusiness",
+                "name": f"{data['region_name']} 병원 인테리어 - {BRAND_NAME}",
+                "description": data["desc"],
+                "url": canonical_url,
+                "telephone": "1588-0000",
+                "priceRange": "$$",
+                "areaServed": [data["region_name"]] + data["landmarks"][:5],
+                "serviceType": f"{data['region_name']} 병원 인테리어 및 리모델링",
+                "provider": {
+                    "@type": "Organization",
+                    "name": BRAND_NAME,
+                    "url": SITE_URL
+                }
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": f"{data['region_name']} 지역 병원 인테리어 무료 현장 실측이 가능한가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"네, {data['region_name']} 전 지역({landmarks_str} 등)에 직영 감리팀이 1:1로 방문하여 정밀 실측 및 3D 도면 비교 견적을 무료로 제공합니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": f"{data['region_name']} 병원 인테리어 공사 시 가장 중요한 점은 무엇인가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"{data['specialties_summary']} 실내건축공사업 면허를 보유한 정식 건설업체와 진행해야 안전합니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "병원 인테리어 시 '실내건축공사업 면허'가 꼭 필요한가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "건설산업기본법에 따라 공사 금액이 1,500만 원 이상인 실내 인테리어 공사는 반드시 정부 등록 면허를 보유한 업체만 시공하도록 규정되어 있습니다. 국토교통부 키스콘(KISCON)에서 면허 보유 여부를 확인하실 수 있습니다."
+                        }
+                    }
+                ]
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "홈", "item": f"{SITE_URL}/"},
+                    {"@type": "ListItem", "position": 2, "name": f"{data['region_name']} 병원 인테리어", "item": canonical_url}
+                ]
+            }
+        ]
+
         schema_script = f"""<script type="application/ld+json">
-  {json.dumps(item["schema_json"], ensure_ascii=False, indent=2)}
+  {json.dumps(schema_json, ensure_ascii=False, indent=2)}
   </script>"""
-        if '<script type="application/ld+json">' in html:
-            html = re.sub(r'<script type="application/ld\+json">[\s\S]*?</script>', schema_script, html)
-        else:
-            html = html.replace('</head>', f'  {schema_script}\n</head>')
+        html = re.sub(r'<script type="application/ld\+json">[\s\S]*?</script>', schema_script, html)
 
-        # 3. 헤더 로고 서브 텍스트 치환
-        html = html.replace('메디컬 공간 디자인</span>', f'{item["keyword"]}</span>')
+        # 3. 로고 서브 텍스트 치환
+        html = html.replace('메디컬 공간 디자인</span>', f'{data["region_name"]} 병원 인테리어</span>')
 
-        # 4. 히어로 섹션 동적 치환 (H1 + 뱃지 + 설명문)
-        html = html.replace('안과 · 내과 복합 메디컬 공간 특화', f'{item["region"]} {item["category"]} 특화 메디컬 공간 디자인')
-        html = html.replace('<span class="text-primary">부산 병원 공간 디자인</span>', f'<span class="text-primary">{item["keyword"]}</span>')
+        # 4. 히어로 섹션 동적 치환
+        html = html.replace('안과 · 내과 복합 메디컬 공간 특화', data["badge"])
+        html = html.replace('<span class="text-primary">부산 병원 공간 디자인</span>', f'<span class="text-primary">{data["region_name"]} 병원 인테리어 전문</span>')
 
-        # 5. 연관 진료과목 메쉬 링크 HTML 생성
-        mesh_badges = []
-        for m in item["mesh_links"]:
-            mesh_badges.append(f'<a href="{m["url"]}" title="{m["name"]}" class="px-3 py-1.5 bg-white hover:bg-primary hover:text-white border border-gray-200 rounded-lg text-xs text-gray-700 transition-all font-medium flex items-center gap-1.5 shadow-sm"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>{m["name"]}</a>')
-        mesh_html = f"""
-        <div class="mt-5 pt-4 border-t border-gray-100">
-          <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-2">{item["region"]} 지역 연관 진료과목 인테리어 바로가기:</span>
-          <div class="flex flex-wrap gap-2">
-            {''.join(mesh_badges)}
-          </div>
-        </div>""" if mesh_badges else ""
-
-        # 6. Information Gain 실무 스펙 요약 카드 + 롱테일 세부 동 텍스트 + 네이버 톡톡 빠른 상담 버튼
-        info_gain_card = f"""    <!-- 진료과목별 특화 실무 정보 가이드 (Google Information Gain & Naver D.I.A+ 극대화) -->
+        # 5. Information Gain 지역 실무 가이드 카드 주입
+        regional_card = f"""    <!-- {data["region_name"]} 지역 특화 실무 정보 가이드 (Google Information Gain & NavBoost 극대화) -->
     <div class="mb-16 p-6 sm:p-8 bg-gradient-to-r from-gray-50 to-orange-50/40 rounded-2xl border border-gray-200/80 shadow-sm">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div class="flex items-center gap-2">
-          <span class="px-2.5 py-1 bg-primary text-white text-[11px] font-bold rounded">실무 가이드</span>
-          <h3 class="text-base sm:text-lg font-bold text-[#111111]">{item["region"]} {item["category"]} 공간 설계 및 시공 핵심 체크포인트</h3>
+          <span class="px-2.5 py-1 bg-primary text-white text-[11px] font-bold rounded">지역 가이드</span>
+          <h3 class="text-base sm:text-lg font-bold text-[#111111]">{data["region_name"]} 병원 인테리어 핵심 설계 & 시공 안내</h3>
+        </div>
+        <a href="{NAVER_TALKTALK_URL}" target="_blank" rel="noopener noreferrer" class="self-start sm:self-auto px-3.5 py-1.5 bg-[#03c75a] hover:bg-[#02b150] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+          <i class="fas fa-comment-dots"></i> 네이버 톡톡 상담
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+        <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <span class="text-gray-400 block mb-1 font-medium">서비스 권역</span>
+          <span class="font-bold text-gray-800 text-sm">{data["region_name"]} 전 지역 무료 실측</span>
+        </div>
+        <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <span class="text-gray-400 block mb-1 font-medium">핵심 메디컬 존</span>
+          <span class="font-bold text-gray-800 text-sm">{data["landmarks"][0]}, {data["landmarks"][1]} 등</span>
+        </div>
+        <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <span class="text-gray-400 block mb-1 font-medium">안전 시공 보증</span>
+          <span class="font-bold text-gray-800 text-sm">실내건축면허 & 하자보증</span>
+        </div>
+        <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <span class="text-gray-400 block mb-1 font-medium">1:1 맞춤 혜택</span>
+          <span class="font-bold text-primary text-sm">3D 도면 무료 & 비교 견적</span>
+        </div>
+      </div>
+
+      <div class="mt-4 p-4 bg-white/90 rounded-xl border border-gray-100 text-xs text-gray-700 leading-relaxed space-y-2">
+        <p><strong>{data["region_name"]} 주요 거점 서비스 지역:</strong> {", ".join(data["landmarks"])} 등 {data["region_name"]} 전 지역 신규 개원 및 이전 리모델링 시공을 지원합니다.</p>
+        <p class="text-gray-500">{data["highlight_text"]}</p>
+      </div>
+    </div>
+
+    <!-- Section 1: Intro Section (병원 공간 철학) -->"""
+
+        html = html.replace('<!-- Section 1: Intro Section (병원 공간 철학) -->', regional_card)
+
+        # 6. Philosophy 인용구 맞춤화
+        new_quote = f'"{data["region_name"]} 지역 병의원 개원 시, 각 진료과목 특성에 최적화된 동선과 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
+        html = re.sub(r'"공간 기획 단계에서부터[\s\S]*?"', new_quote, html)
+
+        # 7. FAQ 질문 치환
+        html = html.replace('<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["region_name"]} 지역 병원 인테리어 무료 현장 실측이 가능한가요?</span>')
+        html = html.replace('<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>', f'<span>{data["region_name"]} 병원 인테리어 공사 시 가장 중요한 점은 무엇인가요?</span>')
+
+        page_file = os.path.join(OUTPUT_DIR, data["slug"])
+        with open(page_file, "w", encoding="utf-8") as f:
+            f.write(html)
+            
+    print("Generated all 13 Regional Super Hub Pages successfully.")
+
+def generate_specialty_pages(base_html):
+    print("Generating 10 Specialty Super Hub Pages...")
+    for key, data in SPECIALTY_HUBS.items():
+        html = base_html
+        canonical_url = f"{SITE_URL}/{data['slug']}"
+        
+        # 1. Head 메타태그 교체
+        head_block = f"""  <title>{data["title"]}</title>
+  
+  <!-- Favicon Setting -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  
+  <!-- SEO Meta Tags for Naver & Google -->
+  <meta name="description" content="{data["desc"]}" />
+  <link rel="canonical" href="{canonical_url}" />
+  <meta name="keywords" content="{data["specialty_name"]} 인테리어, {data["specialty_name"]} 인테리어 전문 업체, {data["specialty_name"]} 리모델링, 부산 {data["specialty_name"]} 인테리어, {data["infra_highlight"]}" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="{BRAND_NAME}" />
+  <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
+  
+  <!-- Open Graph Tags (SNS Sharing) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{BRAND_NAME}" />
+  <meta property="og:title" content="{data["title"]}" />
+  <meta property="og:description" content="{data["desc"]}" />
+  <meta property="og:image" content="{SITE_URL}/main1.webp" />
+  <meta property="og:url" content="{canonical_url}" />"""
+
+        html = re.sub(r'<title>.*?</title>[\s\S]*?(?=<!-- Pretendard Web Font CDN -->)', f'{head_block}\n  \n  ', html, flags=re.I)
+
+        # 2. Schema.org 3종 세트
+        schema_json = [
+            {
+                "@context": "https://schema.org",
+                "@type": "HomeAndConstructionBusiness",
+                "name": f"{data['specialty_name']} 인테리어 - {BRAND_NAME}",
+                "description": data["desc"],
+                "url": canonical_url,
+                "telephone": "1588-0000",
+                "priceRange": "$$",
+                "areaServed": ["부산", "대구", "울산", "창원", "김해", "해운대", "센텀", "명지", "경상남도"],
+                "serviceType": f"{data['specialty_name']} 인테리어 및 리모델링",
+                "provider": {
+                    "@type": "Organization",
+                    "name": BRAND_NAME,
+                    "url": SITE_URL
+                }
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": f"{data['specialty_name']} 인테리어 설계 시 가장 중요한 설비 기준은 무엇인가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"{data['spec_text']} 등 특수 조건들을 사전에 철저히 반영하여 안전하고 오차 없는 정밀 설계를 진행합니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": f"{data['specialty_name']} 개원 시 권장 평수와 공사 기간은 어떻게 되나요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f"{data['specialty_name']}의 권장 개원 실평수는 {data['area_range']}이며, 평균 공사 기간은 {data['duration']}입니다."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "병원 인테리어 시 '실내건축공사업 면허'가 꼭 필요한가요?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "건설산업기본법에 따라 공사 금액이 1,500만 원 이상인 실내 인테리어 공사는 반드시 정부 등록 면허를 보유한 업체만 시공하도록 규정되어 있습니다. 국토교통부 키스콘(KISCON)에서 면허 보유 여부를 확인하실 수 있습니다."
+                        }
+                    }
+                ]
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "홈", "item": f"{SITE_URL}/"},
+                    {"@type": "ListItem", "position": 2, "name": f"{data['specialty_name']} 인테리어", "item": canonical_url}
+                ]
+            }
+        ]
+
+        schema_script = f"""<script type="application/ld+json">
+  {json.dumps(schema_json, ensure_ascii=False, indent=2)}
+  </script>"""
+        html = re.sub(r'<script type="application/ld\+json">[\s\S]*?</script>', schema_script, html)
+
+        # 3. 로고 서브 텍스트 치환
+        html = html.replace('메디컬 공간 디자인</span>', f'{data["specialty_name"]} 인테리어</span>')
+
+        # 4. 히어로 섹션 동적 치환
+        html = html.replace('안과 · 내과 복합 메디컬 공간 특화', data["badge"])
+        html = html.replace('<span class="text-primary">부산 병원 공간 디자인</span>', f'<span class="text-primary">{data["specialty_name"]} 인테리어 전문</span>')
+
+        # 5. Information Gain 진료과목 실무 가이드 카드 주입
+        spec_card = f"""    <!-- {data["specialty_name"]} 특화 실무 정보 가이드 (Google Information Gain & NavBoost 극대화) -->
+    <div class="mb-16 p-6 sm:p-8 bg-gradient-to-r from-gray-50 to-orange-50/40 rounded-2xl border border-gray-200/80 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 bg-primary text-white text-[11px] font-bold rounded">진료과목 가이드</span>
+          <h3 class="text-base sm:text-lg font-bold text-[#111111]">{data["specialty_name"]} 공간 설계 및 시공 핵심 체크포인트</h3>
         </div>
         <a href="{NAVER_TALKTALK_URL}" target="_blank" rel="noopener noreferrer" class="self-start sm:self-auto px-3.5 py-1.5 bg-[#03c75a] hover:bg-[#02b150] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
           <i class="fas fa-comment-dots"></i> 네이버 톡톡 상담
@@ -686,102 +689,123 @@ def generate_static_pages(dataset, base_html, output_dir):
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
         <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
           <span class="text-gray-400 block mb-1 font-medium">권장 개원 실평수</span>
-          <span class="font-bold text-gray-800 text-sm">{item["area_range"]}</span>
+          <span class="font-bold text-gray-800 text-sm">{data["area_range"]}</span>
         </div>
         <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
           <span class="text-gray-400 block mb-1 font-medium">필수 인프라 설비</span>
-          <span class="font-bold text-gray-800 text-sm">{item["infra_highlight"]}</span>
+          <span class="font-bold text-gray-800 text-sm">{data["infra_highlight"]}</span>
         </div>
         <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
           <span class="text-gray-400 block mb-1 font-medium">평균 공사 기간</span>
-          <span class="font-bold text-gray-800 text-sm">{item["duration"]}</span>
+          <span class="font-bold text-gray-800 text-sm">{data["duration"]}</span>
         </div>
         <div class="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-          <span class="text-gray-400 block mb-1 font-medium">{item["region"]} 지역 지원</span>
-          <span class="font-bold text-primary text-sm">3D 도면 무료 & 1:1 비교 견적</span>
+          <span class="text-gray-400 block mb-1 font-medium">영남권 지원</span>
+          <span class="font-bold text-primary text-sm">3D 도면 무료 & 비교 견적</span>
         </div>
       </div>
 
-      <!-- 세부 동 및 랜드마크 형태소 주입 (네이버 스마트블록 롱테일 최적화) -->
-      <div class="mt-4 p-3.5 bg-white/80 rounded-xl border border-gray-100 text-xs text-gray-600 leading-relaxed">
-        <strong class="text-[#111111]">{item["region"]} 주요 거점 서비스 지역:</strong> {item["landmarks_text"]} 등 {item["region"]} 전 지역 신규 개원 및 이전 리모델링 시공을 지원합니다.
+      <div class="mt-4 p-4 bg-white/90 rounded-xl border border-gray-100 text-xs text-gray-700 leading-relaxed space-y-2">
+        <p><strong>{data["guide_title"]}:</strong> {data["guide_desc"]}</p>
+        <p class="text-gray-500">{data["spec_text"]}</p>
       </div>
-      {mesh_html}
     </div>
 
     <!-- Section 1: Intro Section (병원 공간 철학) -->"""
 
-        html = html.replace('<!-- Section 1: Intro Section (병원 공간 철학) -->', info_gain_card)
+        html = html.replace('<!-- Section 1: Intro Section (병원 공간 철학) -->', spec_card)
 
-        # 7. 본문 Intro 철학 인용구 동적 맞춤화 (D.I.A+ 본문 연관도 점수 극대화)
-        old_quote = '"공간 기획 단계에서부터 의료법과 현장 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
-        new_quote = f'"{item["region"]} 지역 {item["category"]} {item["action"]} 시, 진료과목 특성에 최적화된 동선과 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
-        html = html.replace(old_quote, new_quote)
+        # 6. Philosophy 인용구 맞춤화
+        new_quote = f'"{data["specialty_name"]} 인테리어 시, 진료 특성에 최적화된 동선과 소방/공조 시설 기준을 완벽하게 검토하여 설계합니다."'
+        html = re.sub(r'"공간 기획 단계에서부터[\s\S]*?"', new_quote, html)
 
-        # 8. FAQ 1 & 2 질문 및 답변 동적 맞춤화 (본문 형태소 매칭)
-        old_faq1 = '<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>'
-        new_faq1 = f'<span>{item["region"]} {item["category"]} 프리미엄 {item["action"]}는 일반 인테리어와 무엇이 다른가요?</span>'
-        html = html.replace(old_faq1, new_faq1)
+        # 7. FAQ 질문 치환
+        html = html.replace('<span>부산 병원 프리미엄 인테리어는 일반 인테리어와 무엇이 다른가요?</span>', f'<span>{data["specialty_name"]} 인테리어 설계 시 가장 중요한 설비 기준은 무엇인가요?</span>')
+        html = html.replace('<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>', f'<span>{data["specialty_name"]} 개원 시 권장 평수와 공사 기간은 어떻게 되나요?</span>')
 
-        old_faq2 = '<span>진료 과목별(내과, 치과, 피부과 등) 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>'
-        new_faq2 = f'<span>{item["region"]} {item["category"]} 공간 인테리어 설계 시 가장 중요한 점은 무엇인가요?</span>'
-        html = html.replace(old_faq2, new_faq2)
-
-        # FAQ 2 답변 내 진료과목별 특화 설명 삽입
-        old_faq2_ans = '의료 시설 법정 기준에 미달해 준공 검사가 지연되거나 수술실이 비법정 규격으로 완공될 시 대규모의 매몰 비용과 재공사가 수반될 수 있습니다.'
-        new_faq2_ans = f'{item["region"]} {item["category"]} 개원 시 {item["spec_text"]} 등 특수 조건들을 사전에 철저히 반영하여 안전하고 오차 없는 정밀 설계를 진행합니다.'
-        html = html.replace(old_faq2_ans, new_faq2_ans)
-
-        with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
+        page_file = os.path.join(OUTPUT_DIR, data["slug"])
+        with open(page_file, "w", encoding="utf-8") as f:
             f.write(html)
+            
+    print("Generated all 10 Specialty Super Hub Pages successfully.")
 
-    print(f"Successfully generated all {len(dataset)} enriched static pages in {output_dir}")
+def generate_clean_sitemaps(output_dir):
+    print("Generating Clean 27-URL sitemap.xml...")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    
+    urls = [
+        {"loc": f"{SITE_URL}/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": f"{SITE_URL}/portfolio-derma.html", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": f"{SITE_URL}/portfolio-eye-internal.html", "priority": "0.9", "changefreq": "weekly"},
+        {"loc": f"{SITE_URL}/portfolio-dental.html", "priority": "0.9", "changefreq": "weekly"}
+    ]
+    
+    # 13개 지역 허브
+    for k, v in REGIONAL_HUBS.items():
+        urls.append({"loc": f"{SITE_URL}/{v['slug']}", "priority": "0.9", "changefreq": "weekly"})
+        
+    # 10개 진료과목 허브
+    for k, v in SPECIALTY_HUBS.items():
+        urls.append({"loc": f"{SITE_URL}/{v['slug']}", "priority": "0.9", "changefreq": "weekly"})
+        
+    xml_content = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    
+    for u in urls:
+        xml_content.append(f'  <url><loc>{u["loc"]}</loc><lastmod>{today}</lastmod><changefreq>{u["changefreq"]}</changefreq><priority>{u["priority"]}</priority></url>')
+        
+    xml_content.append('</urlset>')
+    
+    sitemap_path = os.path.join(output_dir, "sitemap.xml")
+    with open(sitemap_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(xml_content))
+        
+    print(f"Generated: {sitemap_path} (Total {len(urls)} Clean High-Value URLs)")
+    
+    # robots.txt 최신화
+    robots_path = os.path.join(output_dir, "robots.txt")
+    robots_content = f"""User-agent: *
+Allow: /
+Disallow:
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+    with open(robots_path, "w", encoding="utf-8") as f:
+        f.write(robots_content)
+    print(f"Updated: {robots_path}")
 
 def main():
-    print("=== HOMPAGE_KEYWORD SEO 자동화 빌드 시작 ===")
-    print(f"대상 사이트: {SITE_URL}")
-    print(f"브랜드: {BRAND_NAME}")
+    print("=== HOMPAGE_KEYWORD 23대 슈퍼 허브 빌드 시작 ===")
     
-    if not os.path.exists(RAW_KEYWORD_FILE):
-        print(f"Error: {RAW_KEYWORD_FILE} not found.")
-        sys.exit(1)
+    # 1. 기존 598개 구 디렉토리 및 sitemap 폴더 완전 삭제
+    clean_all_old_directories(OUTPUT_DIR)
+    
+    # 2. base_html 로드
+    base_file = os.path.join(OUTPUT_DIR, "busaninterior_base.html")
+    if not os.path.exists(base_file):
+        base_file = os.path.join(OUTPUT_DIR, "index.html")
+    with open(base_file, "r", encoding="utf-8") as f:
+        base_html = f.read()
         
-    with open(RAW_KEYWORD_FILE, "r", encoding="utf-8") as f:
-        raw_keywords = [line.strip() for line in f if line.strip()]
-        
-    print(f"로딩된 키워드 수: {len(raw_keywords)}개")
-    dataset = generate_seo_dataset(raw_keywords)
-    print(f"파싱 완료된 고유 키워드 수: {len(dataset)}개")
+    # 3. index.html 최신화
+    updated_main_html = update_main_index_html(base_html)
     
-    # 1. seo_keywords.json 저장
-    json_path = os.path.join(OUTPUT_DIR, "seo_keywords.json")
-    with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(dataset, f, ensure_ascii=False, indent=2)
-    print(f"Saved: {json_path}")
+    # 4. 13대 지역 슈퍼 페이지 생성
+    generate_regional_pages(updated_main_html)
     
-    # 2. total_pages 계산 및 index.html / busaninterior_base.html 최신화
-    PAGE_SIZE = 300
-    total_pages = max(1, math.ceil(len(dataset) / PAGE_SIZE))
-    base_html = update_index_and_base_html(total_pages)
+    # 5. 10대 진료과목 슈퍼 페이지 생성
+    generate_specialty_pages(updated_main_html)
     
-    # 3. sitemap.xml & robots.txt 생성
-    generate_sitemaps(dataset, OUTPUT_DIR)
+    # 6. 초경량 27개 클린 sitemap.xml 생성
+    generate_clean_sitemaps(OUTPUT_DIR)
     
-    # 4. HTML 사이트맵 생성 (noindex, follow 적용된 풀 홈페이지 템플릿)
-    generate_html_sitemaps(dataset, base_html, OUTPUT_DIR)
-    
-    # 5. 기존 구 디렉토리 정리 및 598개 정적 HTML 생성
-    clean_old_directories(OUTPUT_DIR, len(dataset))
-    generate_static_pages(dataset, base_html, OUTPUT_DIR)
-    
-    # 6. GitHub Pages용 .nojekyll 보장
+    # 7. GitHub Pages .nojekyll 보장
     nojekyll_path = os.path.join(OUTPUT_DIR, ".nojekyll")
     if not os.path.exists(nojekyll_path):
         with open(nojekyll_path, "w", encoding="utf-8") as f:
             f.write("")
-        print(f"Created: {nojekyll_path}")
-        
-    print("=== HOMPAGE_KEYWORD SEO 빌드 완료! ===")
+            
+    print("=== HOMPAGE_KEYWORD 23대 슈퍼 허브 빌드 완료! ===")
 
 if __name__ == "__main__":
     main()

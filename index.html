@@ -262,7 +262,7 @@
     <section class="mb-32 scroll-mt-24" id="portfolio">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
         <div>
-          <span class="text-xs font-bold text-primary tracking-widest uppercase">Portfolio 01</span>
+          <span class="text-xs font-bold text-primary tracking-widest uppercase">Portfolio</span>
           <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2">
             피부과 포트폴리오
           </h2>
@@ -538,6 +538,71 @@
         <div>
           <a href="https://blog.naver.com/dudu8882/223925375630" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#dd5828] hover:underline">
             <i class="fas fa-external-link-alt text-xs"></i> 블로그에서 전체 이미지 보러 가기
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3-3: Portfolio Showcase 3 (한의원 포트폴리오) -->
+    <section class="mb-32">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div>
+          <span class="text-xs font-bold text-primary tracking-widest uppercase">PORTFOLIO</span>
+          <h2 class="text-3xl font-bold tracking-tight text-[#111111] mt-2">
+            한의원 포트폴리오
+          </h2>
+        </div>
+        <div class="text-[#666666] text-sm max-w-md">
+          횡장형 평면 구조의 특성을 활용하여, 주요 동선과 시선이 닿는 중심 축에 브랜드 아이덴티티를 입체적으로 부각했습니다.
+        </div>
+      </div>
+
+      <!-- Minimalist grid featuring hanui webp images (3개 완공 이미지) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1번 카드: 데스크 -->
+        <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+          <img src="./hanui1.webp" loading="lazy" alt="데스크" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+          <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">RECEPTION DESK</p>
+            <h4 class="text-sm font-bold mt-0.5">데스크</h4>
+          </div>
+        </div>
+
+        <!-- 2번 카드: 복도 -->
+        <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+          <img src="./hanui2.webp" loading="lazy" alt="복도" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+          <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">CORRIDOR</p>
+            <h4 class="text-sm font-bold mt-0.5">복도</h4>
+          </div>
+        </div>
+
+        <!-- 3번 카드: 진료실 -->
+        <div class="group relative overflow-hidden rounded bg-gray-50 border border-gray-100 aspect-[4/3]">
+          <img src="./hanui3.webp" loading="lazy" alt="진료실" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-black/5 group-hover:bg-black/20 transition-colors duration-300"></div>
+          <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black/80 to-transparent text-white">
+            <p class="text-[10px] text-primary font-bold uppercase tracking-wider">CLINIC ROOM</p>
+            <h4 class="text-sm font-bold mt-0.5">진료실</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- 더보기 버튼 및 앵커 텍스트 -->
+      <div class="mt-8 text-center space-y-4">
+        <div class="flex flex-wrap justify-center items-center gap-3">
+          <button onclick="togglePortfolio('portfolio-extra-3', this)" class="px-8 py-3 rounded bg-[#dd5828] text-white hover:bg-[#c84b1d] text-xs font-bold transition-all duration-300 shadow-sm">
+            더보기 <i class="fas fa-chevron-down ml-1 text-[10px]"></i>
+          </button>
+          <a href="./portfolio-oriental.html" class="px-8 py-3 rounded bg-gray-900 text-white hover:bg-black text-xs font-bold transition-all duration-300 shadow-sm inline-flex items-center gap-1.5">
+            상세 포트폴리오 스토리 보기 <i class="fas fa-arrow-right text-[10px]"></i>
+          </a>
+        </div>
+        <div>
+          <a href="https://inde.co.kr/A03/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=17840147&t=board" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#dd5828] hover:underline">
+            <i class="fas fa-external-link-alt text-xs"></i> 공식 홈페이지에서 전체 현장 보기
           </a>
         </div>
       </div>

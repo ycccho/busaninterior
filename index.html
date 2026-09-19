@@ -209,50 +209,36 @@
     </div>
   </header>
 
-  <!-- Hero Section (Full-screen Background Layout for maximum impact) -->
-  <section class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-gray-900">
-    <!-- Main Background Image: Clean, natural, balanced across left and right -->
+  <!-- Hero Section (사진이 100% 선명하게 보이는 풀스크린 뷰 - 블러 및 박스 제거) -->
+  <section class="relative min-h-[85vh] md:min-h-[90vh] flex flex-col justify-end pb-12 sm:pb-16 pt-24 overflow-hidden bg-gray-900">
+    <!-- Main Background Image: 블러 없이 원본 사진 100% 선명하게 노출 -->
     <div class="absolute inset-0 z-0">
-      <img src="./hero-bg.jpg?v=20260813_v2" loading="lazy" alt="부산_병원_인테리어_실내건축면허_보유업체" class="w-full h-full object-cover object-center" />
-      <!-- Soft ambient subtle overlay for text legibility without obscuring the background image -->
-      <div class="absolute inset-0 bg-black/25"></div>
+      <img src="./hero-bg.jpg?v=20260919_clear" loading="lazy" alt="부산_병원_인테리어_실내건축면허_보유업체" class="w-full h-full object-cover object-center" />
+      <!-- 하단 텍스트 가독성을 위한 아주 얇고 부드러운 하단 페이드만 적용 -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 w-full py-20 text-center lg:text-left flex justify-center lg:justify-start">
-      <div class="max-w-3xl lg:max-w-2xl lg:mx-0 space-y-6 bg-black/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/15 shadow-2xl">
-        <div class="inline-block bg-white/10 border border-white/20 px-3 py-1 rounded text-[11px] font-semibold text-white uppercase tracking-wider">
+    <!-- 좌측 하단 구석에 미니멀하게 배치된 타이틀 및 버튼 (박스/블러 완전 제거) -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
+      <div class="max-w-xl space-y-4">
+        <div class="inline-block bg-black/40 border border-white/20 px-3 py-1 rounded text-[11px] font-semibold text-white uppercase tracking-wider backdrop-blur-sm">
           안과 · 내과 복합 메디컬 공간 특화
         </div>
         
         <!-- Single H1 tag for perfect SEO structure -->
-        <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight drop-shadow-md">
           성공적인 개원의 시작,<br />
-          <span class="text-primary">부산 병원 공간 디자인</span>
+          <span class="text-primary drop-shadow-md">부산 병원 공간 디자인</span>
         </h1>
         
-        <p class="text-sm md:text-lg text-gray-200/90 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 pt-2">
-          내과, 외과, 안과, 피부과, 성형외과까지, 각 진료과목의 특성과 의료법을 완벽히 이해한 맞춤형 인테리어를 선보입니다. 실내건축공사업 면허를 보유한 검증된 전문성과 감각으로, 환자와 의료진 모두에게 신뢰감을 주는 품격 있는 병원 공간을 완성합니다.
-        </p>
-        
-        <!-- Recommendations & Action Buttons -->
-        <div class="pt-8 flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-3">
-          <div class="flex items-center gap-2 text-xs text-white bg-white/10 border border-white/20 backdrop-blur-md px-4 py-3 rounded shadow-lg">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            <span>병원인테리어 추천업체</span>
-            <span class="text-white/30">|</span>
-            <a href="https://inde.co.kr" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">
-              인디컴퍼니 공식 홈페이지
-            </a>
-          </div>
-          
-          <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <a href="#portfolio" class="px-6 py-3 rounded text-xs bg-white text-primary hover:bg-orange-50 font-bold transition-all shadow-md text-center border border-primary">
-              포트폴리오 보러 가기
-            </a>
-            <a href="#columns" class="px-6 py-3 rounded text-xs bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all backdrop-blur-md font-medium text-center">
-              전문 칼럼 읽어보기
-            </a>
-          </div>
+        <!-- Action Buttons (구석에 정갈하게 배치된 하얀 바탕 + 주황 글씨 버튼) -->
+        <div class="pt-2 flex flex-wrap items-center gap-3">
+          <a href="#portfolio" class="px-6 py-3 rounded text-xs bg-white text-primary hover:bg-orange-50 font-bold transition-all shadow-lg border border-white">
+            포트폴리오 보러 가기
+          </a>
+          <a href="https://inde.co.kr" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded text-xs bg-black/60 hover:bg-black/80 text-white border border-white/30 transition-all font-medium backdrop-blur-sm">
+            인디컴퍼니 공식 홈페이지
+          </a>
         </div>
       </div>
     </div>
@@ -1028,8 +1014,11 @@
         <p>
           © 부산 병원 인테리어 전문 업체 정보 All rights reserved.
         </p>
-        <p class="text-gray-400">
-          본 홈페이지는 원장님들의 올바른 메디컬 공간 정보 공유와 투명한 인테리어 문화를 위해 생성되었습니다.
+        <p class="text-gray-500 leading-relaxed max-w-lg">
+          내과, 외과, 안과, 피부과, 성형외과까지 각 진료과목의 특성과 의료법을 준수하는 맞춤형 메디컬 인테리어를 선보입니다. 실내건축공사업 면허를 보유한 검증된 전문성과 감각으로 신뢰받는 병원 공간을 완성합니다.
+        </p>
+        <p class="text-gray-400 text-[11px]">
+          본 홈페이지는 원장님들의 올바른 메디컬 공간 정보 공유와 투명한 인테리어 문화를 위해 운영됩니다.
         </p>
       </div>
       <div class="lg:text-right space-y-3">

@@ -1,0 +1,33 @@
+name: Daily Cafe Column Sync Pipeline
+
+on:
+  schedule:
+    # 1회차: 한국 시간 오전 10:25 (UTC 01:25) - 1일 1회 정기 분산 발행
+    - cron: '25 1 * * *'
+    # 2회차: 한국 시간 오후 16:40 (UTC 07:40) - 1일 2회 신규 글 감지 모니터링
+    - cron: '40 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run sync pipeline (1일 1건 순차 발행 및 소진 시 일 2회 신규 글 감지)
+        run: |
+          python scripts/sync_pipeline.py 1

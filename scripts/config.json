@@ -1,0 +1,29 @@
+{
+  "cafe_club_id": "27280102",
+  "cafe_menu_id": "8",
+  "site_domain": "https://busaninterior.kr",
+  "site_name": "부산 병원 인테리어 전문 업체",
+  "site_category_label": "메디컬 실무 칼럼",
+  "author_name": "실무 감리 기술팀",
+  "publisher_name": "인디컴퍼니",
+  "geo_region": "KR-26",
+  "geo_placename": "부산광역시",
+  "geo_position": "35.1795543;129.0756416",
+  "icbm": "35.1795543, 129.0756416",
+  "naver_analytics_key": "180cc2f772d0f30",
+  "forbidden_words": [
+    "친환경",
+    "100%",
+    "2년",
+    "전담"
+  ],
+  "forbidden_replacements": [
+    { "pattern": "친환경", "replacement": "고품질 안전" },
+    { "pattern": "100%", "replacement": "완벽히" },
+    { "pattern": "2년", "replacement": "장기" },
+    { "pattern": "전담", "replacement": "전문" }
+  ],
+  "initial_start_column": 7,
+  "columns_board_path": "columns.html",
+  "sitemap_path": "sitemap.xml"
+}

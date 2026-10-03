@@ -502,9 +502,17 @@ def run_sync(batch_size=1):
     processed_set = set(state.get("processed_cafe_ids", []))
     pending = [a for a in articles if int(a[id_key]) not in processed_set]
 
-    # 규칙 1: 기존 밀린 글이 있는 상태에서는 하루 1회만 발행
-    if pending and state.get("last_synced_date") == today_str:
-        print(f"[INFO] 오늘자({today_str}) 칼럼 1건이 이미 발행되었습니다. 내일 지정 시각(오전 10~11시)에 다음 칼럼을 순차 발행합니다.")
+    daily_limit = cfg.get("daily_limit", 2)
+    last_synced_date = state.get("last_synced_date", "")
+    
+    # 날짜가 바뀌었으면 오늘 발행 건수 초기화
+    if last_synced_date != today_str:
+        state["synced_today_count"] = 0
+    synced_today_count = state.get("synced_today_count", 0)
+
+    # 규칙 1: 기존 밀린 글이 있는 상태에서는 하루 최대 daily_limit 건(기본 2건)만 발행
+    if pending and synced_today_count >= daily_limit and last_synced_date == today_str:
+        print(f"[INFO] 오늘자({today_str}) 칼럼 {daily_limit}건이 이미 모두 발행 완료되었습니다. 내일 순차 발행합니다.")
         return False
 
     # 규칙 2: 모든 글이 소진되었을 때 새 글 대기 모드 (일 2회 체크)
@@ -512,8 +520,15 @@ def run_sync(batch_size=1):
         print(f"[INFO] 카페의 모든 게시글이 이미 칼럼으로 변환되었습니다. 신규 등록 글을 모니터링 중입니다 (현재 신규 글 0건).")
         return False
 
-    to_process = pending[:batch_size]
-    print(f"[INFO] 대기 글 중 {len(to_process)}건을 새 칼럼으로 변환 및 발행합니다...")
+    # 이번 회차에서 처리할 건수 (하루 한도 초과 방지)
+    remaining_quota = daily_limit - synced_today_count if last_synced_date == today_str else daily_limit
+    process_count = min(batch_size, remaining_quota)
+    if process_count <= 0:
+        print(f"[INFO] 오늘자({today_str}) 발행 가능 한도({daily_limit}건)에 도달했습니다.")
+        return False
+
+    to_process = pending[:process_count]
+    print(f"[INFO] 대기 글 중 {len(to_process)}건을 새 칼럼으로 변환 및 발행합니다 (오늘 발행 예정: {synced_today_count + len(to_process)}/{daily_limit}건)...")
 
     created_cols = []
     for art in to_process:
@@ -542,6 +557,7 @@ def run_sync(batch_size=1):
 
     state["last_run_timestamp"] = datetime.now().isoformat()
     state["last_synced_date"] = today_str
+    state["synced_today_count"] = synced_today_count + len(created_cols)
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(state, f, indent=2, ensure_ascii=False)
 
@@ -551,8 +567,11 @@ def run_sync(batch_size=1):
             subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT, check=True)
             msg = f"feat(column): auto-sync column {created_cols} from cafe"
             subprocess.run(["git", "commit", "-m", msg], cwd=PROJECT_ROOT, check=True)
+            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=PROJECT_ROOT, check=False)
             subprocess.run(["git", "push", "origin", "main"], cwd=PROJECT_ROOT, check=True)
             print(f"[배포 완료] Git 커밋 및 푸시 성공: 칼럼 {created_cols}")
+        except Exception as e:
+            print(f"[주의] Git 커밋/푸시 중 오류 발생: {e}")
         except Exception as e:
             print(f"[주의] Git 커밋/푸시 중 오류 발생: {e}")
 

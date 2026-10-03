@@ -24,6 +24,7 @@
     { "pattern": "전담", "replacement": "전문" }
   ],
   "initial_start_column": 7,
+  "daily_limit": 2,
   "columns_board_path": "columns.html",
   "sitemap_path": "sitemap.xml"
 }

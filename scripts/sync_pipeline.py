@@ -54,13 +54,19 @@ def fetch_article_detail(article_id, cfg):
     club_id = cfg["cafe_club_id"]
     url = f'https://apis.naver.com/cafe-web/cafe-articleapi/v2.1/cafes/{club_id}/articles/{article_id}'
     headers = {'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X)'}
-    req = urllib.request.Request(url, headers=headers)
-    resp = urllib.request.urlopen(req)
-    data = json.loads(resp.read().decode('utf-8'))
-    art = data['result']['article']
-    
-    raw_title = art['subject'].strip()
-    content_html = art.get('contentHtml', '')
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        resp = urllib.request.urlopen(req)
+        data = json.loads(resp.read().decode('utf-8'))
+        art = data.get('result', {}).get('article')
+        if not art or not art.get('contentHtml'):
+            return None, []
+        
+        raw_title = art.get('subject', '').strip()
+        content_html = art.get('contentHtml', '')
+    except Exception as e:
+        print(f"[알림] 글 ID {article_id} 수집 불가 (멤버공개 또는 비공개): {e}")
+        return None, []
     
     # HTML clean-up
     text = re.sub(r'<br\s*/?>', '\n', content_html)
@@ -537,6 +543,11 @@ def run_sync(batch_size=1):
         print(f"-> [처리 시작] 카페 글 ID {aid} => column-{next_idx}.html 변환 중...")
 
         raw_title, paragraphs = fetch_article_detail(aid, cfg)
+        if not raw_title or not paragraphs or len(paragraphs) < 2:
+            print(f"[건너뜀] 카페 글 ID {aid}는 멤버공개 또는 비공개/내용부재로 자동 건너뜁니다.")
+            state.setdefault("processed_cafe_ids", []).append(aid)
+            continue
+
         title, lead, sections = transform_article_content(raw_title, paragraphs, cfg)
         html = generate_column_html(next_idx, title, lead, sections, cfg)
 

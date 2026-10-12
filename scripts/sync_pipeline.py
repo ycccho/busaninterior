@@ -188,7 +188,7 @@ def generate_column_html(col_idx, title, lead, sections, cfg):
   <!-- SEO Meta Tags -->
   <meta name="description" content="{desc}" />
   <meta name="keywords" content="{title}, 부산 병원 인테리어, 메디컬 인테리어 시공, 실내건축면허" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="author" content="{site_name}" />
   <meta name="naver-site-verification" content="57ef696d2b54b5a9118376789981871be0fe78a9" />
   <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
@@ -199,6 +199,7 @@ def generate_column_html(col_idx, title, lead, sections, cfg):
   <meta property="og:title" content="{title} | 전문가 칼럼" />
   <meta property="og:description" content="{desc}" />
   <meta property="og:image" content="{domain}/favicon.png" />
+  <link rel="image_src" href="{domain}/favicon.png" />
   <meta property="og:url" content="{domain}/column-{col_idx}.html" />
 
   <!-- Local GEO Meta Tags -->

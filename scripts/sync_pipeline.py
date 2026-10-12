@@ -488,6 +488,38 @@ def update_sitemap(col_idx, cfg):
         with open(sitemap_file, "w", encoding="utf-8") as f:
             f.write(content)
 
+def update_rss(col_idx, title, excerpt, cfg):
+    rss_file = os.path.join(PROJECT_ROOT, "rss.xml")
+    if not os.path.exists(rss_file):
+        return
+    with open(rss_file, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    domain = cfg["site_domain"].rstrip("/")
+    now_str = datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0900')
+    clean_desc = excerpt.replace('"', '&quot;')
+
+    new_item = f"""    <item>
+      <title>{title}</title>
+      <link>{domain}/column-{col_idx}.html</link>
+      <description><![CDATA[{clean_desc}]]></description>
+      <pubDate>{now_str}</pubDate>
+      <guid isPermaLink="true">{domain}/column-{col_idx}.html</guid>
+    </item>\n"""
+
+    # Update pubDate and lastBuildDate
+    content = re.sub(r'<pubDate>[^<]+</pubDate>', f'<pubDate>{now_str}</pubDate>', content, count=1)
+    content = re.sub(r'<lastBuildDate>[^<]+</lastBuildDate>', f'<lastBuildDate>{now_str}</lastBuildDate>', content, count=1)
+
+    pos = content.find("<item>")
+    if pos != -1:
+        content = content[:pos] + new_item + "    " + content[pos:]
+    else:
+        content = content.replace("</channel>", new_item + "  </channel>")
+
+    with open(rss_file, "w", encoding="utf-8") as f:
+        f.write(content)
+
 def run_sync(batch_size=1):
     cfg = load_config()
 
@@ -561,6 +593,7 @@ def run_sync(batch_size=1):
         excerpt = (clean_lead[:90] + '...') if len(clean_lead) > 90 else clean_lead
         update_columns_html(next_idx, title, excerpt, cfg)
         update_sitemap(next_idx, cfg)
+        update_rss(next_idx, title, excerpt, cfg)
 
         state["last_column_index"] = next_idx
         state.setdefault("processed_cafe_ids", []).append(aid)

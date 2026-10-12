@@ -1,86 +1,188 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-<channel>
-  <title>부산 병원 인테리어 전문 업체</title>
-  <link>https://busaninterior.kr</link>
-  <description>국가 등록 실내건축공업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법 및 소방 심사 기준을 준수하는 메디컬 디자인.</description>
-  <language>ko</language>
-  <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-  <lastBuildDate>Sun, 19 Jul 2026 12:00:00 +0900</lastBuildDate>
-  <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-  <generator>Custom RSS Generator</generator>
-  <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+  <channel>
+    <title>부산 병원 인테리어 전문 업체 | 메디컬 공간 전문가 칼럼</title>
+    <link>https://busaninterior.kr</link>
+    <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
+    <language>ko</language>
+    <pubDate>Mon, 12 Oct 2026 13:38:48 +0900</pubDate>
+    <lastBuildDate>Mon, 12 Oct 2026 13:38:48 +0900</lastBuildDate>
+    <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
 
-  <item>
-    <title>성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      병원 개원은 단순한 미적 공간 창출을 넘어, 복잡한 의료법 규정과 환자 및 의료진의 실질적인 편의성을 완벽하게 매칭시켜야 하는 정밀한 작업입니다. 특히 병원 개원 인테리어를 진행할 때 가장 먼저 고려해야 할 부분은 바로 환자 중심 동선 기획입니다. 환자가 내원하여 접수하고 대기하며, 진료를 받고 수납 후 귀가하기까지의 모든 과정이 막힘없이 흘러가도록 동선을 구성해야 합니다.
-      예를 들어, 소아청소년과나 내과의 경우 교차 감염의 우려를 줄이기 위해 호흡기 대기실을 분리 설계하거나, 치과의 경우에는 체어 간의 간격과 환자의 프라이버시 보호가 최우선으로 고려되어야 합니다. 또한 의료진의 업무 효율성을 향상하기 위한 서브 동선과 수술실, 소독실 등의 위생 공간 배치 또한 면밀하게 설계되어야 합니다.
-      부산 내과 개원 인테리어 전문 브랜드로 알려진 파트너와 함께 이러한 세부 동선을 사전에 면밀히 시뮬레이션함으로써, 개원 후 의료진의 피로도는 줄이고 환자의 내원 만족도는 비약적으로 높일 수 있습니다. 각 진료과목의 법적 시설 기준과 규격을 철저히 준수하는 시공이야말로 안정적인 병원 운영의 핵심 기반이 됩니다. 준공 이후 보건소 실사 시 작은 면적 차이나 레이아웃 오류로도 개원이 연기될 수 있으므로, 반드시 메디컬 시공 경험이 축적된 면허 업체와의 초기 협의가 개원의 첫 걸음입니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-1</guid>
-  </item>
-
-  <item>
-    <title>의료법 기준을 충족하는 무균 수술실 및 공조 설비 구축 가이드</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      병의원 공간은 소방법, 의료법, 건축법 등 다양한 법적 규제가 가장 복잡하게 얽혀 있는 특수 시설입니다. 단순한 상업공간 디자인 감각만으로는 병원의 특수 설비를 완벽하게 시공할 수 없기에, 반드시 전문적인 메디컬 인테리어에 대한 깊은 이해도가 필요합니다.
-      특히 정형외과나 성형외과 등 수술실이 포함된 병원의 경우, 의료법 기준에 따른 무균 수술실 환경 조성이 필수적입니다. 수술실 내 공기 정화 설비(HEPA 필터 적용 공조기)와 압력 제어 시스템(양압 시스템)을 통해 외부 오염 물질의 유입을 철저히 차단해야 합니다.
-      또한, 엑스레이실이나 CT실의 경우 방사선 누출을 완벽하게 차단하기 위해 벽면과 문 내부에 납판(Lead sheet) 차폐 공사를 꼼꼼히 시행해야 하며, 관할 보건소의 사용 승인을 받기 위한 정밀 측정들이 병행되어야 합니다. 각 진료과목별 맞춤 설계 시 이러한 법적 기준과 설비 기술력이 뒷받침되지 않으면 준공 허가 지연이나 재시공이라는 막대한 피해가 발생할 수 있습니다. 당사는 오랜 현장 경험을 바탕으로 공조, 소방, 전기, 가스 설비 등 병원 특수 인프라를 완벽히 책임 시공하여 의뢰하시는 원장님들께 신뢰를 드립니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-2</guid>
-  </item>
-
-  <item>
-    <title>환자에게 신뢰감을 주는 대기실 라운지 연출법</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      최근 메디컬 트렌드는 단순히 질병을 치료하는 장소를 넘어 환자에게 심리적 위안과 경험을 제공하는 공간으로 진화하고 있습니다. 환자가 병원에 머무는 시간 중 가장 긴 비중을 차지하는 곳이 대기 공간인 만큼, 품격 있는 대기실 라운지 조성은 병원의 첫인상을 결정하는 매우 중요한 요소입니다.
-      메디컬 공간에서는 인위적이고 차가운 느낌을 주는 소재를 지양하고, 따뜻하면서도 고급스러운 질감을 전달하기 위해 이탈리아산 천연 대리석, 유럽 친환경 도료, 천연 무늬목 등 검증된 마감재를 적극 도입합니다. 조명 또한 직접 조명을 최소화하고 간접 조명과 라인 조명을 적절히 매칭하여 아늑하고 은은한 호텔식 분위기를 자아내도록 기획합니다.
-      부산 메디컬 공간 디자인의 새로운 기준을 제시하는 당사는, 환자가 느끼는 병원 특유의 차가운 불안감을 덜어낼 수 있도록 내추럴한 톤앤매너와 플랜테리어 요소를 가미한 공간 솔루션을 제공합니다. 인체공학적으로 설계된 가구 배치와 쾌적한 환기 및 공기정화 설비가 결합된 웰니스 라운지는 귀원의 품격을 대변할 것입니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-3</guid>
-  </item>
-
-  <item>
-    <title>첫눈에 사로잡는 병원 파사드 디자인과 아이덴티티 구축</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      치열해지는 개원가 속에서 독보적인 경쟁력을 확보하기 위해서는 시각적인 정체성을 확립하는 것이 필수적입니다. 병원의 외관인 전면 입구, 즉 병원 파사드 디자인은 환자가 엘리베이터에서 내리거나 건물을 마주할 때 첫 인식을 형성하는 강력한 마케팅 요소입니다.
-      이에 따라 최근 개원을 준비하는 원장님들께서는 단순한 간판 설치를 넘어, 공간 전체의 비주얼과 병원의 로고, 톤앤매너가 긴밀하게 연결되는 통합적인 의료 공간 브랜딩을 지향하고 있습니다. 파사드는 병원이 추구하는 진료 가치와 철학을 시각화하는 도구여야 합니다.
-      예를 들어, 피부과나 성형외과의 경우 우아하고 세련된 곡선 템바보드와 은은한 후광 조명을 활용해 신뢰감과 아름다움을 강조하며, 내과나 통증의학과의 경우 차분하고 안정감 있는 톤의 샌드스톤이나 금속 마감을 조화시켜 굳건한 전문성을 드러냅니다. 당사에서 제공하는 부산 병원 리모델링 서비스는 입지 분석을 기반으로 주변 상권과 차별화되는 고유의 외관을 디자인하여, 환자들이 심리적 안정감과 신뢰를 느낄 수 있도록 예술적인 품격을 담은 고감도 파사드를 완성합니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-4</guid>
-  </item>
-
-  <item>
-    <title>안전한 메디컬 공사를 위한 실내건축공사업 면허 확인의 중요성</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      병원 인테리어는 소방 설비, 방사선 납 차폐, 공조 환기 장치 등 전문적인 건축 기술이 집약된 고난도의 시공 분야입니다. 따라서 단순한 일반 카페나 주택 인테리어와 같은 방식으로 상업공간 디자인 감각만을 믿고 업체를 선정했다가는 자칫 중대한 법적, 구조적 하자가 발생할 위험이 매우 높습니다.
-      현행 건설산업기본법에 따르면 공사 예정 금액이 1,500만 원 이상인 실내 인테리어 공사는 반드시 정부가 공인하는 실내건축공사업 면허를 보유한 정식 건설업 등록 업체가 시공하도록 규정되어 있습니다. 면허를 보유하기 위해서는 전문 기술 인력 상주, 자본금 증명, 보증보험 가입 등 까다로운 조건들을 상시 충족해야 하기 때문에, 면허 여부는 업체의 기본적인 재정 안정성과 시공 능력을 평가하는 가장 중요한 척도가 됩니다.
-      무면허 업체와 계약해 공사를 진행할 경우, 공사 도중 돌연 잠적(먹튀), 공사 지연, 날림 공사로 인한 누수 및 소방 불합격, 하자보수(AS) 거부 등 막대한 리스크를 온전히 발주자인 원장님이 떠안게 됩니다. 안전하고 신뢰할 수 있는 병원 공간을 만들기 위해, 반드시 부산 실내건축면허 인테리어 업체를 선택하시어 국토교통부 건설산업지식정보시스템(KISCON) 조회를 통해 정식 업체 여부를 꼼꼼하게 검증하시는 것을 강력히 권장해 드립니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-5</guid>
-  </item>
-
-  <item>
-    <title>체계적인 감리 프로세스와 준공 후 완벽한 사후관리 시스템</title>
-    <link>https://busaninterior.kr/index.html#columns</link>
-    <description><![CDATA[
-      아무리 뛰어난 3D 투시도와 평면 도면이 있더라도 현장에서 정밀하게 구현되지 않는다면 무용지물입니다. 특히 높은 신뢰성과 청결함이 요구되는 메디컬 인테리어 현장에서는 철저한 감리 및 시공 품질 관리 프로세스가 수반되어야 합니다. 당사는 골조, 배관, 전기 등 기본 인프라 공사 단계에서부터 마감재 부착, 조명 조도 조절, 가구 세팅에 이르기까지 공정별 밀착 감리를 원칙으로 합니다.
-      또한 시공 과정에서 발생할 수 있는 보이지 않는 미세한 하자까지 잡아내기 위해 준공 전 자체 품질 검사(QA)를 엄격히 시행하고 있습니다. 병원 개원 후에는 즉각적인 진료가 개시되므로, 사소한 전기 누전이나 수도 누수조차 병원 매출 및 대외 이미지에 치명적인 타격을 줄 수 있습니다.
-      당사는 독창적인 의료 공간 브랜딩 디자인을 넘어서, 하자이행 보증증권 발행을 비롯한 투명한 A/S 전담 센터를 운영하여 준공 후에도 안심하고 진료에만 전념하실 수 있도록 밀착 케어 시스템을 약속합니다. 시공 후 24시간 긴급 대응 서비스 및 주기적인 공간 안전 점검을 제공하여 오랜 시간 동안 최고의 청결함과 편안함이 유지되는 병원을 지향합니다.
-    ]]></description>
-    <pubDate>Sun, 19 Jul 2026 12:00:00 +0900</pubDate>
-    <guid>https://busaninterior.kr/index.html#columns-6</guid>
-  </item>
-</channel>
+    <item>
+      <title>현관 중문 인테리어 3연동 슬라이딩 도어와 원슬라이딩 도어의 공간 개폐율 및 기밀성 비교 안내에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-25.html</link>
+      <description><![CDATA[인테리어 리모델링 공사 시 관계 법령과 기술 규격에 부합하지 않는 임의 시공이 진행될 경우 입주 후 안전사고 및 하자 분쟁의 원...]]></description>
+      <pubDate>Mon, 12 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-25.html</guid>
+    </item>
+    <item>
+      <title>인테리어 고품질 안전 자재 검증을 위한 공인 HB마크 및 환경표지 인증서 원본 대조 가이드</title>
+      <link>https://busaninterior.kr/column-24.html</link>
+      <description><![CDATA[인테리어 공사를 계획할 때 업체의 외형이나 화려한 포트폴리오만 보고 섣불리 계약을 맺는 경우가 많습니다.]]></description>
+      <pubDate>Mon, 12 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-24.html</guid>
+    </item>
+    <item>
+      <title>인테리어 공사 대금 선지급 사기 예방을 위한 단계별 분할 지급 안전 비율 가이드</title>
+      <link>https://busaninterior.kr/column-23.html</link>
+      <description><![CDATA[인테리어 공사를 계획할 때 업체의 외형이나 단순 현장미팅만으로만 판단하고 섣불리 계약을 맺는 경우가 많습니다.]]></description>
+      <pubDate>Sun, 11 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-23.html</guid>
+    </item>
+    <item>
+      <title>욕실 및 베란다 인테리어 방수 부실로 인한 하부층 누수 피해 시 법적 책임 기준 안내</title>
+      <link>https://busaninterior.kr/column-22.html</link>
+      <description><![CDATA[인테리어 공사를 마친 직후 욕실이나 베란다 배수 부실로 아랫집 천장에 누수가 발생하면 수백만 원에서 수천만 원에 달하는 누수 피...]]></description>
+      <pubDate>Sun, 11 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-22.html</guid>
+    </item>
+    <item>
+      <title>인테리어 견적서 내 1식 기재 항목의 위험성과 자재 노무 분리 상세 내역서 필수 검토 안내에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-21.html</link>
+      <description><![CDATA[인테리어 공사 계약 시 견적서에 상세 수량과 단가 없이 '욕실 공사 1식 600만 원'과 같이 뭉텅이로 기재된...]]></description>
+      <pubDate>Sat, 10 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-21.html</guid>
+    </item>
+    <item>
+      <title>인테리어 부실시공 하자 발생 시 건설산업기본법상 법정 하자담보책임 1년 청구 요령에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-20.html</link>
+      <description><![CDATA[인테리어 완공 후 타일 들뜸, 마루 변색, 문틀 뒤틀림 등 하자가 발생했을 때 시공업체가 'AS 기간 3개월이 끝났다&...]]></description>
+      <pubDate>Sat, 10 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-20.html</guid>
+    </item>
+    <item>
+      <title>상가 및 학원 인테리어 시 다중이용업소 방염 필증 및 소방시설 완비증명서 필수 기준 안내</title>
+      <link>https://busaninterior.kr/column-19.html</link>
+      <description><![CDATA[상가, 학원, 음식점, 병의원 등 다중이용시설 인테리어 공사는 주거 공간과 달리 엄격한 소방법 기준을 충족해야 합니다.]]></description>
+      <pubDate>Fri, 09 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-19.html</guid>
+    </item>
+    <item>
+      <title>아파트 발코니 확장 및 비내력벽 철거 시 지자체 행위허가 신청 필수 안내에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-18.html</link>
+      <description><![CDATA["관리사무소에 인테리어 공사 신고하고 이웃 동의서 다 받았으니 철거해도 되겠지?"라고 생각하면 큰 낭패를 볼 ...]]></description>
+      <pubDate>Fri, 09 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-18.html</guid>
+    </item>
+    <item>
+      <title>인테리어 계약 시 계약금 과다 요구 주의 및 공정위 표준계약서 필수 확인 안내에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-17.html</link>
+      <description><![CDATA[인테리어 사기 및 공사 중단 피해 사례의 대부분은 공사가 시작되기도 전에 공사 대금의 상당 부분을 미리 건네주면서 발생합니다.]]></description>
+      <pubDate>Thu, 08 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-17.html</guid>
+    </item>
+    <item>
+      <title>1500만원 이상 인테리어 공사 무등록 업체 시공 주의 및 건설업 면허 확인 안내에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-16.html</link>
+      <description><![CDATA[인테리어는 감각과 포트폴리오만 보고 업체를 고르기 쉽지만, 면허 유무는 공사 도중 문제가 생겼을 때 내 돈을 지킬 수 있는지 판...]]></description>
+      <pubDate>Thu, 08 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-16.html</guid>
+    </item>
+    <item>
+      <title>주방 후드 배관 직경과 주름관 꺾임 각도에 따른 배기 효율 저하 원인에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-15.html</link>
+      <description><![CDATA[주방 리모델링 시 고풍량 렌지후드를 설치하더라도 기존 아파트의 100mm 주름관 배관을 그대로 연장하거나 90도 이상의 직각 굴...]]></description>
+      <pubDate>Wed, 07 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-15.html</guid>
+    </item>
+    <item>
+      <title>마루 시공 전 바닥 미장 평활도 허용 오차 기준과 수평몰탈 필요성</title>
+      <link>https://busaninterior.kr/column-14.html</link>
+      <description><![CDATA[강마루 및 원목마루 시공 전 기존 바닥 미장면의 평활도 편차가 허용 기준을 초과할 경우 보행 시 꿀렁거림과 마루 이음매 벌어짐이...]]></description>
+      <pubDate>Wed, 07 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-14.html</guid>
+    </item>
+    <item>
+      <title>로이유리 코팅면 위치 2번과 3번의 단열 차이 및 현장 확인법</title>
+      <link>https://busaninterior.kr/column-13.html</link>
+      <description><![CDATA[창호 교체 시 복층유리에 로이유리 를 적용할 때 은(Ag) 코팅막의 위치를 실외측 2번면에 두는지 실내측 3번면에 두는지에 따라...]]></description>
+      <pubDate>Tue, 06 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-13.html</guid>
+    </item>
+    <item>
+      <title>욕실 방수 액체방수 후 도막방수가 권장되는 이유와 담수 테스트 기준</title>
+      <link>https://busaninterior.kr/column-12.html</link>
+      <description><![CDATA[욕실 리모델링 시 시멘트 액체방수 만으로 바닥 방수를 마감할 경우 건물의 미세 거동이나 건조 수축으로 인한 균열 발생 시 누수*...]]></description>
+      <pubDate>Tue, 06 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-12.html</guid>
+    </item>
+    <item>
+      <title>아일랜드 주방 상판 세라믹 시공 시 하지 보강이 권장되는 구조적 이유</title>
+      <link>https://busaninterior.kr/column-11.html</link>
+      <description><![CDATA[대형 아일랜드 주방에 12T 두께의 세라믹 또는 엔지니어드스톤(칸스톤) 상판을 시공할 때 하부 하부장 위에 별도의 보강 프레임 ...]]></description>
+      <pubDate>Mon, 05 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-11.html</guid>
+    </item>
+    <item>
+      <title>거실 3인치 다운라이트 집중형과 확산형의 차이 및 공간별 선택 기준</title>
+      <link>https://busaninterior.kr/column-10.html</link>
+      <description><![CDATA[거실 매립 조명 설계 시 3인치 다운라이트 를 전면 확산형으로만 배치할 경우 공간 전체의 조도 는 확보되나 명암 대비가 사라져 ...]]></description>
+      <pubDate>Mon, 05 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-10.html</guid>
+    </item>
+    <item>
+      <title>무몰딩 도배 시공 시 올퍼티 작업이 권장되는 이유와 줄퍼티의 차이</title>
+      <link>https://busaninterior.kr/column-9.html</link>
+      <description><![CDATA[천장 몰딩을 없애는 무몰딩 도배 시공 시 이음새만 메우는 줄퍼티 방식으로 마감할 경우 측면 조명이나 자연광 아래에서 석고보드 단...]]></description>
+      <pubDate>Sun, 04 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-9.html</guid>
+    </item>
+    <item>
+      <title>히든도어 시공 후 문 처짐이 발생하는 구조적 원인과 예방법에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-8.html</link>
+      <description><![CDATA[문틀과 벽면이 일체화되는 히든도어 시공 시 문틀 하지면을 MDF 로만 시공할 경우 장기적으로 문 처짐이 발생할 확률이 매우 높아...]]></description>
+      <pubDate>Sun, 04 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-8.html</guid>
+    </item>
+    <item>
+      <title>난방 바닥 포세린 타일 시공 시 에폭시를 피하고 C2TES1 접착제를 써야 하는 이유</title>
+      <link>https://busaninterior.kr/column-7.html</link>
+      <description><![CDATA[바닥 난방 환경에서 에폭시 본드 사용 시 발생하는 타일 들뜸 하자의 원인과 국제 표준 C2TES1 탄성 접착제의 열변형 완충 메커니즘을 상세히 분석합니다.]]></description>
+      <pubDate>Sat, 03 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-7.html</guid>
+    </item>
+    <item>
+      <title>체계적인 감리 프로세스와 준공 후 완벽한 사후관리 시스템</title>
+      <link>https://busaninterior.kr/column-6.html</link>
+      <description><![CDATA[아무리 뛰어난 3D 도면이 있어도 현장 감리가 부실하면 무용지물입니다. 체계적인 밀착 감리와 하자이행보증증권 기반의 A/S 시스템을 알아봅니다.]]></description>
+      <pubDate>Sat, 03 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-6.html</guid>
+    </item>
+    <item>
+      <title>안전한 메디컬 공사를 위한 실내건축공사업 면허 확인의 중요성</title>
+      <link>https://busaninterior.kr/column-5.html</link>
+      <description><![CDATA[병원 인테리어는 소방, 방사선 차폐 등 고난도 공정이 요구됩니다. 안전한 개원을 위해 정부 공인 실내건축공사업 면허 확인이 왜 필수인지 짚어봅니다.]]></description>
+      <pubDate>Fri, 02 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-5.html</guid>
+    </item>
+    <item>
+      <title>첫눈에 사로잡는 병원 파사드 디자인과 아이덴티티 구축</title>
+      <link>https://busaninterior.kr/column-4.html</link>
+      <description><![CDATA[치열해지는 개원가 속에서 독보적인 경쟁력을 확보하기 위해서는 시각적인 정체성을 확립하는 것이 필수적입니다. 병원의 외관인 전면 파사드 디자인 노하우를 공유합니다.]]></description>
+      <pubDate>Fri, 02 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-4.html</guid>
+    </item>
+    <item>
+      <title>환자에게 신뢰감을 주는 대기실 라운지 연출법</title>
+      <link>https://busaninterior.kr/column-3.html</link>
+      <description><![CDATA[단순한 대기 공간을 넘어, 고급스러운 호텔식 라운지 감성을 더해 환자의 불안감을 해소하고 병원의 브랜드 가치를 높이는 인테리어 기법입니다.]]></description>
+      <pubDate>Thu, 01 Oct 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-3.html</guid>
+    </item>
+    <item>
+      <title>의료법 기준을 충족하는 무균 수술실 및 공조 설비 구축 가이드</title>
+      <link>https://busaninterior.kr/column-2.html</link>
+      <description><![CDATA[병원 인테리어에서 가장 까다로운 소방, 공조 및 방사선 차폐 설비의 기준을 명확히 제시하고 시공 시 주의해야 할 점을 알아봅니다.]]></description>
+      <pubDate>Thu, 01 Oct 2026 01:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-2.html</guid>
+    </item>
+    <item>
+      <title>성공적인 메디컬 개원을 위한 진료과목별 맞춤 동선 설계 기획</title>
+      <link>https://busaninterior.kr/column-1.html</link>
+      <description><![CDATA[내과, 치과, 이비인후과 등 각 진료과목의 특성에 맞춘 환자 및 의료진 동선 기획은 병원 운영의 효율성과 직결됩니다. 환자의 심리적 부담을 덜고 직원의 이동을 최소화하는 비법을 공개합니다.]]></description>
+      <pubDate>Wed, 30 Sep 2026 13:38:48 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-1.html</guid>
+    </item>
+  </channel>
 </rss>

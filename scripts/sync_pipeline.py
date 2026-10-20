@@ -192,6 +192,7 @@ def generate_column_html(col_idx, title, lead, sections, cfg):
   <meta name="author" content="{site_name}" />
   <meta name="naver-site-verification" content="57ef696d2b54b5a9118376789981871be0fe78a9" />
   <meta name="google-site-verification" content="0f-j7HOTRJP6McdtJbnZNC-e6SibEW0xDkSq_J1YGUI" />
+  <meta name="p:domain_verify" content="735309f4fa474b49f5cb398ecf142b1f"/>
   
   <!-- Open Graph Tags -->
   <meta property="og:type" content="article" />

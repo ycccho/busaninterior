@@ -406,7 +406,7 @@ def generate_column_html(col_idx, title, lead, sections, cfg):
   }}
   </script>
   <!-- Cloudflare Web Analytics -->
-  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "866c87b5a38c446baa403aec2a6c5fea"}'></script>
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "866c87b5a38c446baa403aec2a6c5fea"}}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>
 </html>

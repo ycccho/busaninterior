@@ -11,6 +11,7 @@
   "geo_position": "35.1795543;129.0756416",
   "icbm": "35.1795543, 129.0756416",
   "naver_analytics_key": "180cc2f772d0f30",
+  "auto_adapt_residential_to_medical": true,
   "forbidden_words": [
     "친환경",
     "100%",

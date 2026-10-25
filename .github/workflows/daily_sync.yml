@@ -27,6 +27,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Run sync pipeline (1일 1건 순차 발행 및 소진 시 일 2회 신규 글 감지)
+      - name: Run sync pipeline (카피킬러 0% AI 패러프레이징 연동, 1일 1건 순차 발행)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python scripts/sync_pipeline.py 1

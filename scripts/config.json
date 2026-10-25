@@ -27,5 +27,6 @@
   "initial_start_column": 7,
   "daily_limit": 2,
   "columns_board_path": "columns.html",
-  "sitemap_path": "sitemap.xml"
+  "sitemap_path": "sitemap.xml",
+  "gemini_api_key": ""
 }

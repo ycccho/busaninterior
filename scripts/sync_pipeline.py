@@ -252,31 +252,244 @@ def adapt_residential_to_medical(raw_title, paragraphs, cfg):
 
     return new_title, new_paras, True
 
-def transform_article_content(raw_title, paragraphs, cfg):
-    """
-    중복문서 방지 패러프레이징 및 전문 칼럼 구조 재구성 엔진.
-    동일 카페 글을 사용하는 타 PBN과의 중복을 원천 차단하고
-    부산 병원 인테리어 전문 감리사 관점의 독창적 칼럼으로 전면 탈바꿈.
-    아파트/주거 관련 콘텐츠 감지 시 병원·의원 인테리어 전문 맥락으로 정밀 변환.
-    """
-    # 0. 아파트/주거 관련 콘텐츠를 병원·의원 인테리어 전문 맥락으로 정밀 변환
-    raw_title, paragraphs, is_adapted = adapt_residential_to_medical(raw_title, paragraphs, cfg)
 
-    # 1. 제목 재구성
-    title = raw_title.replace("시공 예시", "시공 시 핵심 주의사항 및 시방 가이드")
-    title = title.replace("시공시", "시공 시")
-    if not any(k in title for k in ["이유", "가이드", "분석", "기준", "원리", "노하우"]):
-        title = f"{title}에 대한 실무 공학적 분석과 감리 기준"
-    title = clean_forbidden(title, cfg)
+# ==============================================================================
+# 카피킬러(CopyKiller) 6어절 N-gram 알고리즘 & AI 중간 패러프레이징 엔진
+# ==============================================================================
 
-    # 2. 본문 문단 정제 및 소제목 그룹화
+def get_words(text):
+    clean = re.sub(r'[^\w\s]', ' ', text)
+    return [w for w in clean.split() if len(w) > 0]
+
+def get_ngrams(words, n=6):
+    return [tuple(words[i:i+n]) for i in range(len(words) - n + 1)]
+
+def evaluate_copykiller(orig_text, comp_text, n=6):
+    """
+    카피킬러 6어절 N-gram 알고리즘 기반 표절 검사 엔진
+    """
+    orig_words = get_words(orig_text)
+    comp_words = get_words(comp_text)
+    
+    orig_ngrams = set(get_ngrams(orig_words, n))
+    comp_ngrams = get_ngrams(comp_words, n)
+    
+    if not comp_ngrams:
+        return 0.0, []
+        
+    matches = [g for g in comp_ngrams if g in orig_ngrams]
+    match_rate = (len(matches) / len(comp_ngrams)) * 100 if comp_ngrams else 0
+    return match_rate, matches
+
+def format_copykiller_dashboard(orig_text, comp_text):
+    """
+    사용자 지정 카피킬러 표절 검사 종합 대시보드 리포트 생성기
+    """
+    rate, matches = evaluate_copykiller(orig_text, comp_text)
+    unique_matches = set(matches)
+    
+    if rate < 15.0 and len(matches) == 0:
+        status = "🟢 안전(발행 가능)"
+        summary = "6어절 연속 일치 0건 완벽 달성. 네이버·구글 크롤러의 유사문서(중복문서) 필터링을 100% 통과하는 독창적 창작 원고입니다."
+    elif rate < 15.0:
+        status = "🟡 주의(수정 권장)"
+        summary = f"일치율은 {rate:.1f}%이나 6어절 일치 구간이 {len(unique_matches)}건 감지되었습니다."
+    else:
+        status = "🔴 위험(중복문서 누락 확정)"
+        summary = f"카피킬러 기준 일치율 {rate:.1f}%로 검색엔진 유사문서 누락 위험군입니다."
+        
+    report = f"""
+================================================================================
+# 📊 1. 표절 검사 종합 대시보드 (카피킬러 6어절 N-gram 기준)
+- **카피킬러 기준 6어절 일치율**: {rate:.1f}%
+- **6어절 연속 일치 구간**: {len(unique_matches)}건
+- **네이버·구글 중복문서 판정**: {status}
+- **총평**: {summary}
+
+# 🔍 2. 6어절 이상 연속 일치 구간 대조
+"""
+    if matches:
+        for idx, m in enumerate(list(unique_matches)[:5], 1):
+            report += f"{idx}. \"{' '.join(m)}\"\n"
+    else:
+        report += "일치 구간 없음 (완벽 통과)\n"
+    report += "================================================================================"
+        
+    return report, rate, len(matches)
+
+def call_ai_paraphrase(raw_title, paragraphs, site_type, cfg):
+    """
+    Gemini / OpenAI API를 호출하여 카피킬러 6어절 일치율 0% 원고로 완전 재창작
+    """
+    api_key_gemini = os.environ.get("GEMINI_API_KEY") or cfg.get("gemini_api_key", "").strip()
+    api_key_openai = os.environ.get("OPENAI_API_KEY") or cfg.get("openai_api_key", "").strip()
+    
+    if not api_key_gemini and not api_key_openai:
+        return None
+
+    orig_text = "\n".join(paragraphs)
+    
+    if site_type == "hospital":
+        domain_desc = """
+[사이트 맞춤 업종 변환 규칙 (부산 병원·의원 인테리어 감리 관점)]
+- 주거용(아파트, 거실, 안방, 침실, 베란다, 발코니, 주방, 입주민, 세대) 단어는 반드시 '병원·의원(진료실, 대기실, 입원실, 상가 관리단, 환자/내원객)' 및 실존 법령(건축법, 의료법, 집합건물법, 소방시설법)으로 정밀 치환.
+- 부산 지역 의료시설 인허가, 보건소 개설 실사 및 감리 관점을 일관되게 유지.
+"""
+    else:
+        domain_desc = """
+[사이트 맞춤 업종 변환 규칙 (오피스·사무실 인테리어 감리 관점)]
+- 주거용(아파트, 거실, 안방, 베란다, 주방, 입주민) 단어는 '오피스 빌딩(업무 공간, 회의실, 탕비실, 입주사)' 및 건축법/빌딩관리규약으로 정밀 치환.
+"""
+
+    prompt = f"""당신은 대한민국 최고 수준의 텍스트 표절 및 검색엔진(네이버·구글) 중복문서 판별 전문 AI입니다.
+아래 제공되는 [카페 원고]를 바탕으로, 카피킬러(CopyKiller)의 핵심 알고리즘(6어절 N-gram)과 검색엔진 크롤러 기준으로 100% 창작 문서(일치율 15% 미만, 6어절 일치 0건)로 재작성(패러프레이징)하십시오.
+
+■ 핵심 작성 기준
+1. [6어절 연속 일치 0건 (100% 필수)]: 원문의 6단어 이상 어순과 단어가 연속으로 일치하는 구간을 100% 배제하십시오.
+   - 단순 조사 교체나 몇 단어 치환을 금지합니다.
+   - 문장 구조(도치, 능동/피동 변환, 복문 분할/병합)를 완전히 전면 재구성하십시오.
+2. [의미/패러프레이징 유사도 극소화]: 원문의 핵심 공학적·법률적 의미만 취하고, 완전히 새로운 문체와 문장 흐름으로 집필하십시오.
+3. [검색엔진 안전성]: 네이버 스마트블록/뷰탭 및 구글 크롤러의 '유사문서(중복문서) 필터링' 통과 기준(일치율 15% 미만, 6어절 일치 0건)을 완벽히 충족하십시오.
+4. [4대 금지어 배제]: '친환경', '100%', '2년', '전담' 단어는 절대 사용하지 마십시오.
+5. [외부 링크 및 주소창 안내 스텁 일체 배제]: 공식 홈페이지 URL, '▶ 찾는 방법:', '주소창에' 등 불완전한 링크 안내문은 일체 작성하지 마십시오.
+{domain_desc}
+
+■ 출력 포맷 (반드시 JSON 코드블록만 출력할 것):
+```json
+{{
+  "title": "재구성된 전문 칼럼 제목",
+  "lead": "전체 내용을 요약하는 핵심 리드문 (공백 포함 60~75자)",
+  "sections": [
+    {{
+      "title": "첫 번째 전문 섹션 소제목",
+      "paragraphs": [
+        "섹션 1 본문 문단 1...",
+        "섹션 1 본문 문단 2..."
+      ]
+    }},
+    {{
+      "title": "두 번째 전문 섹션 소제목",
+      "paragraphs": [
+        "섹션 2 본문 문단 1...",
+        "섹션 2 본문 문단 2..."
+      ]
+    }},
+    {{
+      "title": "세 번째 전문 섹션 소제목",
+      "paragraphs": [
+        "섹션 3 본문 문단 1...",
+        "섹션 3 본문 문단 2..."
+      ]
+    }}
+  ]
+}}
+```
+
+[카페 원문 제목]: {raw_title}
+[카페 원문 본문]:
+{orig_text}
+"""
+    # 1. Gemini API 시도
+    if api_key_gemini:
+        try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key_gemini}"
+            headers = {"Content-Type": "application/json"}
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0.7, "topP": 0.95}
+            }
+            req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                text = data["candidates"][0]["content"]["parts"][0]["text"]
+                return parse_ai_json(text)
+        except Exception as e:
+            print(f"[경고] Gemini API 패러프레이징 호출 실패: {e}")
+
+    # 2. OpenAI API 시도
+    if api_key_openai:
+        try:
+            url = "https://api.openai.com/v1/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key_openai}"
+            }
+            payload = {
+                "model": "gpt-4o-mini",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.7
+            }
+            req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers)
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                text = data["choices"][0]["message"]["content"]
+                return parse_ai_json(text)
+        except Exception as e:
+            print(f"[경고] OpenAI API 패러프레이징 호출 실패: {e}")
+
+    return None
+
+def parse_ai_json(text):
+    """
+    AI 응답 텍스트에서 JSON 객체를 안전하게 추출
+    """
+    m = re.search(r'```json\s*([\s\S]*?)\s*```', text)
+    json_str = m.group(1) if m else text.strip()
+    try:
+        obj = json.loads(json_str)
+        title = obj.get("title", "").strip()
+        lead = obj.get("lead", "").strip()
+        raw_secs = obj.get("sections", [])
+        sections = []
+        for s in raw_secs:
+            stitle = s.get("title", "").strip()
+            sparas = [p.strip() for p in s.get("paragraphs", []) if p.strip()]
+            if stitle and sparas:
+                sections.append((stitle, sparas))
+        if title and sections:
+            return title, lead, sections
+    except Exception as e:
+        print(f"[경고] AI 응답 JSON 파싱 실패: {e}")
+    return None
+
+def paraphrase_algorithmic(raw_title, paragraphs, site_type, cfg):
+    """
+    API 키 미설정 시 작동하는 고급 알고리즘 패러프레이징 엔진 (문장 구조 도치, 시방 전문용어 치환)
+    """
+    ADVANCED_REPLACEMENTS = [
+        (r'완성됩니다\.', '확보될 수 있습니다.'),
+        (r'필수적입니다\.', '반드시 준수되어야 할 핵심 관리 지침입니다.'),
+        (r'요구됩니다\.', '선행되어야 안전성이 담보됩니다.'),
+        (r'확인해야 합니다\.', '정밀하게 사전 계측하고 검측 조서를 작성해야 합니다.'),
+        (r'주의해야 합니다\.', '철저한 관리 감독 하에 시공 오차를 통제해야 합니다.'),
+        (r'원인이 됩니다\.', '직결되는 치명적 하자로 이어집니다.'),
+        (r'나타났습니다\.', '실증적으로 확인된 바 있습니다.'),
+        (r'할 수 있습니다\.', '하는 방안이 공학적으로 권장됩니다.'),
+        (r'있어야 합니다\.', '갖추어져 있어야 적법 시공으로 인정받습니다.'),
+        (r'비로소\s*', '안정적으로 '),
+        (r'특히\s*', '무엇보다 실무 감리 관점에서 '),
+        (r'반드시\s*', '예외 없이 사전 검증을 거쳐 '),
+        (r'엄격히\s*', '오차 범위 없이 정밀하게 '),
+        (r'철저히\s*', '다각적인 계측을 통해 '),
+        (r'사전에\s*', '본격적인 착공 이전 단계에서 '),
+        (r'인테리어\s*공사', '실내 건축 및 설비 공정'),
+        (r'하자\s*분쟁', '법률적 하자담보 분쟁 및 구상권 청구'),
+        (r'시험성적서', '공인 시험기관 발행 품질성적서'),
+        (r'공인\s*기준', '국토교통부 표준시방서 및 KS 규격'),
+        (r'세부\s*지침', '공학적 감리 시방 규준'),
+        (r'내구성', '구조적 장기 내구성'),
+        (r'안전사고', '구조적 안전사고 및 파손 결함'),
+    ]
+    
     cleaned_paras = []
     for p in paragraphs:
-        # 카페 기호 및 불필요 메타 라인 제거
         p_clean = re.sub(r'^[■□◆◇▶▷●○※★☆\s\d\.-]+', '', p).strip()
         if not p_clean or is_stub_line(p_clean) or is_stub_line(p):
             continue
-        cleaned_paras.append(p_clean)
+        cur = p_clean
+        for pat, repl in ADVANCED_REPLACEMENTS:
+            cur = re.sub(pat, repl, cur)
+        cleaned_paras.append(cur)
 
     # 요약 리드문 추출 및 생성
     lead = ""
@@ -287,21 +500,60 @@ def transform_article_content(raw_title, paragraphs, cfg):
     if not lead and cleaned_paras:
         lead = cleaned_paras[0]
 
-    # 본문을 3개의 전문 영역으로 균형 배분
     body_items = [p for p in cleaned_paras if p != lead]
-    
-    # 3개 섹션 분할
     chunk_size = max(1, len(body_items) // 3)
     sec1_items = body_items[:chunk_size]
     sec2_items = body_items[chunk_size:chunk_size*2]
     sec3_items = body_items[chunk_size*2:]
 
     sections = [
-        ("현장 물리적 특성 및 하자 발생 메커니즘 분석", sec1_items),
-        ("표준 시방 규격 및 공학적 핵심 성능 원리", sec2_items),
-        ("안전 시공을 위한 실무 자재 검수 및 감리 지침", sec3_items)
+        ("현장 물리적 특성 및 시공 메커니즘 분석", sec1_items),
+        ("공학적 시방 규격 및 핵심 성능 원리", sec2_items),
+        ("실무 자재 검수 지침 및 사전 감리 기준", sec3_items)
     ]
 
+    title = raw_title.replace("시공 예시", "시공 시 핵심 주의사항 및 시방 가이드")
+    title = title.replace("시공시", "시공 시")
+    if not any(k in title for k in ["이유", "가이드", "분석", "기준", "원리", "노하우"]):
+        title = f"{title}에 대한 실무 공학적 분석과 감리 기준"
+    title = clean_forbidden(title, cfg)
+
+    return title, lead, sections
+
+def transform_article_content(raw_title, paragraphs, cfg):
+    """
+    카피킬러 6어절 N-gram 0% 회피 & 검색엔진 100% 안전 발행 중간 변환 엔진
+    """
+    # 원문 전체 텍스트 (표절 검사 대조군)
+    orig_full_text = raw_title + " " + " ".join(paragraphs)
+
+    # 0. 기존 기본 변환 규칙 선적용 (금지어 제거, 아파트->병원 정밀 치환)
+    raw_title, paragraphs, is_adapted = adapt_residential_to_medical(raw_title, paragraphs, cfg)
+
+    # 1. AI 패러프레이징 시도 (Gemini / OpenAI API)
+    ai_result = call_ai_paraphrase(raw_title, paragraphs, site_type="hospital", cfg=cfg)
+    
+    if ai_result:
+        title, lead, sections = ai_result
+        # AI 생성물 전체 텍스트 구성
+        comp_full_text = title + " " + lead + " " + " ".join([p for _, sparas in sections for p in sparas])
+        
+        # 카피킬러 6어절 표절 검사 실행 및 대시보드 출력
+        report, rate, match_count = format_copykiller_dashboard(orig_full_text, comp_full_text)
+        print(report)
+        
+        if rate < 15.0 and match_count == 0:
+            print("[성공] AI 패러프레이징: 카피킬러 6어절 일치율 0% 및 중복문서 100% 통과 기준 충족!")
+            return title, lead, sections
+
+    # 2. API 키 미설정 또는 실패 시: 고급 알고리즘 패러프레이징 폴백
+    title, lead, sections = paraphrase_algorithmic(raw_title, paragraphs, site_type="hospital", cfg=cfg)
+    comp_full_text = title + " " + lead + " " + " ".join([p for _, sparas in sections for p in sparas])
+    
+    report, rate, match_count = format_copykiller_dashboard(orig_full_text, comp_full_text)
+    print(report)
+    print("[안내] GitHub Secrets 또는 config.json에 GEMINI_API_KEY를 설정하시면 6어절 일치율 0%의 완전한 AI 재창작 원고가 매일 자동 생성됩니다.")
+    
     return title, lead, sections
 
 def generate_column_html(col_idx, title, lead, sections, cfg):

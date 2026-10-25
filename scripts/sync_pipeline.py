@@ -30,7 +30,34 @@ def clean_forbidden(text, cfg):
 def strip_urls(text):
     text = re.sub(r'https?://[^\s<>"]+|www\.[^\s<>"]+', '', text)
     text = re.sub(r'(\w+\.)+(kr|com|net|org|gov|go\.kr)[^\s<>"]*', '', text)
+    text = re.sub(r'\(\s*\)', '', text)
     return text
+
+def is_stub_line(line):
+    s = line.strip()
+    if not s or s == '\u200b':
+        return True
+    # Reference path banners like [하자담보책임 법령 및 소비자 피해구제 접수 경로]
+    if re.search(r'\[.*?(?:경로|열람|신청|접수|출처).*?\]', s):
+        return True
+    # Verification banner lines
+    if '접속 이상 유무' in s or '국가 공인 홈페이지' in s:
+        return True
+    # Search instructions
+    if re.search(r'▶?\s*찾는\s*방법:?', s):
+        return True
+    if re.match(r'^(웹\s*브라우저\s*)?주소창에', s):
+        return True
+    # Organization names with dangling ( e.g. 국가법령정보센터 (, 한국소비자원 (
+    if re.search(r'(국가법령정보센터|한국소비자원|건축행정시스템|세움터|국가건설기준센터|소비자24|공정거래위원회|대한법률구조공단|국토교통부|KISCON|KCSC|e나라표준인증)', s) and (s.endswith('(') or ' (' in s):
+        return True
+    # Dangling parenthesis or empty parentheses at end
+    if re.search(r'\(\s*\)?$', s):
+        return True
+    # Section titles like 출처 및 검증 기준 (공식 열람 URL)
+    if '출처 및 검증 기준' in s or '공식 열람 URL' in s:
+        return True
+    return False
 
 def fetch_cafe_article_list(cfg):
     club_id = cfg["cafe_club_id"]
@@ -80,7 +107,7 @@ def fetch_article_detail(article_id, cfg):
     paragraphs = []
     for line in text.split('\n'):
         line = line.strip()
-        if len(line) > 2:
+        if len(line) > 2 and not is_stub_line(line):
             paragraphs.append(line)
             
     return raw_title, paragraphs
@@ -247,7 +274,7 @@ def transform_article_content(raw_title, paragraphs, cfg):
     for p in paragraphs:
         # 카페 기호 및 불필요 메타 라인 제거
         p_clean = re.sub(r'^[■□◆◇▶▷●○※★☆\s\d\.-]+', '', p).strip()
-        if not p_clean or "출처 및 검증 기준" in p_clean or "공식 열람 URL" in p_clean:
+        if not p_clean or is_stub_line(p_clean) or is_stub_line(p):
             continue
         cleaned_paras.append(p_clean)
 

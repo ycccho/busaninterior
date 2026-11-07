@@ -1,5 +1,5 @@
 {
-  "last_column_index": 78,
+  "last_column_index": 79,
   "processed_cafe_ids": [
     30012,
     30013,
@@ -102,9 +102,10 @@
     30110,
     30111,
     30112,
-    30113
+    30113,
+    30114
   ],
-  "last_run_timestamp": "2026-11-07T07:11:56.007400",
+  "last_run_timestamp": "2026-11-07T14:54:38.610388",
   "last_synced_date": "2026-11-07",
-  "synced_today_count": 1
+  "synced_today_count": 2
 }

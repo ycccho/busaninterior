@@ -933,20 +933,43 @@ def update_rss(col_idx, title, excerpt, cfg):
       <description><![CDATA[{clean_desc}]]></description>
       <pubDate>{now_str}</pubDate>
       <guid isPermaLink="true">{domain}/column-{col_idx}.html</guid>
-    </item>\n"""
+    </item>"""
 
-    # Update pubDate and lastBuildDate
-    content = re.sub(r'<pubDate>[^<]+</pubDate>', f'<pubDate>{now_str}</pubDate>', content, count=1)
-    content = re.sub(r'<lastBuildDate>[^<]+</lastBuildDate>', f'<lastBuildDate>{now_str}</lastBuildDate>', content, count=1)
+    # Extract all existing items
+    existing_items = re.findall(r'<item>[\s\S]*?</item>', content)
+    all_items = [new_item]
+    for item in existing_items:
+        lines = [l.strip() for l in item.splitlines() if l.strip()]
+        cleaned_item = "    <item>\n"
+        for l in lines:
+            if l in ['<item>', '</item>']:
+                continue
+            cleaned_item += f"      {l}\n"
+        cleaned_item += "    </item>"
+        all_items.append(cleaned_item)
 
-    pos = content.find("<item>")
-    if pos != -1:
-        content = content[:pos] + new_item + "    " + content[pos:]
-    else:
-        content = content.replace("</channel>", new_item + "  </channel>")
+    # Strictly maintain top 15 items for Naver Search Advisor / Google SEO
+    all_items = all_items[:15]
 
+    header = f"""<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>부산 병원 인테리어 전문 업체 | 메디컬 공간 전문가 칼럼</title>
+    <link>{domain}</link>
+    <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
+    <language>ko</language>
+    <pubDate>{now_str}</pubDate>
+    <lastBuildDate>{now_str}</lastBuildDate>
+    <atom:link href="{domain}/rss.xml" rel="self" type="application/rss+xml" />
+
+"""
+    footer = """
+  </channel>
+</rss>
+"""
+    new_content = header + "\n\n".join(all_items) + footer
     with open(rss_file, "w", encoding="utf-8") as f:
-        f.write(content)
+        f.write(new_content)
 
 def run_sync(batch_size=1):
     cfg = load_config()

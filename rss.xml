@@ -5,9 +5,17 @@
     <link>https://busaninterior.kr</link>
     <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
     <language>ko</language>
-    <pubDate>Sun, 15 Nov 2026 07:53:07 +0900</pubDate>
-    <lastBuildDate>Sun, 15 Nov 2026 07:53:07 +0900</lastBuildDate>
+    <pubDate>Sun, 15 Nov 2026 15:40:30 +0900</pubDate>
+    <lastBuildDate>Sun, 15 Nov 2026 15:40:30 +0900</lastBuildDate>
     <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>실내 벽면 템바보드 및 목재 루바 시공 시 방염 선처리 필증 검증 및 수축 팽창 방지 기준</title>
+      <link>https://busaninterior.kr/column-95.html</link>
+      <description><![CDATA[실내 인테리어 리모델링 공사에서 템바보드 방염 선처리 공정은 완공 후 공간의 구조적 장기 내구성과 안전성을 좌우하는 핵심 기준입니다. 다중 이용 및 실내 벽면 목...]]></description>
+      <pubDate>Sun, 15 Nov 2026 15:40:30 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-95.html</guid>
+    </item>
 
     <item>
       <title>인테리어 공사 계약금, 중도금, 잔금의 법적 안전 비율은 몇 %일까? (선급금 지급 리스크 방지)에 대한 실무 공학적 분석과 감리 기준</title>
@@ -119,14 +127,6 @@
       <description><![CDATA[인테리어 계약을 앞두고 &quot;현금 결제하면 4,000만 원인데, 세금계산서나 현금영수증을 끊으려면 부가세 10%(400만 원)를 더 내셔야 합니다&quot;...]]></description>
       <pubDate>Sun, 08 Nov 2026 15:13:57 +0900</pubDate>
       <guid isPermaLink="true">https://busaninterior.kr/column-81.html</guid>
-    </item>
-
-    <item>
-      <title>실내 단열 창호 시공 시 로이복층유리 코팅면 방향 확인 및 기밀 시험성적서 검토 가이드</title>
-      <link>https://busaninterior.kr/column-80.html</link>
-      <description><![CDATA[실내 인테리어 리모델링 공사 중 관계 법령과 표준 기술 규격에 미달하는 임의 시공이 이뤄질 경우, 준공 직후에는 외관상 드러나지 않더라도 공간 이용 기간 동안 심...]]></description>
-      <pubDate>Sun, 08 Nov 2026 07:22:34 +0900</pubDate>
-      <guid isPermaLink="true">https://busaninterior.kr/column-80.html</guid>
     </item>
   </channel>
 </rss>

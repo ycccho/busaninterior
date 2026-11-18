@@ -5,9 +5,17 @@
     <link>https://busaninterior.kr</link>
     <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
     <language>ko</language>
-    <pubDate>Wed, 18 Nov 2026 08:34:11 +0900</pubDate>
-    <lastBuildDate>Wed, 18 Nov 2026 08:34:11 +0900</lastBuildDate>
+    <pubDate>Wed, 18 Nov 2026 20:33:23 +0900</pubDate>
+    <lastBuildDate>Wed, 18 Nov 2026 20:33:23 +0900</lastBuildDate>
     <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>실내 고품질 안전 도배 시공 시 밀풀 배합비 및 콘센트/스위치 주변 정밀 재단 마감 기준</title>
+      <link>https://busaninterior.kr/column-101.html</link>
+      <description><![CDATA[[핵심 요약: 고품질 안전 도배 밀풀 배합 시공 및 하자 예방 Q&amp;A]]]></description>
+      <pubDate>Wed, 18 Nov 2026 20:33:23 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-101.html</guid>
+    </item>
 
     <item>
       <title>실내 바닥 타일 시공 시 압착 시멘트 오픈타임(15분 이내) 초과 방지 및 타일 배면 버터링 가이드</title>
@@ -119,14 +127,6 @@
       <description><![CDATA[인테리어 계약서를 작성할 때 시공사가 &quot;자재 수급 상황 봐가면서 꼼꼼하게 잘 끝내드리겠다&quot;며 착공일만 적어두고 완공일(준공일자)을 비워두거나 두...]]></description>
       <pubDate>Wed, 11 Nov 2026 16:12:00 +0900</pubDate>
       <guid isPermaLink="true">https://busaninterior.kr/column-87.html</guid>
-    </item>
-
-    <item>
-      <title>실내 가구 및 목공 마감재 고품질 안전 E0/E1 등급 포름알데히드 방출량 시험성적서 검증 안내에 대한 실무 공학적 분석과 감리 기준</title>
-      <link>https://busaninterior.kr/column-86.html</link>
-      <description><![CDATA[완성도 높은 실내 공간 인테리어를 위해서는 작업자의 단순 경험이나 관행적 시공에 의존하지 않고, 공인된 기술 시방서에 따른 단계별 감리 검수가 선행되어야 합니다.]]></description>
-      <pubDate>Wed, 11 Nov 2026 07:45:24 +0900</pubDate>
-      <guid isPermaLink="true">https://busaninterior.kr/column-86.html</guid>
     </item>
   </channel>
 </rss>

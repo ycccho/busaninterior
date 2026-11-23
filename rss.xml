@@ -5,9 +5,17 @@
     <link>https://busaninterior.kr</link>
     <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
     <language>ko</language>
-    <pubDate>Mon, 23 Nov 2026 09:08:01 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2026 09:08:01 +0900</lastBuildDate>
+    <pubDate>Mon, 23 Nov 2026 23:55:07 +0900</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2026 23:55:07 +0900</lastBuildDate>
     <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>인테리어 공사 전 반드시 확인해야 할 '건축물대장 위반건축물' 확인 요령과 이행강제금 리스크에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-109.html</link>
+      <description><![CDATA[실내 건축 및 설비 공정 전 예외 없이 사전 검증을 거쳐 확인해야 할 &#x27;건축물대장 위반건축물&#x27;]]></description>
+      <pubDate>Mon, 23 Nov 2026 23:55:07 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-109.html</guid>
+    </item>
 
     <item>
       <title>실내 벽면 목공 알판(디자인 월) 시공 시 줄눈(메지) 일정한 간격 유지 및 음향 흡음 타공판 기준</title>
@@ -119,14 +127,6 @@
       <description><![CDATA[실내 인테리어 리모델링 공사에서 템바보드 방염 선처리 공정은 완공 후 공간의 구조적 장기 내구성과 안전성을 좌우하는 핵심 기준입니다. 다중 이용 및 실내 벽면 목...]]></description>
       <pubDate>Sun, 15 Nov 2026 15:40:30 +0900</pubDate>
       <guid isPermaLink="true">https://busaninterior.kr/column-95.html</guid>
-    </item>
-
-    <item>
-      <title>인테리어 공사 계약금, 중도금, 잔금의 법적 안전 비율은 몇 %일까? (선급금 지급 리스크 방지)에 대한 실무 공학적 분석과 감리 기준</title>
-      <link>https://busaninterior.kr/column-94.html</link>
-      <description><![CDATA[인테리어 분쟁 중 가장 심각한 유형은 공사 시작 전 과도한 계약금이나 중도금을 선지급받은 후 시공사가 공사를 지연하거나 중단하고 잠적하는 &#x27;먹튀&#x27...]]></description>
-      <pubDate>Sun, 15 Nov 2026 07:53:07 +0900</pubDate>
-      <guid isPermaLink="true">https://busaninterior.kr/column-94.html</guid>
     </item>
   </channel>
 </rss>

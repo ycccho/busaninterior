@@ -5,9 +5,17 @@
     <link>https://busaninterior.kr</link>
     <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
     <language>ko</language>
-    <pubDate>Mon, 23 Nov 2026 23:55:07 +0900</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2026 23:55:07 +0900</lastBuildDate>
+    <pubDate>Wed, 25 Nov 2026 09:52:17 +0900</pubDate>
+    <lastBuildDate>Wed, 25 Nov 2026 09:52:17 +0900</lastBuildDate>
     <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>실내 전기 통신 단자함(IDF) 분기 배선 및 CAT6 기가비트 랜선 강전류 배관 격리 기준</title>
+      <link>https://busaninterior.kr/column-110.html</link>
+      <description><![CDATA[[핵심 요약: CAT6 랜선 강전류 격리 시공 및 하자 예방 Q&amp;A]]]></description>
+      <pubDate>Wed, 25 Nov 2026 09:52:17 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-110.html</guid>
+    </item>
 
     <item>
       <title>인테리어 공사 전 반드시 확인해야 할 '건축물대장 위반건축물' 확인 요령과 이행강제금 리스크에 대한 실무 공학적 분석과 감리 기준</title>
@@ -119,14 +127,6 @@
       <description><![CDATA[[핵심 요약: 강화유리 칸막이 갈바 프레임 시공 및 하자 예방 Q&amp;A]]]></description>
       <pubDate>Mon, 16 Nov 2026 07:59:45 +0900</pubDate>
       <guid isPermaLink="true">https://busaninterior.kr/column-96.html</guid>
-    </item>
-
-    <item>
-      <title>실내 벽면 템바보드 및 목재 루바 시공 시 방염 선처리 필증 검증 및 수축 팽창 방지 기준</title>
-      <link>https://busaninterior.kr/column-95.html</link>
-      <description><![CDATA[실내 인테리어 리모델링 공사에서 템바보드 방염 선처리 공정은 완공 후 공간의 구조적 장기 내구성과 안전성을 좌우하는 핵심 기준입니다. 다중 이용 및 실내 벽면 목...]]></description>
-      <pubDate>Sun, 15 Nov 2026 15:40:30 +0900</pubDate>
-      <guid isPermaLink="true">https://busaninterior.kr/column-95.html</guid>
     </item>
   </channel>
 </rss>

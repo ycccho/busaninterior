@@ -5,9 +5,17 @@
     <link>https://busaninterior.kr</link>
     <description>국가 등록 실내건축공사업 면허를 보유한 부산/경남 병원 인테리어 전문. 각 진료과목별 의료법, 무균 공조 설비, 바닥 타일 시공, 동선 기획 등 메디컬 전문가 칼럼 전체 피드.</description>
     <language>ko</language>
-    <pubDate>Thu, 26 Nov 2026 21:33:49 +0900</pubDate>
-    <lastBuildDate>Thu, 26 Nov 2026 21:33:49 +0900</lastBuildDate>
+    <pubDate>Fri, 27 Nov 2026 09:41:40 +0900</pubDate>
+    <lastBuildDate>Fri, 27 Nov 2026 09:41:40 +0900</lastBuildDate>
     <atom:link href="https://busaninterior.kr/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>인테리어 공사 중 작업자가 다쳤을 때 산재보험 처리 책임은 누구에게 있을까? (산재 미가입 리스크)에 대한 실무 공학적 분석과 감리 기준</title>
+      <link>https://busaninterior.kr/column-113.html</link>
+      <description><![CDATA[[인테리어 현장 작업자 구조적 안전사고 및 파손 결함 시 산재 책임과 발주자 보호 가이드]]]></description>
+      <pubDate>Fri, 27 Nov 2026 09:41:40 +0900</pubDate>
+      <guid isPermaLink="true">https://busaninterior.kr/column-113.html</guid>
+    </item>
 
     <item>
       <title>실내 인테리어 공사 안내문 부착 및 이웃 동의서 징구의 법적 효력과 소음 민원 예방법에 대한 실무 공학적 분석과 감리 기준</title>
@@ -119,14 +127,6 @@
       <description><![CDATA[[인테리어 견적서 &#x27;일식(一式)&#x27; 기재의 위험성과 대처 가이드]]]></description>
       <pubDate>Tue, 17 Nov 2026 20:57:04 +0900</pubDate>
       <guid isPermaLink="true">https://busaninterior.kr/column-99.html</guid>
-    </item>
-
-    <item>
-      <title>실내 메인 분전반 배선용 차단기(MCCB)와 분기 누전차단기(ELB) 용량 정합성 및 배선 규격 기준</title>
-      <link>https://busaninterior.kr/column-98.html</link>
-      <description><![CDATA[실내 메인 분전반 배선용 차단기(MCCB)와 분기 누전차단기(ELB) 용량]]></description>
-      <pubDate>Tue, 17 Nov 2026 09:14:18 +0900</pubDate>
-      <guid isPermaLink="true">https://busaninterior.kr/column-98.html</guid>
     </item>
   </channel>
 </rss>
